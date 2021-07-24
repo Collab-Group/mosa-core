@@ -1,7 +1,7 @@
 ﻿using Mosa.Kernel.x86;
 using System;
 
-namespace $safeprojectname$
+namespace Mosa.External.x86.Driver
 {
 
     public static class PS2Mouse

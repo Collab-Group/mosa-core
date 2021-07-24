@@ -135,6 +135,7 @@ namespace MOSA1
 
             uint offset = (uint)(partitionInfo.LBA + fileAreaSectorOffset + ((fileInfo.Cluster - 2) * fAT12Header.SectorsPerCluster));
 
+            // TODO: Maybe make ReadBlock() only read count?
             byte[] data = new byte[IDE.SectorSize * count];
             Disk.ReadBlock(offset, count, data);
 

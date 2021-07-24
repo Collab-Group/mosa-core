@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.External.x86.FileSystem;
+using Mosa.External.x86.Driver;
 using Mosa.Kernel.x86;
 
 namespace $safeprojectname$
@@ -11,25 +12,25 @@ namespace $safeprojectname$
 
         public static void Main()
         {
-            Mosa.Kernel.x86.Kernel.Setup();
-
+            // Initialize the kernel and interrupts
+            Kernel.Setup();
             IDT.SetInterruptHandler(ProcessInterrupt);
 
+            // Initialize the PS/2 keyboard
             PS2Keyboard.Initialize();
 
-            /*
-            //MOSA-Core Only Support FAT12 At The Moment. If You Want You Can Add More For Us!!!
-            IDEDisk iDEDisk = new IDEDisk();
-            MBR.Initialize(iDEDisk);
-            FAT12 fAT12 = new FAT12(iDEDisk, MBR.PartitionInfos[0]);
-            byte[] b = fAT12.ReadAllBytes("/TEST1.TXT");
-            */
+            // Initialize the IDE hard drive
+            // MOSA currently only supports FAT12
+            IDisk disk = new IDEDisk();
+            MBR.Initialize(disk);
+            FAT12 fs = new FAT12(disk, MBR.PartitionInfos[0]);          
+            //byte[] b = fs.ReadAllBytes("/TEST1.TXT");
 
-            Console.WriteLine("MOSA Booted Successfully. Type Anything You Want And Get Echo Back!");
+            Console.WriteLine("MOSA booted successfully! Type anything and get an echo of what you've typed.");
 
+            // Type anything and get an echo of what you've typed
             PS2Keyboard.KeyCode keyCode;
-
-            while (true)
+            for (; ; )
             {
                 if (PS2Keyboard.KeyAvailable)
                 {
@@ -40,9 +41,10 @@ namespace $safeprojectname$
                             Console.RemovePreviousOne();
                             Input = Input.Substring(0, Input.Length - 1);
                             break;
+
                         case PS2Keyboard.KeyCode.Enter:
                             Console.WriteLine();
-                            Console.WriteLine("Input:" + Input);
+                            Console.WriteLine("Input : " + Input);
                             Input = "";
                             break;
 
@@ -50,13 +52,11 @@ namespace $safeprojectname$
                             if (PS2Keyboard.IsCapsLock)
                             {
                                 Console.Write(PS2Keyboard.KeyCodeToString(keyCode));
-
                                 Input += PS2Keyboard.KeyCodeToString(keyCode);
                             }
                             else
                             {
                                 Console.Write(PS2Keyboard.KeyCodeToString(keyCode).ToLower());
-
                                 Input += PS2Keyboard.KeyCodeToString(keyCode).ToLower();
                             }
                             break;
@@ -70,6 +70,7 @@ namespace $safeprojectname$
             switch (interrupt)
             {
                 case 0x21:
+                    // PS/2 keyboard interrupt is 0x21 IRQ 1
                     PS2Keyboard.OnInterrupt();
                     break;
             }

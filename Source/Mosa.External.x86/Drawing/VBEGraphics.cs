@@ -1,47 +1,46 @@
-﻿using Mosa.External.x86;
-using Mosa.External.x86.Driver;
+﻿using Mosa.External.x86.Driver;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.x86;
-using System;
 
 namespace Mosa.External.x86.Drawing
 {
     public class VBEGraphics : Graphics
     {
-        VBEDriver vBEDriver;
-
-        MemoryBlock memoryBlock;
+        private readonly VBEDriver vBEDriver;
+        private readonly MemoryBlock memoryBlock;
 
         public VBEGraphics()
         {
             vBEDriver = new VBEDriver();
-			base.Width = (int)vBEDriver.ScreenWidth;
-            base.Height = (int)vBEDriver.ScreenHeight;
+
+			Width = (int)vBEDriver.ScreenWidth;
+            Height = (int)vBEDriver.ScreenHeight;
+
+            CurrentDriver = "VBE";
 
 			memoryBlock = new MemoryBlock(KernelMemory.AllocateVirtualMemory((uint)FrameSize), (uint)FrameSize);
 
 			ResetLimit();
         }
 
-        public override void Disable()
+        public override void Clear(uint Color)
         {
-            //throw new NotImplementedException();
+            memoryBlock.Fill32((uint)FrameSize, Color, (uint)FrameSize, Bpp);
         }
+
+        public override void Disable() { }
 
         public override void DrawPoint(uint Color, int X, int Y)
         {
             if (X >= LimitX && X < LimitX + LimitWidth && Y >= LimitY && Y < LimitY + LimitHeight)
-            {
-                memoryBlock.Write32((uint)(((Width * Y + X) * Bpp)), Color);
-            }
+                memoryBlock.Write32((uint)((Width * Y + X) * Bpp), Color);
         }
 
 		public override uint GetPoint(int X, int Y)
         {
             if (X >= LimitX && X < LimitX + LimitWidth && Y >= LimitY && Y < LimitY + LimitHeight)
-            {
-				return memoryBlock.Read32((uint)(((Width * Y + X) * Bpp)));
-			}
+				return memoryBlock.Read32((uint)((Width * Y + X) * Bpp));
+
 			return 0;
 		}
 
@@ -49,14 +48,14 @@ namespace Mosa.External.x86.Drawing
         {
             uint addr = vBEDriver.Video_Memory.Address.ToUInt32();
             uint bufferaddr = memoryBlock.Address.ToUInt32();
+
             for (int i = 0; i < FrameSize; i++)
             {
-                if(Native.Get8((uint)(addr + i)) != Native.Get8((uint)(bufferaddr + i)))
-                {
-                    Native.Set8((uint)(addr + i), Native.Get8((uint)(bufferaddr + i)));
-                }
+                byte bufferi = Native.Get8((uint)(bufferaddr + i));
+
+                if (Native.Get8((uint)(addr + i)) != bufferi)
+                    Native.Set8((uint)(addr + i), bufferi);
             }
-            //throw new NotImplementedException();
         }
     }
 }

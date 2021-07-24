@@ -1,5 +1,6 @@
 ﻿using Mosa.Kernel.x86;
 using Mosa.Runtime;
+using Mosa.Runtime.x86;
 using System;
 
 namespace Mosa.External.x86
@@ -36,42 +37,47 @@ namespace Mosa.External.x86
 
 		public MemoryBlock(Pointer address, uint size)
 		{
-			this.address = address;
 			this.size = size;
+			this.address = address;
+
 			IsManaged = false;
 		}
 
 		public MemoryBlock(uint size)
         {
-			this.address = GC.AllocateObject(size);
 			this.size = size;
+
+			address = GC.AllocateObject(size);
 			IsManaged = true;
         }
 
         public MemoryBlock(byte[] data)
         {
-			this.address = GC.AllocateObject((uint)data.Length);
-			this.size = (uint)data.Length;
-			this.IsManaged = true;
+			size = (uint)data.Length;
+
+			address = GC.AllocateObject(size);
+			IsManaged = true;
 			
-			for(int i = 0; i < data.Length; i++) 
-			{
+			for (int i = 0; i < data.Length; i++)
 				Write8((uint)i, data[i]);
-			}
         }
 
-		public void Free() 
+		public void Free()
 		{
-            if (this.IsManaged) 
-			{
+            if (IsManaged)
 				GC.Free((uint)address, size);
-			}
 		}
 
 		public byte this[uint offset]
 		{
 			get { return address.Load8(offset); }
 			set { address.Store8(offset, value); }
+		}
+
+		public void Fill32(uint offset, uint value, uint length, uint step)
+		{
+			for (uint i = 0; i < length; i += step)
+				address.Store32(offset + i, value);
 		}
 
 		public byte Read8(uint offset)
