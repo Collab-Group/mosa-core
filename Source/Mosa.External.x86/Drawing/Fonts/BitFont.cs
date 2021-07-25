@@ -1,5 +1,6 @@
 ﻿using Mosa.Runtime;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace Mosa.External.x86.Drawing.Fonts
 {

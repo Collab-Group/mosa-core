@@ -1,7 +1,6 @@
-﻿using Mosa.External.x86;
-using Mosa.External.x86.Drawing;
-using Mosa.External.x86.Encoding;
+﻿using Mosa.External.x86.Encoding;
 using Mosa.Kernel.x86;
+using System.Drawing;
 
 namespace Mosa.External.x86.Drawing
 {

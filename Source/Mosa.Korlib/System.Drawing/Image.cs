@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Mosa.External.x86.Drawing
+﻿namespace System.Drawing
 {
     public class Image
     {
