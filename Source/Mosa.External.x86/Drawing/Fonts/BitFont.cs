@@ -9,12 +9,13 @@ namespace Mosa.External.x86.Drawing.Fonts
 		public byte[] Raw;
 		public int Size;
 		public string Name;
+
 		public BitFontDescriptor(string aName, string aCharset, byte[] aRaw, int aSize)
 		{
-			this.Charset = aCharset;
-			this.Raw = aRaw;
-			this.Size = aSize;
-			this.Name = aName;
+			Charset = aCharset;
+			Raw = aRaw;
+			Size = aSize;
+			Name = aName;
 		}
 	}
 
@@ -33,30 +34,7 @@ namespace Mosa.External.x86.Drawing.Fonts
 			RegisteredBitFont.Add(bitFontDescriptor);
 		}
 
-		public static void DrawBitFontString(this Graphics graphics, string FontName, uint color, string Text, int X, int Y, int Devide = 0, bool DisableAntiAliasing = false)
-		{
-			BitFontDescriptor bitFontDescriptor = new BitFontDescriptor();
-			foreach (var v in RegisteredBitFont)
-			{
-				if (v.Name == FontName)
-				{
-					bitFontDescriptor = v;
-				}
-			}
-
-			string[] Lines = Text.Split('\n');
-			for (int l = 0; l < Lines.Length; l++)
-			{
-				int UsedX = 0;
-				for (int i = 0; i < Lines[l].Length; i++)
-				{
-					char c = Lines[l][i];
-					UsedX += DrawBitFontChar(graphics, bitFontDescriptor.Raw, bitFontDescriptor.Size, Color.FromArgb((int)color), bitFontDescriptor.Charset.IndexOf(c), UsedX + X, Y + bitFontDescriptor.Size * l, !DisableAntiAliasing) + 2 + Devide;
-				}
-			}
-		}
-
-		private static int DrawBitFontChar(Graphics graphics, byte[] Raw, int Size, Color Color, int Index, int X, int Y, bool UseAntiAliasing)
+		public static int DrawBitFontChar(Graphics graphics, byte[] Raw, int Size, Color Color, int Index, int X, int Y, bool UseAntiAliasing)
 		{
 			if (Index == -1) return Size / 2;
 
@@ -94,7 +72,7 @@ namespace Mosa.External.x86.Drawing.Fonts
 								{
 									int tx = X + (aw * 8) + ww - 1;
 									int ty = Y + h;
-									Color ac = Mosa.External.x86.Drawing.Color.FromArgb((int)graphics.GetPoint(tx, ty));
+									Color ac = Color.FromArgb((int)graphics.GetPoint(tx, ty));
 									ac.R = (byte)(((Color.R * 127 + 127 * ac.R) >> 8) & 0xFF);
 									ac.G = (byte)(((Color.R * 127 + 127 * ac.G) >> 8) & 0xFF);
 									ac.B = (byte)(((Color.R * 127 + 127 * ac.B) >> 8) & 0xFF);

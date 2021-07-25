@@ -290,12 +290,7 @@ namespace System.Collections.Generic
 
 		public bool Contains(T item)
 		{
-			for (int i = 0; i < _size; i++)
-			{
-				if (_items[i].Equals(item))
-					return true;
-			}
-			return false;
+			return IndexOf(item) >= 0;
 		}
 
 		bool IList.Contains(object value)
@@ -338,8 +333,11 @@ namespace System.Collections.Generic
 		public int IndexOf(T item)
 		{
 			for (int i = 0; i < _size; i++)
-			{
-				if (_items[i].Equals(item))
+            {
+				object first = _items[i];
+				object second = item;
+
+				if (first == second)
 					return i;
 			}
 			return -1;

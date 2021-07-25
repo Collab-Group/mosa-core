@@ -1,4 +1,6 @@
-﻿namespace Mosa.External.x86.Drawing
+﻿using Mosa.External.x86.Drawing.Fonts;
+
+namespace Mosa.External.x86.Drawing
 {
     public abstract class Graphics
     {
@@ -16,6 +18,26 @@
         public int LimitHeight;
 
         public string CurrentDriver;
+
+        public virtual void DrawBitFontString(string FontName, uint color, string Text, int X, int Y, int Devide = 0, bool DisableAntiAliasing = false)
+        {
+            BitFontDescriptor bitFontDescriptor = new BitFontDescriptor();
+
+            foreach (var v in BitFont.RegisteredBitFont)
+                if (v.Name == FontName)
+                    bitFontDescriptor = v;
+
+            string[] Lines = Text.Split('\n');
+            for (int l = 0; l < Lines.Length; l++)
+            {
+                int UsedX = 0;
+                for (int i = 0; i < Lines[l].Length; i++)
+                {
+                    char c = Lines[l][i];
+                    UsedX += BitFont.DrawBitFontChar(this, bitFontDescriptor.Raw, bitFontDescriptor.Size, Color.FromArgb((int)color), bitFontDescriptor.Charset.IndexOf(c), UsedX + X, Y + bitFontDescriptor.Size * l, !DisableAntiAliasing) + 2 + Devide;
+                }
+            }
+        }
 
         public virtual void DrawFilledRectangle(uint Color, int X, int Y, int Width, int Height)
         {
