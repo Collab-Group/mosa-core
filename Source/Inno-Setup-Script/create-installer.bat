@@ -1,0 +1,8 @@
+@@ -1,7 +0,0 @@
+@echo off
+rem set INNOSETUP=C:\Program Files (x86)\Inno Setup 5\ISCC.exe
+set INNOSETUP=C:\Program Files (x86)\Inno Setup 6\ISCC.exe
+
+if exist "%INNOSETUP%" "%INNOSETUP%" /DMyAppVersion=2.0.0 Mosa-Installer.iss
+
+start "" ..\..\bin\MOSA-Installer.exe "/silent"
