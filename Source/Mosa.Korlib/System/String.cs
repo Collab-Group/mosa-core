@@ -530,6 +530,16 @@ namespace System
 			return (value == null) || (value.Length == 0);
 		}
 
+		public bool Contains(string value)
+        {
+			return IndexOfImpl(value, 0, length) >= 0;
+        }
+
+		public bool Contains(char value)
+		{
+			return IndexOfImpl(value, 0, length) >= 0;
+		}
+
 		public int IndexOf(string value)
 		{
 			if (length == 0)
