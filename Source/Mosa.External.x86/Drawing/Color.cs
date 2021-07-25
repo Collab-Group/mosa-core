@@ -1582,7 +1582,7 @@
 
         internal Color(KnownColor knownColor)
         {
-            A = 0;
+            A = 255;
             R = 0;
             G = 0;
             B = 0;
