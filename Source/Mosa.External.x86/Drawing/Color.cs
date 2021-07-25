@@ -1610,7 +1610,8 @@
 
         public int ToArgb()
 		{
-			return ARGB == 0 ? (A << 24 | R << 16 | G << 8 | B) : ARGB;
+            // TODO: Optimize function when ARGB is 0
+			return ARGB == 0 ? (GetAlpha() << 24 | GetRed() << 16 | GetGreen() << 8 | GetBlue()) : ARGB;
 		}
 
 		public static int ToArgb(byte r, byte g, byte b)
@@ -1640,7 +1641,7 @@
 
         public override string ToString()
         {
-			return "A:" + A + " R:" + R + " G:" + G + " B:" + B;
+			return "A:" + GetAlpha() + " R:" + GetRed() + " G:" + GetGreen() + " B:" + GetBlue();
 		}
     }
 }
