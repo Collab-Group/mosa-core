@@ -6,6 +6,8 @@
 
         public int ARGB { get; private set; }
 
+        public bool IsBlack { get; private set; }
+
         public static bool operator ==(Color a, Color b)
         {
             return Equals(a, b);
@@ -1585,33 +1587,34 @@
             G = 0;
             B = 0;
 
+            IsBlack = knownColor == KnownColor.Black;
             ARGB = KnownColorTable.KnownColorToArgb(knownColor);
         }
 
         public byte GetAlpha()
         {
-            return A == 0 ? ((byte)((ARGB >> 24) & 0xFF)) : A;
+            return A == 0 && !IsBlack ? ((byte)((ARGB >> 24) & 0xFF)) : A;
         }
 
         public byte GetRed()
         {
-            return R == 0 ? ((byte)((ARGB >> 16) & 0xFF)) : R;
+            return R == 0 && !IsBlack ? ((byte)((ARGB >> 16) & 0xFF)) : R;
         }
 
         public byte GetGreen()
         {
-            return G == 0 ? ((byte)((ARGB >> 8) & 0xFF)) : G;
+            return G == 0 && !IsBlack ? ((byte)((ARGB >> 8) & 0xFF)) : G;
         }
 
         public byte GetBlue()
         {
-            return B == 0 ? ((byte)((ARGB) & 0xFF)) : B;
+            return B == 0 && !IsBlack ? ((byte)((ARGB) & 0xFF)) : B;
         }
 
         public int ToArgb()
 		{
             // TODO: Optimize function when ARGB is 0
-			return ARGB == 0 ? (GetAlpha() << 24 | GetRed() << 16 | GetGreen() << 8 | GetBlue()) : ARGB;
+			return ARGB == 0 && !IsBlack ? (GetAlpha() << 24 | GetRed() << 16 | GetGreen() << 8 | GetBlue()) : ARGB;
 		}
 
 		public static int ToArgb(byte r, byte g, byte b)
