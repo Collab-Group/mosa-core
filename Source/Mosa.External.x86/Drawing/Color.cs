@@ -2,13 +2,27 @@
 {
 	public struct Color
 	{
-		public byte A { get; set; }
+        private byte A, R, G, B;
 
-		public byte R { get; set; }
+        public int ARGB { get; private set; }
 
-        public byte G { get; set; }
+        public static bool operator ==(Color a, Color b)
+        {
+            return Equals(a, b);
+        }
 
-        public byte B { get; set; }
+        public static bool operator !=(Color a, Color b)
+        {
+            return !Equals(a, b);
+        }
+
+        public static bool Equals(Color a, Color b)
+        {
+            return a.GetAlpha() == b.GetAlpha() &&
+                a.GetRed() == b.GetRed() &&
+                a.GetGreen() == b.GetGreen() &&
+                a.GetBlue() == b.GetBlue();
+        }
 
         public static readonly Color Empty = new Color();
 
@@ -1566,12 +1580,37 @@
 
         internal Color(KnownColor knownColor)
         {
-            this = FromArgb(KnownColorTable.KnownColorToArgb(knownColor));
+            A = 0;
+            R = 0;
+            G = 0;
+            B = 0;
+
+            ARGB = KnownColorTable.KnownColorToArgb(knownColor);
+        }
+
+        public byte GetAlpha()
+        {
+            return A == 0 ? ((byte)((ARGB >> 24) & 0xFF)) : A;
+        }
+
+        public byte GetRed()
+        {
+            return R == 0 ? ((byte)((ARGB >> 16) & 0xFF)) : R;
+        }
+
+        public byte GetGreen()
+        {
+            return G == 0 ? ((byte)((ARGB >> 8) & 0xFF)) : G;
+        }
+
+        public byte GetBlue()
+        {
+            return B == 0 ? ((byte)((ARGB) & 0xFF)) : B;
         }
 
         public int ToArgb()
 		{
-			return A << 24 | R << 16 | G << 8 | B;
+			return ARGB == 0 ? (A << 24 | R << 16 | G << 8 | B) : ARGB;
 		}
 
 		public static int ToArgb(byte r, byte g, byte b)
@@ -1579,14 +1618,19 @@
 			return 255 << 24 | r << 16 | g << 8 | b;
 		}
 
-		public static Color FromArgb(byte red, byte green, byte blue)
+        public static int ToArgb(byte a, byte r, byte g, byte b)
+        {
+            return a << 24 | r << 16 | g << 8 | b;
+        }
+
+        public static Color FromArgb(byte red, byte green, byte blue)
 		{
-			return new Color() { A = 255, R = red, G = green, B = blue };
+			return new Color() { A = 255, R = red, G = green, B = blue, ARGB = ToArgb(red, green, blue) };
 		}
 
 		public static Color FromArgb(byte alpha, byte red, byte green, byte blue)
 		{
-			return new Color() { A = alpha, R = red, G = green, B = blue };
+			return new Color() { A = alpha, R = red, G = green, B = blue, ARGB = ToArgb(alpha, red, green, blue) };
 		}
 
 		public static Color FromArgb(int argb)
@@ -1596,7 +1640,7 @@
 
         public override string ToString()
         {
-			return "A:" + A + " " + "R:" + R + " " + "G:" + G + " " + "B:" + B;
+			return "A:" + A + " R:" + R + " G:" + G + " B:" + B;
 		}
     }
 }
