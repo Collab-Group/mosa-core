@@ -85,12 +85,12 @@ namespace Mosa.External.x86.Drawing
                         Color foreground = Color.FromArgb(image.RawData[image.Width * h + w]);
                         Color background = Color.FromArgb((int)GetPoint(X + w, Y + h));
 
-                        int alpha = foreground.A;
+                        int alpha = foreground.GetAlpha();
                         int inv_alpha = 255 - alpha;
 
-                        byte newR = (byte)(((foreground.R * alpha + inv_alpha * background.R) >> 8) & 0xFF);
-                        byte newG = (byte)(((foreground.G * alpha + inv_alpha * background.G) >> 8) & 0xFF);
-                        byte newB = (byte)(((foreground.B * alpha + inv_alpha * background.B) >> 8) & 0xFF);
+                        byte newR = (byte)(((foreground.GetRed() * alpha + inv_alpha * background.GetRed()) >> 8) & 0xFF);
+                        byte newG = (byte)(((foreground.GetGreen() * alpha + inv_alpha * background.GetGreen()) >> 8) & 0xFF);
+                        byte newB = (byte)(((foreground.GetBlue() * alpha + inv_alpha * background.GetBlue()) >> 8) & 0xFF);
 
                         DrawPoint((uint)Color.ToArgb(newR, newG, newB), X + w, Y + h);
                     }

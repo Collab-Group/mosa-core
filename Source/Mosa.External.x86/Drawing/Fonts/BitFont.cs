@@ -73,10 +73,10 @@ namespace Mosa.External.x86.Drawing.Fonts
 									int tx = X + (aw * 8) + ww - 1;
 									int ty = Y + h;
 									Color ac = Color.FromArgb((int)graphics.GetPoint(tx, ty));
-									ac.R = (byte)(((Color.R * 127 + 127 * ac.R) >> 8) & 0xFF);
-									ac.G = (byte)(((Color.R * 127 + 127 * ac.G) >> 8) & 0xFF);
-									ac.B = (byte)(((Color.R * 127 + 127 * ac.B) >> 8) & 0xFF);
-									graphics.DrawPoint((uint)ac.ToArgb(),tx , ty);
+									byte r = (byte)(((Color.GetRed() * 127 + 127 * ac.GetRed()) >> 8) & 0xFF);
+									byte g = (byte)(((Color.GetRed() * 127 + 127 * ac.GetGreen()) >> 8) & 0xFF);
+									byte b = (byte)(((Color.GetRed() * 127 + 127 * ac.GetBlue()) >> 8) & 0xFF);
+									graphics.DrawPoint((uint)Color.ToArgb(ac.GetAlpha(), r, g, b), tx , ty);
 								}
 
 								LastPixelIsNotDrawn = false;
