@@ -6,8 +6,6 @@
  * or (at your option) any later version.
  */
 
-using Mosa.External.x86.Drawing;
-
 namespace Mosa.External.x86.Drawing.Fonts
 {
     static class ASC16
