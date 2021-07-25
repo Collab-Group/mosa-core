@@ -1,7 +1,7 @@
 # Note: Your project name cannot contain spaces
 # Join Our Discord Chat! 👉[Here](https://discord.gg/WrNEsmUmKa)
 ## How to use?
-### Just Install Inno setup and double click CreateInstallerPowerShell.bat
+# Just Install Inno setup and double click CreateInstallerPowerShell.bat
 ### MOSA-Core support Visual studio template!
 ### Also. VMWare Player required.
 ## Inno-Setup Required [Download Here](https://jrsoftware.org/download.php/is.exe)
