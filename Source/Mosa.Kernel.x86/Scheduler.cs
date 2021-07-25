@@ -43,13 +43,6 @@ namespace Mosa.Kernel.x86
 			CreateThread(address, PageFrameAllocator.PageSize, 0);
 		}
 
-		// Quality of life function
-		public static void CreateAndStart(ThreadStart thread)
-        {
-			CreateThread(thread, PageFrameAllocator.PageSize);
-			Start();
-        }
-
 		public static void Start()
 		{
 			SetThreadID(0);

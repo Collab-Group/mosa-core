@@ -33,6 +33,7 @@ namespace Mosa.Kernel.x86
 			VirtualPageAllocator.Setup();
 			GC.Setup();
 
+			Scheduler.Setup();
 			SmbiosManager.Setup();
 
 			//Setup PCI
