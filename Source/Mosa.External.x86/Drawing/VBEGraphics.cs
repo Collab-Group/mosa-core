@@ -25,7 +25,7 @@ namespace Mosa.External.x86.Drawing
 
         public override void Clear(uint Color)
         {
-            memoryBlock.Fill32((uint)FrameSize, Color, (uint)FrameSize, Bpp);
+            memoryBlock.Fill32(0, Color, (uint)FrameSize, Bpp);
         }
 
         public override void Disable() { }
