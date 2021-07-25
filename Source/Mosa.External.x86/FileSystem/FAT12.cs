@@ -6,8 +6,8 @@ using Mosa.Kernel.x86;
 using Mosa.Runtime;
 using System.Collections.Generic;
 
-//namespace Mosa.External.x86.FileSystem
-namespace MOSA1
+namespace Mosa.External.x86.FileSystem
+//namespace MOSA1
 {
     public class FAT12
     {
