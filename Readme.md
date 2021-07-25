@@ -1,7 +1,7 @@
 # Note: Your project name cannot contain spaces
 # Join Our Discord Chat! 👉[Here](https://discord.gg/WrNEsmUmKa)
 ## How to use?
-### Just Build the Mosa.sln and Install Inno setup. then double click CreateInstaller.bat.
+### Just Install Inno setup, then double click CreateInstaller.bat.
 ### MOSA-Core support Visual studio template!
 ### Also. VMWare Player required.
 ## Inno-Setup Required [Download Here](https://jrsoftware.org/download.php/is.exe)
