@@ -44,7 +44,7 @@ namespace System
 				count++;
 			} while (tmp != 0);
 
-			string s = String.InternalAllocateString(count);
+			string s = "";
 			ulong temp = this;
 
 			for(int i = 0; i < count; i++) 
@@ -56,9 +56,9 @@ namespace System
 
 			string r = "";
 
-			for (int i = 0; i < s.Length; i++)
+			for (int i = 0; i < s.length; i++)
 			{
-				r += s[s.Length - 1 - i];
+				r += s[s.length - 1 - i];
 			}
 
 			return r;
