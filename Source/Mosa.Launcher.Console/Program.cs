@@ -260,6 +260,7 @@ namespace Mosa.Launcher.Console
 		{
 			Settings.AddPropertyListValue("Compiler.SourceFiles", SourceName);
 			Settings.AddPropertyListValue("SearchPaths", SourceFolder);
+			Settings.AddPropertyListValue("SearchPaths", Path.Combine(AppFolder, "asm"));
 		}
 
 		private static void RegisterPlatforms()
