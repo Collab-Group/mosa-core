@@ -1642,6 +1642,15 @@
             return new Color() { A = (byte)((argb >> 24) & 0xFF), R = (byte)((argb >> 16) & 0xFF), G = (byte)((argb >> 8) & 0xFF), B = (byte)((argb) & 0xFF) };
         }
 
+        public static ushort Convert8888RGBto565RGB(uint argb)
+        {
+            byte r = (byte)((byte)((argb >> 16) & 0xFF) >> 3);
+            byte g = (byte)((byte)((argb >> 8) & 0xFF) >> 2);
+            byte b = (byte)((byte)((argb) & 0xFF) >> 3);
+
+            return (ushort)((r << 11) | (g << 5) | b);
+        }
+
         public override string ToString()
         {
             return "A:" + GetAlpha() + " R:" + GetRed() + " G:" + GetGreen() + " B:" + GetBlue();

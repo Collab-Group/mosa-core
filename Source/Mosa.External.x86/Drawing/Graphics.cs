@@ -10,7 +10,7 @@ namespace Mosa.External.x86.Drawing
     {
         public int Width;
         public int Height;
-        public const int Bpp = 4;
+        public int Bpp = 4;
 
         public int FrameSize
         {
