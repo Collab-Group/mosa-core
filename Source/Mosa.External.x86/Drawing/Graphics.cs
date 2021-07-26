@@ -24,13 +24,10 @@ namespace Mosa.External.x86.Drawing
 
         public string CurrentDriver;
 
-<<<<<<< Updated upstream
-        public virtual int DrawBitFontString(string FontName, uint color, string Text, int X, int Y, int Devide = 0, bool DisableAntiAliasing = false)
-=======
         public uint FrameCacheAddr;
 
-        public virtual void DrawBitFontString(string FontName, uint color, string Text, int X, int Y, int Devide = 0, bool DisableAntiAliasing = false)
->>>>>>> Stashed changes
+        //UsedX will be the last line of it used.
+        public virtual int DrawBitFontString(string FontName, uint color, string Text, int X, int Y, int Devide = 0, bool DisableAntiAliasing = false)
         {
             BitFontDescriptor bitFontDescriptor = new BitFontDescriptor();
 
