@@ -25,27 +25,5 @@ namespace Mosa.External.x86
             GC.DisposeObject(ls);
             return result;
         }
-
-        //Not available until GC is setup
-        public static string ToString(this ulong u) 
-        {
-            string s = "";
-            ulong temp = u;
-
-            do
-            {
-                s += (char)((temp % 10) + 0x30);
-                temp /= 10;
-            } while (temp != 0);
-
-            string r = "";
-
-            for (int i = 0; i < s.Length; i++)
-            {
-                r += s[s.Length - 1 - i];
-            }
-
-            return r;
-        }
     }
 }
