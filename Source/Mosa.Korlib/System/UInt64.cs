@@ -34,31 +34,23 @@ namespace System
 			return (int)_value;
 		}
 
+		//Not Available Until GC Is Setup
         public override string ToString()
         {
-			int count = 0;
-			ulong tmp = this;
-			do
-			{
-				tmp /= 10;
-				count++;
-			} while (tmp != 0);
-
 			string s = "";
 			ulong temp = this;
 
-			for(int i = 0; i < count; i++) 
+			do
 			{
-				//ASCII
 				s += (char)((temp % 10) + 0x30);
 				temp /= 10;
-			}
+			} while (temp != 0);
 
 			string r = "";
 
-			for (int i = 0; i < s.length; i++)
+			for (int i = 0; i < s.Length; i++)
 			{
-				r += s[s.length - 1 - i];
+				r += s[s.Length - 1 - i];
 			}
 
 			return r;
