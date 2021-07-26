@@ -24,8 +24,6 @@ namespace Mosa.External.x86.Drawing
 
         public string CurrentDriver;
 
-        public uint FrameCacheAddr;
-
         //UsedX will be the last line of it used.
         public virtual int DrawBitFontString(string FontName, uint color, string Text, int X, int Y, int Devide = 0, bool DisableAntiAliasing = false)
         {
@@ -35,17 +33,21 @@ namespace Mosa.External.x86.Drawing
                 if (v.Name == FontName)
                     bitFontDescriptor = v;
 
-            int UsedX = 0;
+            int TotalX = 0;
             string[] Lines = Text.Split('\n');
 
             for (int l = 0; l < Lines.Length; l++)
+            {
+                int UsedX = 0;
                 for (int i = 0; i < Lines[l].Length; i++)
                 {
                     char c = Lines[l][i];
                     UsedX += BitFont.DrawBitFontChar(this, bitFontDescriptor.Raw, bitFontDescriptor.Size, Color.FromArgb((int)color), bitFontDescriptor.Charset.IndexOf(c), UsedX + X, Y + bitFontDescriptor.Size * l, !DisableAntiAliasing) + 2 + Devide;
                 }
+                TotalX += UsedX;
+            }
 
-            return UsedX;
+            return TotalX;
         }
 
         public virtual void DrawFilledRectangle(uint Color, int X, int Y, int Width, int Height)
@@ -53,21 +55,6 @@ namespace Mosa.External.x86.Drawing
             for (int h = 0; h < Height; h++)
                 for (int w = 0; w < Width; w++)
                     DrawPoint(Color, X + w, Y + h);
-        }
-
-        public virtual void DrawFilledRectangleNoLimit(uint Color, int X, int Y, int aWidth, int aHeight)
-        {
-            uint address = FrameCacheAddr;
-            int h = 0;
-
-            while (((h++) <= Height - Y) && h <= aHeight)
-            {
-                ASM.MEMFILL(
-                    (uint)(address + ((Width * (Y + h) + X) * Bpp)),
-                    (uint)Math.Clamp((aWidth * 4), 0, (Width - X) * 4),
-                    Color
-                    ); ;
-            }
         }
 
         public virtual void DrawRectangle(uint Color, int X, int Y, int Width, int Height, int Weight)
@@ -120,20 +107,6 @@ namespace Mosa.External.x86.Drawing
                         DrawPoint((uint)Color.ToArgb(newR, newG, newB), X + w, Y + h);
                     }
                     else DrawPoint((uint)image.RawData[(uint)(image.Width * h + w)], X + w, Y + h);
-        }
-
-        public virtual void DrawImageNoLimit(Image image, int X, int Y)
-        {
-            uint address = FrameCacheAddr;
-            int h = 0;
-            while (((h++) <= Height - Y) && h <= image.Height)
-            {
-                ASM.MEMCPY(
-                    (uint)(address + ((Width * (Y + h) + X) * Bpp)),
-                    (uint)((uint)image.RawData.Address + (image.Width * 4 * h)),
-                    (uint)Math.Clamp((image.Width * 4), 0, (Width - X) * 4)
-                    ); ;
-            }
         }
 
         public void SetLimit(int X, int Y, int Width, int Height)

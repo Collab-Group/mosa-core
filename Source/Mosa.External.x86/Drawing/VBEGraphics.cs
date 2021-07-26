@@ -1,6 +1,8 @@
 ﻿using Mosa.External.x86.Driver;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.x86;
+using System;
+using System.Drawing;
 
 namespace Mosa.External.x86.Drawing
 {
@@ -22,8 +24,6 @@ namespace Mosa.External.x86.Drawing
 
 			memoryBlock = new MemoryBlock(KernelMemory.AllocateVirtualMemory((uint)FrameSize), (uint)FrameSize);
             memoryBlockAddr = (uint)memoryBlock.Address;
-
-            FrameCacheAddr = (uint)memoryBlock.Address;
 
 			ResetLimit();
         }
@@ -49,7 +49,29 @@ namespace Mosa.External.x86.Drawing
 			return 0;
 		}
 
-		public override void Update()
+        public override void DrawImage(Image image, int X, int Y, bool DrawWithAlpha)
+        {
+            int h = 0;
+            while ((h++ <= Height - Y) && h <= image.Height)
+                ASM.MEMCPY(
+                    (uint)(memoryBlockAddr + ((Width * (Y + h) + X) * Bpp)),
+                    (uint)((uint)image.RawData.Address + (image.Width * 4 * h)),
+                    (uint)Math.Clamp(image.Width * 4, 0, (Width - X) * 4)
+                    );
+        }
+
+        public override void DrawFilledRectangle(uint Color, int X, int Y, int aWidth, int aHeight)
+        {
+            int h = 0;
+            while ((h++ <= Height - Y) && h <= aHeight)
+                ASM.MEMFILL(
+                    (uint)(memoryBlockAddr + ((Width * (Y + h) + X) * Bpp)),
+                    (uint)Math.Clamp(aWidth * 4, 0, (Width - X) * 4),
+                    Color
+                    );
+        }
+
+        public override void Update()
         {
             ASM.MEMCPY(vbeDriverAddr, memoryBlockAddr, (uint)FrameSize);
         }
