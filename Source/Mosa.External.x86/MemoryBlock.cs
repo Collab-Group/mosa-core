@@ -39,6 +39,17 @@ namespace Mosa.External.x86
                 Write8((uint)i, data[i]);
         }
 
+        public MemoryBlock(int[] data)
+        {
+            size = (uint)data.Length * 4;
+
+            address = GC.AllocateObject(size);
+            IsManaged = true;
+
+            for (int i = 0; i < data.Length; i++)
+                this[(uint)i] = data[i];
+        }
+
         public void Free()
         {
             if (IsManaged)
