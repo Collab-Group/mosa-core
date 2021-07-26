@@ -25,7 +25,10 @@ namespace Mosa.External.x86.Drawing
 
         public override void Clear(uint Color)
         {
-            memoryBlock.Fill32(0, Color, (uint)FrameSize, Bpp);
+            //memoryBlock.Fill32(0, Color, (uint)FrameSize, Bpp);
+
+            uint Addr = (uint)memoryBlock.Address;
+            ASM.MEMFILL(Addr, (uint)FrameSize, Color);
         }
 
         // TODO: Fix
