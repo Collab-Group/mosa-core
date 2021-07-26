@@ -8,10 +8,12 @@ namespace Mosa.External.x86.Drawing
     {
         private readonly VBEDriver vBEDriver;
         private readonly MemoryBlock memoryBlock;
+        private readonly uint memoryBlockAddr, vbeDriverAddr;
 
         public VBEGraphics()
         {
             vBEDriver = new VBEDriver();
+            vbeDriverAddr = (uint)vBEDriver.Video_Memory.Address;
 
 			Width = (int)vBEDriver.ScreenWidth;
             Height = (int)vBEDriver.ScreenHeight;
@@ -19,36 +21,15 @@ namespace Mosa.External.x86.Drawing
             CurrentDriver = "VBE";
 
 			memoryBlock = new MemoryBlock(KernelMemory.AllocateVirtualMemory((uint)FrameSize), (uint)FrameSize);
+            memoryBlockAddr = (uint)memoryBlock.Address;
 
 			ResetLimit();
         }
 
         public override void Clear(uint Color)
         {
-            //memoryBlock.Fill32(0, Color, (uint)FrameSize, Bpp);
-
-            uint Addr = (uint)memoryBlock.Address;
-            ASM.MEMFILL(Addr, (uint)FrameSize, Color);
+            ASM.MEMFILL(memoryBlockAddr, (uint)FrameSize, Color);
         }
-
-        // TODO: Fix
-        /*public override void DrawFilledRectangle(uint Color, int X, int Y, int Width, int Height)
-        {
-            for (int h = 0; h < Height; h++)
-                if (X >= 0)
-                {
-                    int w = Width;
-                    if (X + Width > this.Width)
-                        w = this.Width - X;
-
-                    memoryBlock.Fill32((uint)(this.Width * (h + Y) + X), Color, (uint)w, Bpp);
-                }
-                else
-                {
-                    if (Width + X >= 0)
-                        memoryBlock.Fill32((uint)(this.Width * (h + Y)), Color, (uint)(Width + X), Bpp);
-                }
-        }*/
 
         public override void Disable() { }
 
@@ -68,18 +49,7 @@ namespace Mosa.External.x86.Drawing
 
 		public override void Update()
         {
-            uint addr = vBEDriver.Video_Memory.Address.ToUInt32();
-            uint bufferaddr = memoryBlock.Address.ToUInt32();
-
-            /*for (int i = 0; i < FrameSize; i++)
-            {
-                byte bufferi = Native.Get8((uint)(bufferaddr + i));
-
-                if (Native.Get8((uint)(addr + i)) != bufferi)
-                    Native.Set8((uint)(addr + i), bufferi);
-            }*/
-
-            ASM.MEMCPY(addr, bufferaddr, (uint)FrameSize);
+            ASM.MEMCPY(vbeDriverAddr, memoryBlockAddr, (uint)FrameSize);
         }
     }
 }

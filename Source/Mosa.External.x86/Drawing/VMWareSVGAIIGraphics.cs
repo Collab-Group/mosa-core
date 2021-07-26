@@ -6,11 +6,14 @@ namespace Mosa.External.x86.Drawing
     public class VMWareSVGAIIGraphics : Graphics
     {
         private readonly VMWareSVGAII vMWareSVGAII;
+        private readonly uint svgaAddress;
 
         public VMWareSVGAIIGraphics(int width, int height)
         {
             vMWareSVGAII = new VMWareSVGAII();
             vMWareSVGAII.SetMode((uint)width, (uint)height);
+
+            svgaAddress = (uint)vMWareSVGAII.Video_Memory.Address;
 
             Width = width;
             Height = height;
@@ -22,10 +25,7 @@ namespace Mosa.External.x86.Drawing
 
         public override void Clear(uint Color)
         {
-            //vMWareSVGAII.Video_Memory.Fill32((uint)FrameSize, Color, (uint)FrameSize, Bpp);
-
-            uint Addr = (uint)vMWareSVGAII.Video_Memory.Address;
-            ASM.MEMFILL((uint)(Addr + FrameSize), (uint)FrameSize, Color);
+            ASM.MEMFILL((uint)(svgaAddress + FrameSize), (uint)FrameSize, Color);
         }
 
         public override void DrawPoint(uint Color, int X, int Y)
@@ -44,14 +44,7 @@ namespace Mosa.External.x86.Drawing
 
 		public unsafe override void Update()
         {
-            uint addr = vMWareSVGAII.Video_Memory.Address.ToUInt32();
-
-            /*for (int i = 0; i < FrameSize; i++)
-                Native.Set8((uint)(addr + i), Native.Get8((uint)(addr + FrameSize + i)));*/
-
-            // Fast memory copy using assembly
-            ASM.MEMCPY(addr, (uint)(addr + FrameSize), (uint)FrameSize);
-
+            ASM.MEMCPY(svgaAddress, (uint)(svgaAddress + FrameSize), (uint)FrameSize);
             vMWareSVGAII.Update();
         }
 
