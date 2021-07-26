@@ -1,8 +1,10 @@
-﻿namespace System.Drawing
+﻿using Mosa.External.x86;
+
+namespace System.Drawing
 {
     public unsafe class Image
     {
-        public int* RawData;
+        public MemoryBlock RawData;
         public int Length;
         public int Bpp;
         public int Width;

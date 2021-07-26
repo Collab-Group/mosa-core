@@ -44,7 +44,7 @@ namespace Mosa.External.x86.Drawing
             this.Height = (int)bitmapHeader.Height;
             this.Length = Width * Height;
             this.Bpp = (int)bitmapHeader.Bpp;
-            this.RawData = (int*)GC.AllocateObject((uint)(this.Length * Bpp));
+            this.RawData = new MemoryBlock((uint)(Length * Bpp));
 
 
             int[] temp = new int[Width];
@@ -56,7 +56,7 @@ namespace Mosa.External.x86.Drawing
                 {
                     for (uint k = 0; k < temp.Length; k++)
                     {
-                        RawData[Width * h + k] = temp[k];
+                        RawData[(uint)Width * h + k] = temp[k];
                     }
                     w = 0;
                     h--;

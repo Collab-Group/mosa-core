@@ -77,8 +77,8 @@ namespace Mosa.External.x86.Drawing
         {
             for (int h = 0; h < image.Height; h++)
                 for (int w = 0; w < image.Width; w++)
-                    if (image.RawData[image.Width * h + w] != TransparentColor)
-                        DrawPoint((uint)image.RawData[image.Width * h + w], X + w, Y + h);
+                    if (image.RawData[(uint)(image.Width * h + w)] != TransparentColor)
+                        DrawPoint((uint)image.RawData[(uint)(image.Width * h + w)], X + w, Y + h);
         }
 
         public virtual void DrawImage(Image image, int X, int Y, bool DrawWithAlpha)
@@ -87,7 +87,7 @@ namespace Mosa.External.x86.Drawing
                 for (int w = 0; w < image.Width; w++)
                     if (DrawWithAlpha)
                     {
-                        Color foreground = Color.FromArgb(image.RawData[image.Width * h + w]);
+                        Color foreground = Color.FromArgb(image.RawData[(uint)(image.Width * h + w)]);
                         Color background = Color.FromArgb((int)GetPoint(X + w, Y + h));
 
                         int alpha = foreground.GetAlpha();
@@ -99,7 +99,7 @@ namespace Mosa.External.x86.Drawing
 
                         DrawPoint((uint)Color.ToArgb(newR, newG, newB), X + w, Y + h);
                     }
-                    else DrawPoint((uint)image.RawData[image.Width * h + w], X + w, Y + h);
+                    else DrawPoint((uint)image.RawData[(uint)(image.Width * h + w)], X + w, Y + h);
         }
 
         public void SetLimit(int X, int Y, int Width, int Height)
@@ -329,7 +329,7 @@ namespace Mosa.External.x86.Drawing
                 {
                     x2 = ((j * x_ratio) >> 16);
                     y2 = ((i * y_ratio) >> 16);
-                    temp[(i * NewWidth) + j] = Image.RawData[(y2 * w1) + x2];
+                    temp[(i * NewWidth) + j] = Image.RawData[(uint)((y2 * w1) + x2)];
                 }
             }
 
