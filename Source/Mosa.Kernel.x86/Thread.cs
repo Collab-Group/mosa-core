@@ -6,12 +6,17 @@ namespace Mosa.Kernel.x86
 {
 	public enum ThreadStatus { Empty = 0, Running, Terminating, Terminated, Waiting };
 
-	internal class Thread
+	public class Thread
 	{
 		public ThreadStatus Status = ThreadStatus.Empty;
 		public Pointer StackTop;
 		public Pointer StackBottom;
 		public Pointer StackStatePointer;
 		public uint Ticks;
+
+		public static void Sleep(uint millisecond)
+		{
+			PIT.Wait(millisecond);
+		}
 	}
 }

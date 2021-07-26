@@ -25,8 +25,8 @@ namespace Mosa.Kernel.x86
 
 			// Initialize interrupts
 			PIC.Setup();
-			PIT.Setup();
 			IDT.Setup();
+			PIT.Setup();
 
 			// Initializing the memory management
 			PageFrameAllocator.Setup();

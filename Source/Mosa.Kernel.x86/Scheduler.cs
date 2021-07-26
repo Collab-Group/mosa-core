@@ -10,7 +10,7 @@ namespace Mosa.Kernel.x86
 	public static class Scheduler
 	{
 		public const int MaxThreads = 256;
-		public const int ClockIRQ = 0x20;
+		public const int ClockIRQ = 0x26;
 		public const int ThreadTerminationSignalIRQ = 254;
 
 		private static bool Enabled;

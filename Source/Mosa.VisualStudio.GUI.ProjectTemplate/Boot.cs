@@ -7,6 +7,7 @@ using Mosa.External.x86.Driver;
 using Mosa.External.x86.FileSystem;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.x86;
+using System.Drawing;
 
 namespace $safeprojectname$
 {
@@ -50,6 +51,13 @@ namespace $safeprojectname$
             Kernel.Setup();
             IDT.SetInterruptHandler(ProcessInterrupt);
 
+            // Note: Thread Can't Be Created Dynamically
+            Scheduler.CreateThread(MainThread, PageFrameAllocator.PageSize);
+            Scheduler.Start();
+        }
+
+        public static void MainThread() 
+        {
             // Initialize the PS/2 peripherals
             PS2Keyboard.Initialize();
             PS2Mouse.Initialize(Width, Height);
@@ -59,7 +67,7 @@ namespace $safeprojectname$
             IDisk disk = new IDEDisk();
             MBR.Initialize(disk);
             FAT12 fs = new FAT12(disk, MBR.PartitionInfos[0]);
-            
+
             // Initialize graphics (default width and height is 640 and 480 respectively)
             Graphics graphics = GraphicsSelector.GetGraphics(); //GraphicsSelector.GetGraphics(Width, Height);
 
@@ -91,7 +99,7 @@ namespace $safeprojectname$
 
                 // If the FPS is superior to the mouse speed the mouse won't be smooth
                 // Note that if you remove this you'll have more FPS (the desktop will be smoother)
-                Native.Hlt();
+                //Native.Hlt();
             }
         }
 
@@ -103,7 +111,7 @@ namespace $safeprojectname$
                     // PS/2 keyboard interrupt is 0x21 IRQ 1
                     PS2Keyboard.OnInterrupt();
                     break;
-                    
+
                 case 0x2C:
                     // PS/2 mouse interrupt is 0x2C IRQ 12
                     PS2Mouse.OnInterrupt();

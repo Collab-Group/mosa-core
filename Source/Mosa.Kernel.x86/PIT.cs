@@ -1,4 +1,6 @@
-﻿namespace Mosa.Kernel.x86
+﻿using Mosa.Runtime.x86;
+
+namespace Mosa.Kernel.x86
 {
     public class PIT
     {
@@ -35,11 +37,11 @@
             }
         }
 
-        public static void Wait(uint MS)
+        public static void Wait(uint millisecond)
         {
             tickCount = 0;
             isWaitting = true;
-            while (tickCount < MS)
+            while (tickCount < millisecond)
             {
             }
             isWaitting = false;

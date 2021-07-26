@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.External.x86.FileSystem;
 using Mosa.External.x86.Driver;
+using Mosa.External.x86.FileSystem;
 using Mosa.Kernel.x86;
 
 namespace $safeprojectname$
@@ -16,6 +16,13 @@ namespace $safeprojectname$
             Kernel.Setup();
             IDT.SetInterruptHandler(ProcessInterrupt);
 
+            // Note. Thread Can't Be Created Dynamically
+            Scheduler.CreateThread(MainThread, PageFrameAllocator.PageSize);
+            Scheduler.Start();
+        }
+
+        public static void MainThread()
+        {
             // Initialize the PS/2 keyboard
             PS2Keyboard.Initialize();
 
@@ -23,7 +30,7 @@ namespace $safeprojectname$
             // MOSA currently only supports FAT12
             IDisk disk = new IDEDisk();
             MBR.Initialize(disk);
-            FAT12 fs = new FAT12(disk, MBR.PartitionInfos[0]);          
+            FAT12 fs = new FAT12(disk, MBR.PartitionInfos[0]);
             //byte[] b = fs.ReadAllBytes("/TEST1.TXT");
 
             Console.WriteLine("MOSA booted successfully! Type anything and get an echo of what you've typed.");
