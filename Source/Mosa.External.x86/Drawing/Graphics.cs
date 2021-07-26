@@ -1,10 +1,11 @@
 ﻿using Mosa.External.x86.Drawing.Fonts;
+using Mosa.Runtime;
 using System;
 using System.Drawing;
 
 namespace Mosa.External.x86.Drawing
 {
-    public abstract class Graphics
+    public unsafe abstract class Graphics
     {
         public int Width;
         public int Height;
@@ -314,11 +315,11 @@ namespace Mosa.External.x86.Drawing
             DrawLine(Color, V2x, V2y, V3x, V3y);
         }
 
-        public virtual int[] ScaleImage(Image Image, int NewWidth, int NewHeight)
+        public virtual int* ScaleImage(Image Image, int NewWidth, int NewHeight)
         {
-            int[] pixels = Image.RawData;
             int w1 = Image.Width, h1 = Image.Height;
-            int[] temp = new int[NewWidth * NewHeight];
+            //MemoryLeak Maybe
+            int* temp = (int*)GC.AllocateObject((uint)(NewWidth * NewHeight * Image.Bpp));
             int x_ratio = ((w1 << 16) / NewWidth) + 1, y_ratio = ((h1 << 16) / NewHeight) + 1;
 
             int x2, y2;
@@ -328,7 +329,7 @@ namespace Mosa.External.x86.Drawing
                 {
                     x2 = ((j * x_ratio) >> 16);
                     y2 = ((i * y_ratio) >> 16);
-                    temp[(i * NewWidth) + j] = pixels[(y2 * w1) + x2];
+                    temp[(i * NewWidth) + j] = Image.RawData[(y2 * w1) + x2];
                 }
             }
 
@@ -337,7 +338,7 @@ namespace Mosa.External.x86.Drawing
 
         public virtual void DrawImage(Image Image, int X, int Y, int W, int H, bool DrawWithAlpha)
         {
-            int[] pixels = ScaleImage(Image, W, H);
+            int* pixels = ScaleImage(Image, W, H);
 
             for (int h = 0; h < H; h++)
                 for (int w = 0; w < W; w++)
@@ -356,6 +357,8 @@ namespace Mosa.External.x86.Drawing
                         DrawPoint((uint)Color.ToArgb(newR, newG, newB), X + w, Y + h);
                     }
                     else DrawPoint((uint)pixels[W * h + w], X + w, Y + h);
+
+            GC.Free((uint)(Pointer)pixels, (uint)(W * H * Image.Bpp));
         }
 
         public virtual void TrimLine(int x1, int y1, int x2, int y2)

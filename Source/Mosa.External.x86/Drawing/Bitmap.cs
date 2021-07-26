@@ -1,5 +1,6 @@
 ﻿using Mosa.External.x86.Encoding;
 using Mosa.Kernel.x86;
+using Mosa.Runtime;
 using System.Drawing;
 
 namespace Mosa.External.x86.Drawing
@@ -41,13 +42,15 @@ namespace Mosa.External.x86.Drawing
 
             this.Width = (int)bitmapHeader.Width;
             this.Height = (int)bitmapHeader.Height;
-            this.RawData = new int[Width * Height];
+            this.Length = Width * Height;
+            this.Bpp = (int)bitmapHeader.Bpp;
+            this.RawData = (int*)GC.AllocateObject((uint)(this.Length * Bpp));
 
 
             int[] temp = new int[Width];
             uint w = 0;
             uint h = (uint)Height - 1;
-            for (uint i = 0; i < RawData.Length * (bitmapHeader.Bpp / 8); i += (bitmapHeader.Bpp / 8))
+            for (uint i = 0; i < this.Length * (bitmapHeader.Bpp / 8); i += (bitmapHeader.Bpp / 8))
             {
                 if (w == Width)
                 {

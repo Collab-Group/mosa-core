@@ -20,6 +20,8 @@ namespace Mosa.Runtime
 			return Pointer.Zero;
 		}
 
+		public static ulong ObjectsUsedMemory = 0;
+
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static Pointer AllocateObject(uint size)
 		{
@@ -39,6 +41,8 @@ namespace Mosa.Runtime
 					}
 				}
 			}
+
+			ObjectsUsedMemory += size;
 
 			return AllocateMemory(size);
 		}
