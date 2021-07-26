@@ -22,7 +22,10 @@ namespace Mosa.External.x86.Drawing
 
         public override void Clear(uint Color)
         {
-            vMWareSVGAII.Video_Memory.Fill32((uint)FrameSize, Color, (uint)FrameSize, Bpp);
+            //vMWareSVGAII.Video_Memory.Fill32((uint)FrameSize, Color, (uint)FrameSize, Bpp);
+
+            uint Addr = (uint)vMWareSVGAII.Video_Memory.Address;
+            ASM.MEMFILL((uint)(Addr + FrameSize), (uint)FrameSize, Color);
         }
 
         public override void DrawPoint(uint Color, int X, int Y)

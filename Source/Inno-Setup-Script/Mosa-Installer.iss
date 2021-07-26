@@ -48,9 +48,7 @@ Source: "..\Mosa.VisualStudio.GUI.ProjectTemplate\*.*"; DestDir: "{userdocs}\Vis
 Source: "..\Mosa.VisualStudio.GUI.ProjectTemplate\Properties\*.*"; DestDir: "{userdocs}\Visual Studio 2019\Templates\ProjectTemplates\Mosa Project GUI\Properties"; Flags: ignoreversion 
    
 ;Binaries
-Source: "..\..\bin\*.dll"; DestDir: "{app}\bin"; Flags: ignoreversion 
-Source: "..\..\bin\*.json"; DestDir: "{app}\bin"; Flags: ignoreversion 
-Source: "..\..\bin\Mosa.Launcher.Console.exe"; DestDir: "{app}\bin"; Flags: ignoreversion 
+Source: "..\..\bin\*.*"; DestDir: "{app}\bin"; Flags: ignoreversion 
 
 ;ASM
 Source: "..\ASM\*.o"; DestDir: "{app}\asm"; Flags: ignoreversion
