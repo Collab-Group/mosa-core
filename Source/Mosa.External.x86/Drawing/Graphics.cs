@@ -61,11 +61,19 @@ namespace Mosa.External.x86.Drawing
 
         public virtual void DrawFilledRectangleASM(uint Color, int X, int Y, int aWidth, int aHeight)
         {
-            int h = 0;
+            // The problem is either the while loop, Math.Clamp, or both
+            /*int h = 0;
             while ((h++ <= Height - Y) && h <= aHeight)
                 ASM.MEMFILL(
                     (uint)(VideoMemoryCacheAddr + ((Width * (Y + h) + X) * Bpp)),
                     (uint)Math.Clamp(aWidth * 4, 0, (Width - X) * 4),
+                    Color
+                    );*/
+
+            for (int h = 0; h < aHeight; h++)
+                ASM.MEMFILL(
+                    (uint)(VideoMemoryCacheAddr + ((Width * (Y + h) + X) * Bpp)),
+                    (uint)(aWidth * 4),
                     Color
                     );
         }
