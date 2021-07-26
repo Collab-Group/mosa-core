@@ -27,8 +27,10 @@ namespace Mosa.External.x86.Drawing
 
 			memoryBlock = new MemoryBlock(KernelMemory.AllocateVirtualMemory((uint)FrameSize), (uint)FrameSize);
             memoryBlockAddr = (uint)memoryBlock.Address;
+            VideoMemoryCacheAddr = (uint)memoryBlock.Address;
 
-			ResetLimit();
+
+            ResetLimit();
         }
 
         public override void Clear(uint Color)
@@ -40,22 +42,19 @@ namespace Mosa.External.x86.Drawing
 
         public override void DrawPoint(uint Color, int X, int Y)
         {
-            if (X >= LimitX && X < LimitX + LimitWidth && Y >= LimitY && Y < LimitY + LimitHeight) 
+            if (X >= LimitX && X < LimitX + LimitWidth && Y >= LimitY && Y < LimitY + LimitHeight)
             {
-                if (X >= LimitX && X < LimitX + LimitWidth && Y >= LimitY && Y < LimitY + LimitHeight)
+                switch (this.Bpp)
                 {
-                    switch (this.Bpp)
-                    {
-                        case 2:
-                            memoryBlock.Write16((uint)((Width * Y + X) * Bpp), System.Drawing.Color.Convert8888RGBto565RGB(Color));
-                            break;
-                        case 3:
-                            memoryBlock.Write24((uint)((Width * Y + X) * Bpp), Color & 0x00FFFFFF);
-                            break;
-                        case 4:
-                            memoryBlock.Write32((uint)((Width * Y + X) * Bpp), Color);
-                            break;
-                    }
+                    case 2:
+                        memoryBlock.Write16((uint)((Width * Y + X) * Bpp), System.Drawing.Color.Convert8888RGBto565RGB(Color));
+                        break;
+                    case 3:
+                        memoryBlock.Write24((uint)((Width * Y + X) * Bpp), Color & 0x00FFFFFF);
+                        break;
+                    case 4:
+                        memoryBlock.Write32((uint)((Width * Y + X) * Bpp), Color);
+                        break;
                 }
             }
         }
@@ -73,28 +72,6 @@ namespace Mosa.External.x86.Drawing
 
 			return 0;
 		}
-
-        public override void DrawImage(Image image, int X, int Y, bool DrawWithAlpha)
-        {
-            int h = 0;
-            while ((h++ <= Height - Y) && h <= image.Height)
-                ASM.MEMCPY(
-                    (uint)(memoryBlockAddr + ((Width * (Y + h) + X) * Bpp)),
-                    (uint)((uint)image.RawData.Address + (image.Width * 4 * h)),
-                    (uint)Math.Clamp(image.Width * 4, 0, (Width - X) * 4)
-                    );
-        }
-
-        public override void DrawFilledRectangle(uint Color, int X, int Y, int aWidth, int aHeight)
-        {
-            int h = 0;
-            while ((h++ <= Height - Y) && h <= aHeight)
-                ASM.MEMFILL(
-                    (uint)(memoryBlockAddr + ((Width * (Y + h) + X) * Bpp)),
-                    (uint)Math.Clamp(aWidth * 4, 0, (Width - X) * 4),
-                    Color
-                    );
-        }
 
         public override void Update()
         {

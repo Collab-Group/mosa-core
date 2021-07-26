@@ -18,6 +18,8 @@ namespace Mosa.External.x86.Drawing
             svgaAddress = (uint)vMWareSVGAII.Video_Memory.Address;
             frameCacheAddr = (uint)(svgaAddress + FrameSize);
 
+            VideoMemoryCacheAddr = (uint)(svgaAddress + FrameSize);
+
             Width = width;
             Height = height;
 
@@ -44,28 +46,6 @@ namespace Mosa.External.x86.Drawing
 
 			return 0;
 		}
-
-        public override void DrawImage(Image image, int X, int Y, bool DrawWithAlpha)
-        {
-            int h = 0;
-            while ((h++ <= Height - Y) && h <= image.Height)
-                ASM.MEMCPY(
-                    (uint)(frameCacheAddr + ((Width * (Y + h) + X) * Bpp)),
-                    (uint)((uint)image.RawData.Address + (image.Width * 4 * h)),
-                    (uint)Math.Clamp(image.Width * 4, 0, (Width - X) * 4)
-                    );
-        }
-
-        public override void DrawFilledRectangle(uint Color, int X, int Y, int aWidth, int aHeight)
-        {
-            int h = 0;
-            while ((h++ <= Height - Y) && h <= aHeight)
-                ASM.MEMFILL(
-                    (uint)(frameCacheAddr + ((Width * (Y + h) + X) * Bpp)),
-                    (uint)Math.Clamp(aWidth * 4, 0, (Width - X) * 4),
-                    Color
-                    );
-        }
 
         public unsafe override void Update()
         {

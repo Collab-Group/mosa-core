@@ -12,6 +12,8 @@ namespace Mosa.External.x86.Drawing
         public int Height;
         public int Bpp = 4;
 
+        public uint VideoMemoryCacheAddr;
+
         public int FrameSize
         {
             get { return Width * Height * Bpp; }
@@ -57,6 +59,17 @@ namespace Mosa.External.x86.Drawing
                     DrawPoint(Color, X + w, Y + h);
         }
 
+        public virtual void DrawFilledRectangleASM(uint Color, int X, int Y, int aWidth, int aHeight)
+        {
+            int h = 0;
+            while ((h++ <= Height - Y) && h <= aHeight)
+                ASM.MEMFILL(
+                    (uint)(VideoMemoryCacheAddr + ((Width * (Y + h) + X) * Bpp)),
+                    (uint)Math.Clamp(aWidth * 4, 0, (Width - X) * 4),
+                    Color
+                    );
+        }
+
         public virtual void DrawRectangle(uint Color, int X, int Y, int Width, int Height, int Weight)
         {
             DrawFilledRectangle(Color, X, Y, Width, Weight);
@@ -87,6 +100,18 @@ namespace Mosa.External.x86.Drawing
                     if (image.RawData[(uint)(image.Width * h + w)] != TransparentColor)
                         DrawPoint((uint)image.RawData[(uint)(image.Width * h + w)], X + w, Y + h);
         }
+
+        public virtual void DrawImageASM(Image image, int X, int Y)
+        {
+            int h = 0;
+            while ((h++ <= Height - Y) && h <= image.Height)
+                ASM.MEMCPY(
+                    (uint)(VideoMemoryCacheAddr + ((Width * (Y + h) + X) * Bpp)),
+                    (uint)((uint)image.RawData.Address + (image.Width * 4 * h)),
+                    (uint)Math.Clamp(image.Width * 4, 0, (Width - X) * 4)
+                    );
+        }
+
 
         public virtual void DrawImage(Image image, int X, int Y, bool DrawWithAlpha)
         {
