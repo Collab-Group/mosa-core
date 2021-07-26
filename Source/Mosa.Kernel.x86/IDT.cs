@@ -2238,9 +2238,11 @@ namespace Mosa.Kernel.x86
 				case 0x20:
 					PIT.OnInterrupt();
 
+					PIC.SendEndOfInterrupt(stack->Interrupt);
+
 					//Must Be Here. So It Can Switch The Threads
 					Native.Int(Scheduler.ClockIRQ);
-					break;
+					return;
 
 				//We Are Not Expected To Support Floppy Disk. So We Use It As Thread Clock IRQ
 				//0x26 IRQ6
