@@ -8,7 +8,7 @@
 
 namespace Mosa.External.x86.Drawing.Fonts
 {
-    static class ASC16
+    public static class ASC16
     {
         public static void Setup()
         {
