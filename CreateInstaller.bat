@@ -11,7 +11,7 @@ FOR /F "tokens=* USEBACKQ" %%F IN (
 ) DO (SET msbuild=%%F)
 popd
 
-"%msbuild%" Mosa.sln /t:Build /p:Configuration=Debug;Platform="Mixed Platforms"
+"%msbuild%" Mosa.sln /t:Build /p:Configuration=Debug;Platform="Mixed Platforms" -m
 
 echo --- Creating installer...
 cd Inno-Setup-Script
