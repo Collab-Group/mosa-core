@@ -15,9 +15,12 @@ namespace Mosa.External.x86.Drawing
         public VBEGraphics()
         {
             vBEDriver = new VBEDriver();
+
+            this.Bpp = VBE.BitsPerPixel / 8;
+
             vbeDriverAddr = (uint)vBEDriver.Video_Memory.Address;
 
-			Width = (int)vBEDriver.ScreenWidth;
+            Width = (int)vBEDriver.ScreenWidth;
             Height = (int)vBEDriver.ScreenHeight;
 
             CurrentDriver = "VBE";
@@ -37,14 +40,36 @@ namespace Mosa.External.x86.Drawing
 
         public override void DrawPoint(uint Color, int X, int Y)
         {
-            if (X >= LimitX && X < LimitX + LimitWidth && Y >= LimitY && Y < LimitY + LimitHeight)
-                memoryBlock.Write32((uint)((Width * Y + X) * Bpp), Color);
+            if (X >= LimitX && X < LimitX + LimitWidth && Y >= LimitY && Y < LimitY + LimitHeight) 
+            {
+                if (X >= LimitX && X < LimitX + LimitWidth && Y >= LimitY && Y < LimitY + LimitHeight)
+                {
+                    switch (this.Bpp)
+                    {
+                        case 2:
+                            memoryBlock.Write16((uint)((Width * Y + X) * Bpp), System.Drawing.Color.Convert8888RGBto565RGB(Color));
+                            break;
+                        case 3:
+                            memoryBlock.Write24((uint)((Width * Y + X) * Bpp), Color & 0x00FFFFFF);
+                            break;
+                        case 4:
+                            memoryBlock.Write32((uint)((Width * Y + X) * Bpp), Color);
+                            break;
+                    }
+                }
+            }
         }
 
 		public override uint GetPoint(int X, int Y)
         {
-            if (X >= LimitX && X < LimitX + LimitWidth && Y >= LimitY && Y < LimitY + LimitHeight)
-				return memoryBlock.Read32((uint)((Width * Y + X) * Bpp));
+            if (X >= LimitX && X < LimitX + LimitWidth && Y >= LimitY && Y < LimitY + LimitHeight) 
+            {
+                switch (this.Bpp) 
+                {
+                    case 4:
+                        return memoryBlock.Read32((uint)((Width * Y + X) * Bpp));
+                }
+            }
 
 			return 0;
 		}
