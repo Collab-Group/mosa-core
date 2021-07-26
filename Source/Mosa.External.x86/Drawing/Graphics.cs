@@ -315,11 +315,11 @@ namespace Mosa.External.x86.Drawing
             DrawLine(Color, V2x, V2y, V3x, V3y);
         }
 
-        public virtual int* ScaleImage(Image Image, int NewWidth, int NewHeight)
+        public virtual MemoryBlock ScaleImage(Image Image, int NewWidth, int NewHeight)
         {
             int w1 = Image.Width, h1 = Image.Height;
             //MemoryLeak Maybe
-            int* temp = (int*)GC.AllocateObject((uint)(NewWidth * NewHeight * Image.Bpp));
+            MemoryBlock temp = new MemoryBlock(Image.RawData.Size);
             int x_ratio = ((w1 << 16) / NewWidth) + 1, y_ratio = ((h1 << 16) / NewHeight) + 1;
 
             int x2, y2;
@@ -329,7 +329,7 @@ namespace Mosa.External.x86.Drawing
                 {
                     x2 = ((j * x_ratio) >> 16);
                     y2 = ((i * y_ratio) >> 16);
-                    temp[(i * NewWidth) + j] = Image.RawData[(uint)((y2 * w1) + x2)];
+                    temp[(uint)((i * NewWidth) + j)] = Image.RawData[(uint)((y2 * w1) + x2)];
                 }
             }
 
@@ -338,13 +338,13 @@ namespace Mosa.External.x86.Drawing
 
         public virtual void DrawImage(Image Image, int X, int Y, int W, int H, bool DrawWithAlpha)
         {
-            int* pixels = ScaleImage(Image, W, H);
+            MemoryBlock pixels = ScaleImage(Image, W, H);
 
             for (int h = 0; h < H; h++)
                 for (int w = 0; w < W; w++)
                     if (DrawWithAlpha)
                     {
-                        Color foreground = Color.FromArgb(pixels[W * h + w]);
+                        Color foreground = Color.FromArgb(pixels[(uint)(W * h + w)]);
                         Color background = Color.FromArgb((int)GetPoint(X + w, Y + h));
 
                         int alpha = foreground.GetAlpha();
@@ -356,9 +356,9 @@ namespace Mosa.External.x86.Drawing
 
                         DrawPoint((uint)Color.ToArgb(newR, newG, newB), X + w, Y + h);
                     }
-                    else DrawPoint((uint)pixels[W * h + w], X + w, Y + h);
+                    else DrawPoint((uint)pixels[(uint)(W * h + w)], X + w, Y + h);
 
-            GC.Free((uint)(Pointer)pixels, (uint)(W * H * Image.Bpp));
+            pixels.Free();
         }
 
         public virtual void TrimLine(int x1, int y1, int x2, int y2)
