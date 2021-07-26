@@ -33,17 +33,21 @@ namespace Mosa.External.x86.Drawing
                 if (v.Name == FontName)
                     bitFontDescriptor = v;
 
-            int UsedX = 0;
+            int TotalX = 0;
             string[] Lines = Text.Split('\n');
 
             for (int l = 0; l < Lines.Length; l++)
+            {
+                int UsedX = 0;
                 for (int i = 0; i < Lines[l].Length; i++)
                 {
                     char c = Lines[l][i];
                     UsedX += BitFont.DrawBitFontChar(this, bitFontDescriptor.Raw, bitFontDescriptor.Size, Color.FromArgb((int)color), bitFontDescriptor.Charset.IndexOf(c), UsedX + X, Y + bitFontDescriptor.Size * l, !DisableAntiAliasing) + 2 + Devide;
                 }
+                TotalX += UsedX;
+            }
 
-            return UsedX;
+            return TotalX;
         }
 
         public virtual void DrawFilledRectangle(uint Color, int X, int Y, int Width, int Height)
