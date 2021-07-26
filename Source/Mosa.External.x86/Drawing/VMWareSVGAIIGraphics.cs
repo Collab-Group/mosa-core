@@ -1,14 +1,12 @@
 ﻿using Mosa.External.x86.Driver;
 using Mosa.Runtime.x86;
-using System;
-using System.Drawing;
 
 namespace Mosa.External.x86.Drawing
 {
     public class VMWareSVGAIIGraphics : Graphics
     {
         private readonly VMWareSVGAII vMWareSVGAII;
-        private readonly uint svgaAddress, frameCacheAddr;
+        private readonly uint svgaAddress;
 
         public VMWareSVGAIIGraphics(int width, int height)
         {
@@ -16,8 +14,6 @@ namespace Mosa.External.x86.Drawing
             vMWareSVGAII.SetMode((uint)width, (uint)height);
 
             svgaAddress = (uint)vMWareSVGAII.Video_Memory.Address;
-            frameCacheAddr = (uint)(svgaAddress + FrameSize);
-
             VideoMemoryCacheAddr = (uint)(svgaAddress + FrameSize);
 
             Width = width;
@@ -49,7 +45,7 @@ namespace Mosa.External.x86.Drawing
 
         public unsafe override void Update()
         {
-            ASM.MEMCPY(svgaAddress, frameCacheAddr, (uint)FrameSize);
+            ASM.MEMCPY(svgaAddress, VideoMemoryCacheAddr, (uint)FrameSize);
             vMWareSVGAII.Update();
         }
 
