@@ -1,3 +1,4 @@
+# [MOSA-Core Wiki Here](https://github.com/nifanfa/MOSA-Core/wiki)
 # Note: Your project name cannot contain spaces
 # Join Our Discord Chat! 👉[Here](https://discord.gg/WrNEsmUmKa)
 ## How to use?
