@@ -1,5 +1,6 @@
 ﻿using Mosa.External.x86.Drawing.Fonts;
 using Mosa.Runtime;
+using Mosa.Runtime.x86;
 using System;
 using System.Drawing;
 
@@ -23,7 +24,13 @@ namespace Mosa.External.x86.Drawing
 
         public string CurrentDriver;
 
+<<<<<<< Updated upstream
         public virtual int DrawBitFontString(string FontName, uint color, string Text, int X, int Y, int Devide = 0, bool DisableAntiAliasing = false)
+=======
+        public uint FrameCacheAddr;
+
+        public virtual void DrawBitFontString(string FontName, uint color, string Text, int X, int Y, int Devide = 0, bool DisableAntiAliasing = false)
+>>>>>>> Stashed changes
         {
             BitFontDescriptor bitFontDescriptor = new BitFontDescriptor();
 
@@ -49,6 +56,21 @@ namespace Mosa.External.x86.Drawing
             for (int h = 0; h < Height; h++)
                 for (int w = 0; w < Width; w++)
                     DrawPoint(Color, X + w, Y + h);
+        }
+
+        public virtual void DrawFilledRectangleNoLimit(uint Color, int X, int Y, int aWidth, int aHeight)
+        {
+            uint address = FrameCacheAddr;
+            int h = 0;
+
+            while (((h++) <= Height - Y) && h <= aHeight)
+            {
+                ASM.MEMFILL(
+                    (uint)(address + ((Width * (Y + h) + X) * Bpp)),
+                    (uint)Math.Clamp((aWidth * 4), 0, (Width - X) * 4),
+                    Color
+                    ); ;
+            }
         }
 
         public virtual void DrawRectangle(uint Color, int X, int Y, int Width, int Height, int Weight)
@@ -101,6 +123,20 @@ namespace Mosa.External.x86.Drawing
                         DrawPoint((uint)Color.ToArgb(newR, newG, newB), X + w, Y + h);
                     }
                     else DrawPoint((uint)image.RawData[(uint)(image.Width * h + w)], X + w, Y + h);
+        }
+
+        public virtual void DrawImageNoLimit(Image image, int X, int Y)
+        {
+            uint address = FrameCacheAddr;
+            int h = 0;
+            while (((h++) <= Height - Y) && h <= image.Height)
+            {
+                ASM.MEMCPY(
+                    (uint)(address + ((Width * (Y + h) + X) * Bpp)),
+                    (uint)((uint)image.RawData.Address + (image.Width * 4 * h)),
+                    (uint)Math.Clamp((image.Width * 4), 0, (Width - X) * 4)
+                    ); ;
+            }
         }
 
         public void SetLimit(int X, int Y, int Width, int Height)

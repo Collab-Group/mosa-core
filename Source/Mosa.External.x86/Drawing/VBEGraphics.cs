@@ -23,6 +23,8 @@ namespace Mosa.External.x86.Drawing
 			memoryBlock = new MemoryBlock(KernelMemory.AllocateVirtualMemory((uint)FrameSize), (uint)FrameSize);
             memoryBlockAddr = (uint)memoryBlock.Address;
 
+            FrameCacheAddr = (uint)memoryBlock.Address;
+
 			ResetLimit();
         }
 

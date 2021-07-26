@@ -20,6 +20,8 @@ namespace Mosa.External.x86.Drawing
 
             CurrentDriver = "VMWare SVGA II";
 
+            FrameCacheAddr = (uint)((uint)vMWareSVGAII.Video_Memory.Address + FrameSize);
+
 			ResetLimit();
         }
 
