@@ -34,7 +34,6 @@ namespace System
             return (int)_value;
         }
 
-        //Not Available Until GC Is Setup
         public override unsafe string ToString()
         {
             int count = 0;
