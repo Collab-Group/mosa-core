@@ -25,6 +25,7 @@ namespace Mosa.Kernel.x86
 
 			// Initialize interrupts
 			PIC.Setup();
+			PIT.Setup();
 			IDT.Setup();
 
 			// Initializing the memory management
