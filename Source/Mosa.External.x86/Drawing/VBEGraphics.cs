@@ -68,13 +68,15 @@ namespace Mosa.External.x86.Drawing
             uint addr = vBEDriver.Video_Memory.Address.ToUInt32();
             uint bufferaddr = memoryBlock.Address.ToUInt32();
 
-            for (int i = 0; i < FrameSize; i++)
+            /*for (int i = 0; i < FrameSize; i++)
             {
                 byte bufferi = Native.Get8((uint)(bufferaddr + i));
 
                 if (Native.Get8((uint)(addr + i)) != bufferi)
                     Native.Set8((uint)(addr + i), bufferi);
-            }
+            }*/
+
+            ASM.MEMCPY(addr, bufferaddr, (uint)FrameSize);
         }
     }
 }
