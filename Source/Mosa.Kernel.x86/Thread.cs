@@ -14,10 +14,6 @@ namespace Mosa.Kernel.x86
 		public Pointer StackStatePointer;
 		public uint Ticks;
 
-		/// <summary>
-		/// PIT.Wait(uint millisecond)
-		/// </summary>
-		/// <param name="millisecond"></param>
 		//Static Method Won't Appears In The Class Instance It Won't Be A Part Of Class Instance
 		public static void Sleep(uint millisecond)
 		{
