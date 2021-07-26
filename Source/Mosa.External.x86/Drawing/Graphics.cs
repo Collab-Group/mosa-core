@@ -52,14 +52,16 @@ namespace Mosa.External.x86.Drawing
             return TotalX;
         }
 
+        /*
         public virtual void DrawFilledRectangle(uint Color, int X, int Y, int Width, int Height)
         {
             for (int h = 0; h < Height; h++)
                 for (int w = 0; w < Width; w++)
                     DrawPoint(Color, X + w, Y + h);
         }
+        */
 
-        public virtual void DrawFilledRectangleASM(uint Color, int X, int Y, int aWidth, int aHeight)
+        public virtual void DrawFilledRectangle(uint Color, int X, int Y, int aWidth, int aHeight)
         {
             int h = 0;
             while ((h++ <= Height - Y) && h <= aHeight)

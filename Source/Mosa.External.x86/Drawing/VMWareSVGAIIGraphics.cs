@@ -1,36 +1,31 @@
 ﻿using Mosa.External.x86.Driver;
 using Mosa.Runtime.x86;
-using System;
-using System.Drawing;
 
 namespace Mosa.External.x86.Drawing
 {
     public class VMWareSVGAIIGraphics : Graphics
     {
         private readonly VMWareSVGAII vMWareSVGAII;
-        private readonly uint svgaAddress, frameCacheAddr;
 
         public VMWareSVGAIIGraphics(int width, int height)
         {
             vMWareSVGAII = new VMWareSVGAII();
             vMWareSVGAII.SetMode((uint)width, (uint)height);
 
-            svgaAddress = (uint)vMWareSVGAII.Video_Memory.Address;
-            frameCacheAddr = (uint)(svgaAddress + FrameSize);
-
-            VideoMemoryCacheAddr = (uint)(svgaAddress + FrameSize);
-
             Width = width;
             Height = height;
 
+            this.VideoMemoryCacheAddr = (uint)((uint)vMWareSVGAII.Video_Memory.Address + FrameSize);
+
             CurrentDriver = "VMWare SVGA II";
 
-			ResetLimit();
+            ResetLimit();
         }
 
         public override void Clear(uint Color)
         {
-            ASM.MEMFILL((uint)(svgaAddress + FrameSize), (uint)FrameSize, Color);
+            ASM.MEMFILL(VideoMemoryCacheAddr, (uint)FrameSize, Color);
+            //vMWareSVGAII.Video_Memory.Fill32((uint)FrameSize, Color, (uint)FrameSize, Bpp);
         }
 
         public override void DrawPoint(uint Color, int X, int Y)
@@ -39,17 +34,24 @@ namespace Mosa.External.x86.Drawing
                 vMWareSVGAII.Video_Memory.Write32((uint)(FrameSize + ((Width * Y + X) * Bpp)), Color);
         }
 
-		public override uint GetPoint(int X, int Y)
+        public override uint GetPoint(int X, int Y)
         {
             if (X >= LimitX && X < LimitX + LimitWidth && Y >= LimitY && Y < LimitY + LimitHeight)
-				return vMWareSVGAII.Video_Memory.Read32((uint)(FrameSize + ((Width * Y + X) * Bpp)));
+                return vMWareSVGAII.Video_Memory.Read32((uint)(FrameSize + ((Width * Y + X) * Bpp)));
 
-			return 0;
-		}
+            return 0;
+        }
 
         public unsafe override void Update()
         {
-            ASM.MEMCPY(svgaAddress, frameCacheAddr, (uint)FrameSize);
+            uint addr = vMWareSVGAII.Video_Memory.Address.ToUInt32();
+
+            /*for (int i = 0; i < FrameSize; i++)
+                Native.Set8((uint)(addr + i), Native.Get8((uint)(addr + FrameSize + i)));*/
+
+            // Fast memory copy using assembly
+            ASM.MEMCPY(addr, VideoMemoryCacheAddr, (uint)FrameSize);
+
             vMWareSVGAII.Update();
         }
 
