@@ -43,8 +43,11 @@ namespace Mosa.External.x86.Drawing
         {
             uint addr = vMWareSVGAII.Video_Memory.Address.ToUInt32();
 
-            for (int i = 0; i < FrameSize; i++)
-                Native.Set8((uint)(addr + i), Native.Get8((uint)(addr + FrameSize + i)));
+            /*for (int i = 0; i < FrameSize; i++)
+                Native.Set8((uint)(addr + i), Native.Get8((uint)(addr + FrameSize + i)));*/
+
+            // Fast memory copy using assembly
+            ASM.MEMCPY(addr, (uint)(addr + FrameSize), (uint)FrameSize);
 
             vMWareSVGAII.Update();
         }
