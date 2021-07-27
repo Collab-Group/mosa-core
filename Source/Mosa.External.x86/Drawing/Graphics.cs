@@ -13,9 +13,9 @@ namespace Mosa.External.x86.Drawing
 
         public uint VideoMemoryCacheAddr;
 
-        public uint FrameSize
+        public int FrameSize
         {
-            get { return ((uint)Width * (uint)Height * (uint)Bpp); }
+            get { return Width * Height * Bpp; }
         }
 
         public int LimitX;
@@ -50,15 +50,6 @@ namespace Mosa.External.x86.Drawing
 
             return TotalX;
         }
-
-        /*
-        public virtual void DrawFilledRectangle(uint Color, int X, int Y, int Width, int Height)
-        {
-            for (int h = 0; h < Height; h++)
-                for (int w = 0; w < Width; w++)
-                    DrawPoint(Color, X + w, Y + h);
-        }
-        */
 
         public virtual void DrawFilledRectangle(uint Color, int X, int Y, int aWidth, int aHeight)
         {
@@ -98,7 +89,6 @@ namespace Mosa.External.x86.Drawing
         public virtual void Clear(uint Color)
         {
             ASM.MEMFILL(VideoMemoryCacheAddr, (uint)FrameSize, Color);
-            //DrawFilledRectangle(Color, 0, 0, Width, Height);
         }
 
         public abstract void Disable();

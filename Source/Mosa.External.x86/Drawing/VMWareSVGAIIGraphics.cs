@@ -6,6 +6,7 @@ namespace Mosa.External.x86.Drawing
     public class VMWareSVGAIIGraphics : Graphics
     {
         private readonly VMWareSVGAII vMWareSVGAII;
+        private readonly uint svgaAddress;
 
         public VMWareSVGAIIGraphics(int width, int height)
         {
@@ -17,7 +18,8 @@ namespace Mosa.External.x86.Drawing
 
             CurrentDriver = "VMWare SVGA II";
 
-            VideoMemoryCacheAddr = (uint)((uint)vMWareSVGAII.Video_Memory.Address + FrameSize);
+            svgaAddress = (uint)vMWareSVGAII.Video_Memory.Address;
+            VideoMemoryCacheAddr = (uint)(svgaAddress + FrameSize);
 
             ResetLimit();
         }
@@ -38,14 +40,7 @@ namespace Mosa.External.x86.Drawing
 
         public unsafe override void Update()
         {
-            uint addr = vMWareSVGAII.Video_Memory.Address.ToUInt32();
-
-            /*for (int i = 0; i < FrameSize; i++)
-                Native.Set8((uint)(addr + i), Native.Get8((uint)(addr + FrameSize + i)));*/
-
-            // Fast memory copy using assembly
-            ASM.MEMCPY(addr, (uint)(addr + FrameSize), (uint)FrameSize);
-
+            ASM.MEMCPY(svgaAddress, VideoMemoryCacheAddr, (uint)FrameSize);
             vMWareSVGAII.Update();
         }
 
