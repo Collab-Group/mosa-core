@@ -22,11 +22,6 @@ namespace Mosa.External.x86.Drawing
             ResetLimit();
         }
 
-        public override void Clear(uint Color)
-        {
-            vMWareSVGAII.Video_Memory.Fill32((uint)FrameSize, Color, (uint)FrameSize, (uint)Bpp);
-        }
-
         public override void DrawPoint(uint Color, int X, int Y)
         {
             if (X >= LimitX && X < LimitX + LimitWidth && Y >= LimitY && Y < LimitY + LimitHeight)

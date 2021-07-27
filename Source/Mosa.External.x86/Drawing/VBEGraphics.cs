@@ -29,11 +29,6 @@ namespace Mosa.External.x86.Drawing
             ResetLimit();
         }
 
-        public override void Clear(uint Color)
-        {
-            ASM.MEMFILL(VideoMemoryCacheAddr, (uint)FrameSize, Color);
-        }
-
         public override void Disable() { }
 
         public override void DrawPoint(uint Color, int X, int Y)

@@ -1,5 +1,4 @@
 ﻿using Mosa.External.x86.Drawing.Fonts;
-using Mosa.Runtime;
 using Mosa.Runtime.x86;
 using System;
 using System.Drawing;
@@ -14,9 +13,9 @@ namespace Mosa.External.x86.Drawing
 
         public uint VideoMemoryCacheAddr;
 
-        public int FrameSize
+        public uint FrameSize
         {
-            get { return Width * Height * Bpp; }
+            get { return ((uint)Width * (uint)Height * (uint)Bpp); }
         }
 
         public int LimitX;
@@ -98,7 +97,8 @@ namespace Mosa.External.x86.Drawing
 
         public virtual void Clear(uint Color)
         {
-            DrawFilledRectangle(Color, 0, 0, Width, Height);
+            ASM.MEMFILL(VideoMemoryCacheAddr, (uint)FrameSize, Color);
+            //DrawFilledRectangle(Color, 0, 0, Width, Height);
         }
 
         public abstract void Disable();
