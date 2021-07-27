@@ -49,7 +49,7 @@ namespace Mosa.Kernel
         BGA = 0x1111,
         VBVGA = 0xBEEF,
         VBoxGuest = 0xCAFE,
-        AC97 = 0x2445
+        AC97 = 0x2415
     }
 
     public class PCI
