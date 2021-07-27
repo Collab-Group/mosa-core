@@ -1,8 +1,19 @@
 @echo off
-echo --- Removing bin folder...
+set INNOSETUP="C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
+if exist %INNOSETUP% (
+echo Inno Setup Found
+) else (
+echo Inno Setup Not Found
+echo Here To Download Inno Setup
+echo https://jrsoftware.org/download.php/is.exe
+pause
+exit
+)
+
+echo Removing bin folder
 rd /s /q bin
 
-echo --- Building MOSA...
+echo Building MOSA
 cd Source
 
 pushd "%~d0%~p0"
@@ -13,7 +24,7 @@ popd
 
 "%msbuild%" Mosa.sln /t:Build /p:Configuration=Debug;Platform="Mixed Platforms" -m
 
-echo --- Creating installer...
+echo Creating installer
 cd Inno-Setup-Script
 create-installer.bat
 pause
