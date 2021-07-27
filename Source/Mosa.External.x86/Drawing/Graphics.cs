@@ -103,6 +103,7 @@ namespace Mosa.External.x86.Drawing
 
         public abstract void Disable();
 
+        //Only 32Bits
         public virtual void DrawImage(Image image, int X, int Y, int TransparentColor)
         {
             for (int h = 0; h < image.Height; h++)
@@ -111,6 +112,7 @@ namespace Mosa.External.x86.Drawing
                         DrawPoint((uint)image.RawData[(uint)(image.Width * h + w)], X + w, Y + h);
         }
 
+        //Only 32Bits
         public virtual void DrawImageASM(Image image, int X, int Y)
         {
             int h = 0;
@@ -122,7 +124,7 @@ namespace Mosa.External.x86.Drawing
                     );
         }
 
-
+        //Only 32Bits
         public virtual void DrawImage(Image image, int X, int Y, bool DrawWithAlpha)
         {
             for (int h = 0; h < image.Height; h++)
