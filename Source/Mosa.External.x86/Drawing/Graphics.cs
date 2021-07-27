@@ -70,6 +70,14 @@ namespace Mosa.External.x86.Drawing
                     );
         }
 
+        public virtual void DrawArray(int x, int y, int width, int height, int[] array, uint color)
+        {
+            for (int h = 0; h < height; h++)
+                for (int w = 0; w < width; w++)
+                    if (array[h * width + w] == 1)
+                        DrawPoint(color, w + x, h + y);
+        }
+
         public virtual void DrawRectangle(uint Color, int X, int Y, int Width, int Height, int Weight)
         {
             DrawFilledRectangle(Color, X, Y, Width, Weight);
