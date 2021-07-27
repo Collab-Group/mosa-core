@@ -1,8 +1,6 @@
 ﻿using Mosa.External.x86.Driver;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.x86;
-using System;
-using System.Drawing;
 
 namespace Mosa.External.x86.Drawing
 {
@@ -10,13 +8,13 @@ namespace Mosa.External.x86.Drawing
     {
         private readonly VBEDriver vBEDriver;
         private readonly MemoryBlock memoryBlock;
-        private readonly uint memoryBlockAddr, vbeDriverAddr;
+        private readonly uint vbeDriverAddr;
 
         public VBEGraphics()
         {
             vBEDriver = new VBEDriver();
 
-            this.Bpp = VBE.BitsPerPixel / 8;
+            Bpp = VBE.BitsPerPixel / 8;
 
             vbeDriverAddr = (uint)vBEDriver.Video_Memory.Address;
 
@@ -26,16 +24,14 @@ namespace Mosa.External.x86.Drawing
             CurrentDriver = "VBE";
 
 			memoryBlock = new MemoryBlock(KernelMemory.AllocateVirtualMemory((uint)FrameSize), (uint)FrameSize);
-            memoryBlockAddr = (uint)memoryBlock.Address;
             VideoMemoryCacheAddr = (uint)memoryBlock.Address;
-
 
             ResetLimit();
         }
 
         public override void Clear(uint Color)
         {
-            ASM.MEMFILL(memoryBlockAddr, (uint)FrameSize, Color);
+            ASM.MEMFILL(VideoMemoryCacheAddr, (uint)FrameSize, Color);
         }
 
         public override void Disable() { }
@@ -43,8 +39,7 @@ namespace Mosa.External.x86.Drawing
         public override void DrawPoint(uint Color, int X, int Y)
         {
             if (X >= LimitX && X < LimitX + LimitWidth && Y >= LimitY && Y < LimitY + LimitHeight)
-            {
-                switch (this.Bpp)
+                switch (Bpp)
                 {
                     case 2:
                         memoryBlock.Write16((uint)((Width * Y + X) * Bpp), System.Drawing.Color.Convert8888RGBto565RGB(Color));
@@ -56,26 +51,23 @@ namespace Mosa.External.x86.Drawing
                         memoryBlock.Write32((uint)((Width * Y + X) * Bpp), Color);
                         break;
                 }
-            }
         }
 
 		public override uint GetPoint(int X, int Y)
         {
             if (X >= LimitX && X < LimitX + LimitWidth && Y >= LimitY && Y < LimitY + LimitHeight) 
-            {
-                switch (this.Bpp) 
+                switch (Bpp) 
                 {
                     case 4:
                         return memoryBlock.Read32((uint)((Width * Y + X) * Bpp));
                 }
-            }
 
 			return 0;
 		}
 
         public override void Update()
         {
-            ASM.MEMCPY(vbeDriverAddr, memoryBlockAddr, (uint)FrameSize);
+            ASM.MEMCPY(vbeDriverAddr, VideoMemoryCacheAddr, (uint)FrameSize);
         }
     }
 }

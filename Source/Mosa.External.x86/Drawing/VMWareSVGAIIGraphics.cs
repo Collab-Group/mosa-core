@@ -15,17 +15,16 @@ namespace Mosa.External.x86.Drawing
             Width = width;
             Height = height;
 
-            this.VideoMemoryCacheAddr = (uint)((uint)vMWareSVGAII.Video_Memory.Address + FrameSize);
-
             CurrentDriver = "VMWare SVGA II";
+
+            VideoMemoryCacheAddr = (uint)((uint)vMWareSVGAII.Video_Memory.Address + FrameSize);
 
             ResetLimit();
         }
 
         public override void Clear(uint Color)
         {
-            ASM.MEMFILL(VideoMemoryCacheAddr, (uint)FrameSize, Color);
-            //vMWareSVGAII.Video_Memory.Fill32((uint)FrameSize, Color, (uint)FrameSize, Bpp);
+            vMWareSVGAII.Video_Memory.Fill32((uint)FrameSize, Color, (uint)FrameSize, (uint)Bpp);
         }
 
         public override void DrawPoint(uint Color, int X, int Y)
@@ -50,7 +49,7 @@ namespace Mosa.External.x86.Drawing
                 Native.Set8((uint)(addr + i), Native.Get8((uint)(addr + FrameSize + i)));*/
 
             // Fast memory copy using assembly
-            ASM.MEMCPY(addr, VideoMemoryCacheAddr, (uint)FrameSize);
+            ASM.MEMCPY(addr, (uint)(addr + FrameSize), (uint)FrameSize);
 
             vMWareSVGAII.Update();
         }
