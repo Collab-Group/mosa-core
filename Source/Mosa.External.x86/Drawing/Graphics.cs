@@ -15,7 +15,7 @@ namespace Mosa.External.x86.Drawing
 
         public uint FrameSize
         {
-            get { return ((uint)Width * (uint)Height * (uint)Bpp); }
+            get { return (uint)Width * (uint)Height * (uint)Bpp; }
         }
 
         public int LimitX;
