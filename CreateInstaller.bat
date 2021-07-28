@@ -13,11 +13,12 @@ exit
 echo Removing bin folder
 rd /s /q bin
 
-echo Building MOSA
 cd Source
 
-echo Restoreing packages
+echo Restoring packages
 dotnet restore
+
+echo Building MOSA
 
 pushd "%~d0%~p0"
 FOR /F "tokens=* USEBACKQ" %%F IN (
@@ -29,5 +30,4 @@ popd
 
 echo Creating installer
 cd Inno-Setup-Script
-timeout /t -1
 create-installer.bat
