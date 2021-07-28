@@ -16,6 +16,9 @@ rd /s /q bin
 echo Building MOSA
 cd Source
 
+echo Restoreing packages
+dotnet restore
+
 pushd "%~d0%~p0"
 FOR /F "tokens=* USEBACKQ" %%F IN (
     `"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -prerelease -products * -requires Microsoft.Component.MSBuild -find MSBuild\**\Bin\MSBuild.exe`
@@ -26,5 +29,5 @@ popd
 
 echo Creating installer
 cd Inno-Setup-Script
+timeout /t -1
 create-installer.bat
-pause
