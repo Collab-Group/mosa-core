@@ -120,12 +120,21 @@ namespace Mosa.Kernel.x86
 		/// <param name="chr">The character.</param>
 		private static void Write(char chr)
 		{
-			MoveUpPrevious();
+			if (chr == '\n')
+			{
+				CursorLeft = 0;
+				CursorTop++;
+				MoveUpPrevious();
+			}
+            else
+            {
+				MoveUpPrevious();
 
-			Native.Set8(0x0B8000 + ((CursorTop * Columns + CursorLeft) * 2), (byte)chr);
-			Native.Set8(0x0B8000 + ((CursorTop * Columns + CursorLeft) * 2) + 1, color);
+				Native.Set8(0x0B8000 + ((CursorTop * Columns + CursorLeft) * 2), (byte)chr);
+				Native.Set8(0x0B8000 + ((CursorTop * Columns + CursorLeft) * 2) + 1, color);
 
-			Next();
+				Next();
+			}
 
 			UpdateCursor();
 		}
