@@ -49,13 +49,15 @@ namespace Mosa.External.x86.Drawing.Fonts
 					for (int ww = 0; ww < 8; ww++)
 						if ((Raw[SizePerFont + (h * Size8) + aw] & (0x80 >> ww)) != 0)
 						{
-							int x = X + (aw * 8) + ww;
+							int max = (aw * 8) + ww;
+
+							int x = X + max;
 							int y = Y + h;
 
 							graphics.DrawPoint(Color, x, y);
 
-							if (x > MaxX)
-								MaxX = x;
+							if (max > MaxX)
+								MaxX = max;
 
 							if (LastPixelIsNotDrawn)
 							{
