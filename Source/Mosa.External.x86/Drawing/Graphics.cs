@@ -25,7 +25,7 @@ namespace Mosa.External.x86.Drawing
 
         public string CurrentDriver;
 
-        //UsedX will be the last line of it used.
+        //TotalX will be the last line of it used.
         public virtual int DrawBitFontString(string FontName, uint color, string Text, int X, int Y, int Devide = 0, bool DisableAntiAliasing = false)
         {
             BitFontDescriptor bitFontDescriptor = new BitFontDescriptor();
@@ -43,12 +43,29 @@ namespace Mosa.External.x86.Drawing
                 for (int i = 0; i < Lines[l].Length; i++)
                 {
                     char c = Lines[l][i];
-                    UsedX += BitFont.DrawBitFontChar(this, bitFontDescriptor.Raw, bitFontDescriptor.Size, Color.FromArgb((int)color), bitFontDescriptor.Charset.IndexOf(c), UsedX + X, Y + bitFontDescriptor.Size * l, !DisableAntiAliasing) + 2 + Devide;
+                    UsedX += BitFont.DrawBitFontChar(this, bitFontDescriptor.Raw, bitFontDescriptor.Size, color, bitFontDescriptor.Charset.IndexOf(c), UsedX + X, Y + bitFontDescriptor.Size * l, !DisableAntiAliasing) + 2 + Devide;
                 }
                 TotalX += UsedX;
             }
 
             return TotalX;
+        }
+
+        public void DrawACS16String(uint color, string s, int x, int y)
+        {
+            for (int c = 0; c < s.Length; c++)
+            {
+                int offset = ((byte)s[c] & 0xFF) * 16;
+                byte[] fontbuf = new byte[16];
+
+                for (int k = 0; k < fontbuf.Length; k++)
+                    fontbuf[k] = ASC16.Buffer[offset + k];
+
+                for (int i = 0; i < ASC16.FontHeight; i++)
+                    for (int j = 0; j < ASC16.FontWidth; j++)
+                        if ((fontbuf[i] & (0x80 >> j)) != 0)
+                            DrawPoint(color, x + j + (c * 8), y + i);
+            }
         }
 
         public virtual void DrawFilledRectangle(uint Color, int X, int Y, int aWidth, int aHeight)
