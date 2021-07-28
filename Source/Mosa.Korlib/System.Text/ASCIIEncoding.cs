@@ -8,10 +8,10 @@ namespace System.Text
 	public class ASCIIEncoding : Encoding
 	{
 		// Decode a buffer of bytes into a string.
-		public unsafe override string GetString(byte[] bytes, int byteIndex, int count)
+		public override string GetString(byte[] bytes, int byteIndex, int count)
 		{
 			if (count == 0)
-				return String.Empty;
+				return string.Empty;
 
 			string result = "";
 
