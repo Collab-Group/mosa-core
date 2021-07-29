@@ -2242,6 +2242,9 @@ namespace Mosa.Kernel.x86
 
 					//Must Be Here. So It Can Switch The Threads
 					Native.Int(Scheduler.ClockIRQ);
+
+					Interrupt?.Invoke(stack->Interrupt, stack->ErrorCode);
+
 					return;
 
 				//We Are Not Expected To Support Floppy Disk. So We Use It As Thread Clock IRQ

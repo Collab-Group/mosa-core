@@ -68,6 +68,8 @@ namespace Mosa.Launcher.Console
 
 		private static DateTime StartTime;
 
+		public static bool RunAfterBuild = true;
+
 		static void Main(string[] args)
 		{
 			if (!Environment.Is64BitOperatingSystem)
@@ -81,11 +83,22 @@ namespace Mosa.Launcher.Console
 			//Arguments 1: Source Name
 			//Arguments 2: Output Name
 			//Arguments 3: VBE Enable
+
+			//Arguments: JustBuild
+
 			//If you want to change "main.exe" to other name you have to modify the syslinux.cfg
 			Arguments = new string[] { args[0], AppFolder + @"\output\main.exe", args[2] };
 
 			System.Console.WriteLine($"VBE Status: {VBEEnable}");
 			System.Console.WriteLine($"Output ISO Path:{ISOFilePath}");
+
+			foreach(var v in args) 
+			{
+				if(v == "JustBuild") 
+				{
+					RunAfterBuild = false;
+				}
+			}
 
 			DefaultSettings();
 			RegisterPlatforms();
@@ -105,7 +118,10 @@ namespace Mosa.Launcher.Console
 
 			MakeISO();
 
-			RunVMWareWorkstation();
+            if (RunAfterBuild)
+			{
+				RunVMWareWorkstation();
+            }
 
 			Environment.Exit(0);
 
