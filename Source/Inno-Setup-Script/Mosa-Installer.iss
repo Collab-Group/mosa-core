@@ -59,6 +59,7 @@ Source: "..\..\Tools\ndisasm\*.*"; DestDir: "{app}\Tools\ndisasm"; Flags: ignore
 Source: "..\..\Tools\mkisofs\*.*"; DestDir: "{app}\Tools\mkisofs"; Flags: ignoreversion
 Source: "..\..\Tools\syslinux\*.*"; DestDir: "{app}\Tools\syslinux"; Flags: ignoreversion
 Source: "..\..\Tools\virtualbox\*.*"; DestDir: "{app}\Tools\virtualbox"; Flags: ignoreversion
+Source: "..\..\Tools\imdisk\*.*"; DestDir: "{app}\Tools\imdisk"; Flags: ignoreversion
 
 [ThirdParty]
 UseRelativePaths=True
