@@ -38,7 +38,7 @@ namespace Mosa.Kernel.x86
 			Scheduler.Setup();
 			SmbiosManager.Setup();
 
-			//Setup PCI
+			// Setup PCI
 			PCI.Setup();
 
 			// Setup Encoding static variables
