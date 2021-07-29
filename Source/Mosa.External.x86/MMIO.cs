@@ -1,4 +1,5 @@
-﻿using Mosa.Runtime;
+﻿using Mosa.Kernel.x86;
+using Mosa.Runtime;
 
 //namespace MOSA2
 namespace Mosa.External.x86
@@ -45,6 +46,14 @@ namespace Mosa.External.x86
         public static void Out64(uint address, ulong value)
         {
             Intrinsic.Store64((Pointer)address, value);
+        }
+
+        public static void Map(uint address, uint size)
+        {
+            for (uint i = address; i < address + size; i += PageFrameAllocator.PageSize)
+            {
+                PageTable.MapVirtualAddressToPhysical(i, i);
+            }
         }
     }
 }
