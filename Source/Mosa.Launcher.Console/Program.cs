@@ -218,13 +218,17 @@ namespace Mosa.Launcher.Console
             processStartInfo.FileName = VirtualBoxPath;
 
             string path = @"C:\Users\" + System.Environment.UserName + @"\VirtualBox VMs";
+            string vdi = path + @"\MOSA\MOSA.vdi";
+            if (File.Exists(vdi))
+            {
+                File.Copy(Path.Combine(OutputFolder, "MOSA.vdi"), vdi, true);
+            }
             if (!Directory.Exists(path + @"\MOSA"))
             {
                 // Create VM directory
                 Directory.CreateDirectory(path + @"\MOSA");
 
                 string vbox = path + @"\MOSA\MOSA.vbox";
-                string vdi = path + @"\MOSA\MOSA.vdi";
 
                 // Copy VM files to VM directory
                 File.Copy(Path.Combine(OutputFolder, "MOSA.vbox"), vbox);
