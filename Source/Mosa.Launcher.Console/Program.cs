@@ -55,8 +55,7 @@ namespace Mosa.Launcher.Console
 		}
 
 		public static string AppFolder = @"C:\Program Files (x86)\MOSA-Project";
-		public static string VMPlayerPath0 = @"C:\Program Files (x86)\VMware\VMware Workstation\vmplayer.exe";
-		public static string VMPlayerPath1 = @"C:\Program Files (x86)\VMware\VMware Player\vmplayer.exe";
+		public static string VirtualBoxPath = @"C:\Program Files\Oracle\VirtualBox\VBoxManage.exe";
 
 		public static string ISOFilePath
 		{
@@ -120,7 +119,7 @@ namespace Mosa.Launcher.Console
 
             if (RunAfterBuild)
 			{
-				RunVMWareWorkstation();
+				RunVirtualBox();
             }
 
 			Environment.Exit(0);
@@ -194,48 +193,58 @@ namespace Mosa.Launcher.Console
 		{
 			DirectoryInfo directoryInfo = new DirectoryInfo(AppFolder+@"\Tools\syslinux");
 			foreach (var v in directoryInfo.GetFiles())
-			{
 				v.CopyTo(Path.Combine(OutputFolder, v.Name), true);
-			}
 
 			var args = $"-relaxed-filenames -J -R -o \"{ISOFilePath}\" -b isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table \"{OutputFolder}\"";
 			Process process = Process.Start(AppFolder + @"\Tools\mkisofs\mkisofs.exe", args);
             
-			while (!process.HasExited) 
-			{
-			}
+			while (!process.HasExited) { }
 		}
 
-		private static void RunVMWareWorkstation()
+		private static void RunVirtualBox()
 		{
-			if (!File.Exists(VMPlayerPath0) && !File.Exists(VMPlayerPath1))
+			if (!File.Exists(VirtualBoxPath))
 			{
-				System.Console.WriteLine("VMWare Player Not Found!");
+				System.Console.WriteLine("VirtualBox not found!");
 				return;
 			}
 
-			DirectoryInfo directoryInfo = new DirectoryInfo(AppFolder+@"\Tools\vmware");
+			DirectoryInfo directoryInfo = new DirectoryInfo(AppFolder + @"\Tools\virtualbox");
 			foreach (var v in directoryInfo.GetFiles())
-			{
 				v.CopyTo(Path.Combine(OutputFolder, v.Name), true);
-			}
-
-			var args = '"' + Path.Combine(OutputFolder, "MOSA.vmx") + '"';
-
 
 			ProcessStartInfo processStartInfo = new ProcessStartInfo();
-			processStartInfo.UseShellExecute = true;
-			processStartInfo.Arguments = args;
+			processStartInfo.UseShellExecute = false;
+			processStartInfo.FileName = VirtualBoxPath;
 
-			if (File.Exists(VMPlayerPath0))
+			string path = @"C:\Users\" + System.Environment.UserName + @"\VirtualBox VMs";
+			if (!Directory.Exists(path + @"\MOSA"))
 			{
-				processStartInfo.FileName = VMPlayerPath0;
-			}
-			if (File.Exists(VMPlayerPath1))
-			{
-				processStartInfo.FileName = VMPlayerPath1;
+				// Create VM directory
+				Directory.CreateDirectory(path + @"\MOSA");
+
+				string vbox = path + @"\MOSA\MOSA.vbox";
+				string vdi = path + @"\MOSA\MOSA.vdi";
+
+				string iso = AppFolder + @"\output\MOSA.iso";
+
+				// Copy VM files to VM directory
+				File.Copy(Path.Combine(OutputFolder, "MOSA.vbox"), vbox);
+				File.Copy(Path.Combine(OutputFolder, "MOSA.vdi"), vdi);
+
+				// Register VM
+				processStartInfo.Arguments = "registervm \"" + vbox + "\"";
+				Process p1 = Process.Start(processStartInfo);
+				p1.WaitForExit();
+
+				// Attach output ISO
+				processStartInfo.Arguments = "storageattach MOSA --storagectl IDE --port 1 --device 1 --type dvddrive --medium \"" + iso + "\"";
+				Process p2 = Process.Start(processStartInfo);
+				p2.WaitForExit();
 			}
 
+			// Launch VM
+			processStartInfo.Arguments = "startvm MOSA";
 			Process.Start(processStartInfo);
 		}
 
@@ -289,7 +298,6 @@ namespace Mosa.Launcher.Console
 			Settings.SetValue("Compiler.BaseAddress", 0x00400000);
 			Settings.SetValue("Compiler.Binary", true);
 			Settings.SetValue("Compiler.MethodScanner", false);
-			Settings.SetValue("Compiler.Multithreading", true);
 			Settings.SetValue("Compiler.TraceLevel", 0);
 			Settings.SetValue("Compiler.Multithreading", true);
 			Settings.SetValue("CompilerDebug.DebugFile", string.Empty);
@@ -321,7 +329,7 @@ namespace Mosa.Launcher.Console
 			Settings.SetValue("Multiboot.Video.Width", 640);
 			Settings.SetValue("Multiboot.Video.Height", 480);
 			Settings.SetValue("Multiboot.Video.Depth", 32);
-			Settings.SetValue("Emulator", "VMware");
+			Settings.SetValue("Emulator", "VirtualBox");
 			Settings.SetValue("Emulator.Memory", 128);
 			Settings.SetValue("Emulator.Serial", "none");
 			Settings.SetValue("Emulator.Serial.Host", "127.0.0.1");
