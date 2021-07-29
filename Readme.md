@@ -4,7 +4,7 @@
 ## How to use?
 # Just Install Inno setup and double click CreateInstaller.bat
 ### MOSA-Core support Visual studio template!
-### Also. Oracle Virtual Box
+### Also. Oracle Virtual Box Required
 ## Inno-Setup Required [Download Here](https://jrsoftware.org/download.php/is.exe)
 ## I'd recommend you enable IntelliSense completion for unimported types and extension methods in visual studio  
 https://docs.microsoft.com/en-us/visualstudio/ide/reference/intellisense-completion-unimported-types-extension-methods?view=vs-2019
