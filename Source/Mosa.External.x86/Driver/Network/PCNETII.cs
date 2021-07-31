@@ -30,7 +30,7 @@ namespace Mosa.External.x86.Driver
 
         public byte IRQ { get; private set; }
 
-        public override void Initialize()
+        public PCNETII()
         {
             PCIDevice device = PCI.GetDevice(VendorID.AMD, DeviceID.PCNETII);
 

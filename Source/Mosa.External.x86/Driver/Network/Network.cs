@@ -13,7 +13,6 @@ namespace Mosa.External.x86.Driver
     {
         public int MaxPacketSize;
 
-        public abstract void Initialize();
         public abstract void OnInterrupt();
 
         public unsafe abstract bool SendPacket(Buffer* buffer, uint length);

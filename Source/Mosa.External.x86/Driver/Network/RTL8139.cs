@@ -10,7 +10,7 @@ namespace Mosa.External.x86.Driver
         public uint IOBase;
         public byte* ReceiveBuffer;
 
-        public override void Initialize()
+        public RTL8139()
         {
             PCIDevice device = PCI.GetDevice(VendorID.Realtek, DeviceID.RTL8139);
 
