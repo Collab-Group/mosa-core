@@ -1,4 +1,5 @@
 ﻿using Mosa.Runtime;
+using Mosa.Runtime.x86;
 
 namespace Mosa.External.x86
 {
@@ -61,6 +62,11 @@ namespace Mosa.External.x86
         {
             get { return (int)address.Load32(offset * 4); }
             set { address.Store32(offset * 4, value); }
+        }
+
+        public void Clear()
+        {
+            ASM.MEMFILL((uint)address, size, 0);
         }
 
         public void FlushToArray(byte[] dest)
