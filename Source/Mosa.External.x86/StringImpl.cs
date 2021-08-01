@@ -25,5 +25,24 @@ namespace Mosa.External.x86
             GC.DisposeObject(ls);
             return result;
         }
+
+
+        public static string Format(string format, params object?[] args)
+        {
+            string result = "";
+            int count = 0;
+            for (int i = 0; i < format.Length; i++)
+            {
+                if (count < 10 && format[i] == '{' && format[i + 1] == (count.ToString())[0] && format[i + 2] == '}')
+                {
+                    result += args[count].ToString();
+                    i += 3;
+                    count++;
+                    continue;
+                }
+                result += format[i];
+            }
+            return result;
+        }
     }
 }
