@@ -35,6 +35,11 @@ namespace Mosa.External.x86.Drawing
             BGADriver.SetStatus(false);
         }
 
+        public override void Enable()
+        {
+            BGADriver.SetStatus(true);
+        }
+
         public override void DrawPoint(uint Color, int X, int Y)
         {
             if (X >= LimitX && X < LimitX + LimitWidth && Y >= LimitY && Y < LimitY + LimitHeight)

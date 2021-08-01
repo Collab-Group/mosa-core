@@ -118,6 +118,8 @@ namespace Mosa.External.x86.Drawing
 
         public abstract void Disable();
 
+        public abstract void Enable();
+
         public virtual void DrawImage(Image image, int X, int Y, int TransparentColor)
         {
             for (int h = 0; h < image.Height; h++)

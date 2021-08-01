@@ -31,6 +31,8 @@ namespace Mosa.External.x86.Drawing
 
         public override void Disable() { }
 
+        public override void Enable() { }
+
         public override void DrawPoint(uint Color, int X, int Y)
         {
             if (X >= LimitX && X < LimitX + LimitWidth && Y >= LimitY && Y < LimitY + LimitHeight)

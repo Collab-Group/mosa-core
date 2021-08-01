@@ -48,5 +48,10 @@ namespace Mosa.External.x86.Drawing
         {
             vMWareSVGAII.Disable();
         }
+
+        public override void Enable()
+        {
+            vMWareSVGAII.Enable();
+        }
     }
 }
