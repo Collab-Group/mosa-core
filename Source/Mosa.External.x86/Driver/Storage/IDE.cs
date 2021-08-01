@@ -1,7 +1,7 @@
 ﻿using Mosa.External.x86;
 using Mosa.Kernel.x86;
 
-namespace Mosa.External.x86.Driver
+namespace Mosa.External.x86.Driver.Storage
 {
     public class IDE
     {

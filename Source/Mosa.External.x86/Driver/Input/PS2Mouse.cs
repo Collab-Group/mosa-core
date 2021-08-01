@@ -1,7 +1,7 @@
 ﻿using Mosa.Kernel.x86;
 using System;
 
-namespace Mosa.External.x86.Driver
+namespace Mosa.External.x86.Driver.Input
 {
 
     public static class PS2Mouse

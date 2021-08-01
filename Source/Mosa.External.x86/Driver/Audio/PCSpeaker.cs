@@ -1,6 +1,6 @@
 ﻿using Mosa.Kernel.x86;
 
-namespace Mosa.External.x86.Driver
+namespace Mosa.External.x86.Driver.Audio
 {
     public static class PCSpeaker
     {
