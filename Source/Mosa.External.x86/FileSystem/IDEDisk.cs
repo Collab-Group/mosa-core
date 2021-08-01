@@ -1,4 +1,5 @@
 ﻿using Mosa.External.x86.Driver;
+using Mosa.External.x86.Driver.Storage;
 using System;
 
 namespace Mosa.External.x86.FileSystem

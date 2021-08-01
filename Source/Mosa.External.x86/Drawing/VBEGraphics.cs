@@ -1,4 +1,5 @@
 ﻿using Mosa.External.x86.Driver;
+using Mosa.External.x86.Driver.Graphics;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.x86;
 

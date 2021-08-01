@@ -1,4 +1,5 @@
 ﻿using Mosa.External.x86.Driver;
+using Mosa.External.x86.Driver.Graphics;
 using Mosa.Runtime.x86;
 
 namespace Mosa.External.x86.Drawing
