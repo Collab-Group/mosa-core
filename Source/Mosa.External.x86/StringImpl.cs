@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Mosa.External.x86
 {
-    public static class Impl
+    public static class StringImpl
     {
         public static string[] Split(this string s, char c) 
         {

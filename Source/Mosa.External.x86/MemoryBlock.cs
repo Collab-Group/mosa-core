@@ -103,5 +103,13 @@ namespace Mosa.External.x86
         {
             address.Store32(offset, value);
         }
+
+        public void FlushToArray(byte[] dest) 
+        {
+            for(uint i = 0; i < dest.Length; i++) 
+            {
+                dest[i] = Read8(i);
+            }
+        }
     }
 }
