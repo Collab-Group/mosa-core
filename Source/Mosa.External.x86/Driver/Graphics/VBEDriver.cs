@@ -24,20 +24,7 @@ namespace Mosa.External.x86.Driver
 
 		public VBEDriver()
         {
-			Video_Memory = GetPhysicalMemory(VBE.MemoryPhysicalLocation, (uint)(VBE.ScreenWidth * VBE.ScreenHeight * (VBE.BitsPerPixel / 8)));
+			Video_Memory = Memory.GetPhysicalMemory(VBE.MemoryPhysicalLocation, (uint)(VBE.ScreenWidth * VBE.ScreenHeight * (VBE.BitsPerPixel / 8)));
         }
-
-		public MemoryBlock GetPhysicalMemory(Pointer address, uint size)
-		{
-			var start = (uint)address.ToInt32();
-
-			// Map physical memory space to virtual memory space
-			for (var at = start; at < start + size; at += PageFrameAllocator.PageSize)
-			{
-				PageTable.MapVirtualAddressToPhysical(at, at);
-			}
-
-			return new MemoryBlock(address, size);
-		}
 	}
 }
