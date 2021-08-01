@@ -121,11 +121,11 @@ namespace $safeprojectname$
                 {
                     // Draw the borders of the cursor
                     if (cursor[h * 12 + w] == 1)
-                        graphics.DrawPoint(black, w + x, h + y);
+                        graphics.DrawPoint((uint)Color.Black.ToArgb(), w + x, h + y);
 
                     // Draw the contents of the cursor (excluding the borders)
                     if (cursor[h * 12 + w] == 2)
-                        graphics.DrawPoint(white, w + x, h + y);
+                        graphics.DrawPoint((uint)Color.White.ToArgb(), w + x, h + y);
                 }
         }
     }
