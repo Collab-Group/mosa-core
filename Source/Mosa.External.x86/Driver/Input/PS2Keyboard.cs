@@ -1,6 +1,6 @@
 ﻿using Mosa.Kernel.x86;
 
-namespace Mosa.External.x86.Driver.Input
+namespace Mosa.External.x86.Driver
 {
     public static class PS2Keyboard
     {

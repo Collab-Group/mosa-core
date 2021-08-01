@@ -2,6 +2,7 @@
 
 using Mosa.Kernel.x86.Smbios;
 using Mosa.Runtime;
+using System.Text;
 
 namespace Mosa.Kernel.x86
 {
@@ -37,8 +38,11 @@ namespace Mosa.Kernel.x86
 			Scheduler.Setup();
 			SmbiosManager.Setup();
 
-			//Setup PCI
+			// Setup PCI
 			PCI.Setup();
+
+			// Setup Encoding static variables
+			Encoding.Setup();
 		}
 	}
 }

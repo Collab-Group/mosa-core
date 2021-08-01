@@ -2198,7 +2198,6 @@ namespace Mosa.Kernel.x86
 					break;
 
 				case 14:
-
 					// Check if Null Pointer Exception
 					// Otherwise handle as Page Fault
 
@@ -2209,11 +2208,13 @@ namespace Mosa.Kernel.x86
 						Error(stack, "Null Pointer Exception");
 					}
 
+					/*
 					if (cr2 >= 0xF0000000u)
 					{
 						Error(stack, "Invalid Access Above 0xF0000000");
 						break;
 					}
+					*/
 
 					var physicalpage = PageFrameAllocator.Allocate();
 
@@ -2239,6 +2240,8 @@ namespace Mosa.Kernel.x86
 					PIT.OnInterrupt();
 
 					PIC.SendEndOfInterrupt(stack->Interrupt);
+
+					Interrupt?.Invoke(stack->Interrupt, stack->ErrorCode);
 
 					//Must Be Here. So It Can Switch The Threads
 					Native.Int(Scheduler.ClockIRQ);

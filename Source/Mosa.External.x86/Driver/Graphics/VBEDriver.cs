@@ -1,12 +1,11 @@
-﻿using Mosa.External.x86;
-using Mosa.Kernel.x86;
-using Mosa.Runtime;
+﻿using Mosa.Kernel.x86;
 
-namespace Mosa.External.x86.Driver.Graphics
+namespace Mosa.External.x86.Driver
 {
     public class VBEDriver
     {
-		public MemoryBlock Video_Memory;
+		public MemoryBlock VideoMemory;
+
 		public uint ScreenWidth
 		{
 			get
@@ -24,7 +23,7 @@ namespace Mosa.External.x86.Driver.Graphics
 
 		public VBEDriver()
         {
-			Video_Memory = Memory.GetPhysicalMemory(VBE.MemoryPhysicalLocation, (uint)(VBE.ScreenWidth * VBE.ScreenHeight * (VBE.BitsPerPixel / 8)));
+			VideoMemory = Memory.GetPhysicalMemory(VBE.MemoryPhysicalLocation, (uint)(VBE.ScreenWidth * VBE.ScreenHeight * (VBE.BitsPerPixel / 8)));
         }
 	}
 }
