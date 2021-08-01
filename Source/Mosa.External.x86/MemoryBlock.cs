@@ -1,5 +1,4 @@
 ﻿using Mosa.Runtime;
-using Mosa.Runtime.x86;
 
 namespace Mosa.External.x86
 {
@@ -64,15 +63,10 @@ namespace Mosa.External.x86
             set { address.Store32(offset * 4, value); }
         }
 
-        public void Clear()
+        public void Fill32(uint offset, uint value, uint length, uint step)
         {
-            ASM.MEMFILL((uint)address, size, 0);
-        }
-
-        public void FlushToArray(byte[] dest)
-        {
-            for (uint i = 0; i < dest.Length; i++)
-                dest[i] = Read8(i);
+            for (uint i = 0; i < length; i += step)
+                address.Store32(offset + i, value);
         }
 
         public byte Read8(uint offset)

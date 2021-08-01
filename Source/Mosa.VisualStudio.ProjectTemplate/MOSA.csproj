@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>net48</TargetFramework>
+		<TargetFramework>net472</TargetFramework>
 		<OutputType>Exe</OutputType>
 		<StartupObject>$safeprojectname$.Boot</StartupObject>
 		<DebugType>full</DebugType>
@@ -11,10 +11,9 @@
 		<DisableStandardFrameworkResolution>true</DisableStandardFrameworkResolution>
 		<DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-		<NoStdLib>true</NoStdLib>
 	</PropertyGroup>
 	<ItemGroup>
-		<Reference Include="mscorlib">
+		<Reference Include="Mosa.Korlib">
       		<HintPath>C:\Program Files (x86)\MOSA-Project\bin\mscorlib.dll</HintPath>
     	</Reference>
 		<Reference Include="Mosa.Kernel.x86">

@@ -7,7 +7,7 @@ namespace Mosa.Kernel.x86
         public const byte SquareWave = 0x36;
         public const uint Frequency = 1193182;
         //No More Than 1000
-        public const ushort Hz = 200;
+        public const ushort Hz = 100;
         public static ushort modeControlPort;
         public static ushort counter0Divisor;
         public static ulong tickCount;

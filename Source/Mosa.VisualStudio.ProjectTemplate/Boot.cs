@@ -12,12 +12,11 @@ namespace $safeprojectname$
 
         public static void Main()
         {
-            // Initialize the necessary stuff
+            // Initialize the kernel and interrupts
             Kernel.Setup();
-            ACPI.Initialize();
             IDT.SetInterruptHandler(ProcessInterrupt);
 
-            // Note: threads can't be created dynamically (for now)
+            // Note. Thread Can't Be Created Dynamically
             Scheduler.CreateThread(MainThread, PageFrameAllocator.PageSize);
             Scheduler.Start();
         }

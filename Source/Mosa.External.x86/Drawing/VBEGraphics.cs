@@ -16,7 +16,7 @@ namespace Mosa.External.x86.Drawing
 
             Bpp = VBE.BitsPerPixel / 8;
 
-            vbeDriverAddr = (uint)vBEDriver.VideoMemory.Address;
+            vbeDriverAddr = (uint)vBEDriver.Video_Memory.Address;
 
             Width = (int)vBEDriver.ScreenWidth;
             Height = (int)vBEDriver.ScreenHeight;

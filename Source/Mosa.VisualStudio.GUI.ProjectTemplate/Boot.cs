@@ -47,12 +47,11 @@ namespace $safeprojectname$
 
         public static void Main()
         {
-            // Initialize the necessary stuff
+            // Initialize the kernel and interrupts
             Kernel.Setup();
-            ACPI.Initialize();
             IDT.SetInterruptHandler(ProcessInterrupt);
 
-            // Note: threads can't be created dynamically (for now)
+            // Note: Thread Can't Be Created Dynamically
             Scheduler.CreateThread(MainThread, PageFrameAllocator.PageSize);
             Scheduler.Start();
         }
@@ -98,7 +97,8 @@ namespace $safeprojectname$
                 graphics.Update();
                 FPSMeter.Update();
 
-                // Halt the CPU for a moment (decreases FPS at the cost of smoothness and resource efficiency)
+                // If the FPS is superior to the mouse speed the mouse won't be smooth
+                // Note that if you remove this you'll have more FPS (the desktop will be smoother)
                 //Native.Hlt();
             }
         }

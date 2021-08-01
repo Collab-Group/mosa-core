@@ -2,7 +2,7 @@
 
 namespace System.Drawing
 {
-    public class Image
+    public unsafe class Image
     {
         public MemoryBlock RawData;
         public int Length;
