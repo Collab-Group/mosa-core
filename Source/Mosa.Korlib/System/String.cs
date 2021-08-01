@@ -890,7 +890,7 @@ namespace System
 				if (count < 10 && format[i] == '{' && format[i + 1] == (count.ToString())[0] && format[i + 2] == '}')
 				{
 					result += args[count].ToString();
-					i += 3;
+					i += 2;
 					count++;
 					continue;
 				}
