@@ -870,5 +870,15 @@ namespace System
 				return string.Ctor(this, start, len);
 			}
 		}
+
+		public unsafe static string FromPointer(byte* p, int size)
+		{
+			string s = "";
+			for (int i = 0; i < size; i++)
+			{
+				s += ((char)(p[i])).ToString();
+			}
+			return s;
+		}
 	}
 }
