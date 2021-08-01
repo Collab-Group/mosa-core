@@ -3,7 +3,6 @@ using System;
 
 namespace Mosa.External.x86.Driver
 {
-
     public static class PS2Mouse
     {
         private const byte Port_KeyData = 0x0060;
@@ -17,19 +16,13 @@ namespace Mosa.External.x86.Driver
 
         public static void Wait_KBC()
         {
-            for (; ; )
-            {
-                if ((IOPort.In8(Port_KeyStatus) & KeyStatus_Send_NotReady) == 0)
-                {
-                    break;
-                }
-            }
+            while ((IOPort.In8(Port_KeyStatus) & KeyStatus_Send_NotReady) != 0) ;
         }
 
-        public static void Initialize(int XRes, int YRes)
+        public static void Initialize(int width, int height)
         {
-            ScreenWidth = XRes;
-            ScreenHeight = YRes;
+            ScreenWidth = width;
+            ScreenHeight = height;
 
             X = ScreenWidth / 2;
             Y = ScreenHeight / 2;
@@ -39,8 +32,7 @@ namespace Mosa.External.x86.Driver
             Wait_KBC();
             IOPort.Out8(Port_KeyData, KBC_Mode);
 
-            //Enable 
-
+            // Enable the mouse
             Wait_KBC();
             IOPort.Out8(Port_KeyCommand, KeyCommand_SendTo_Mouse);
             Wait_KBC();
@@ -48,8 +40,7 @@ namespace Mosa.External.x86.Driver
 
             Btn = "";
 
-
-            Console.WriteLine("PS/2 Mouse Enabled");
+            Console.WriteLine("PS/2 mouse enabled!");
         }
 
         private static int Phase = 0;
@@ -64,7 +55,6 @@ namespace Mosa.External.x86.Driver
         public static int ScreenWidth = 0;
         public static int ScreenHeight = 0;
 
-
         public static void OnInterrupt()
         {
             byte D = IOPort.In8(Port_KeyData);
@@ -72,11 +62,10 @@ namespace Mosa.External.x86.Driver
             if (Phase == 0)
             {
                 if (D == 0xfa)
-                {
                     Phase = 1;
-                }
                 return;
             }
+
             if (Phase == 1)
             {
                 if ((D & 0xc8) == 0x08)
@@ -86,54 +75,41 @@ namespace Mosa.External.x86.Driver
                 }
                 return;
             }
+
             if (Phase == 2)
             {
                 MData[1] = D;
                 Phase = 3;
                 return;
             }
+
             if (Phase == 3)
             {
                 MData[2] = D;
                 Phase = 1;
 
                 MData[0] &= 0x07;
-                switch (MData[0])
+                Btn = MData[0] switch
                 {
-                    case 0x01:
-                        Btn = "Left";
-                        break;
-                    case 0x02:
-                        Btn = "Right";
-                        break;
-                    default:
-                        Btn = "None";
-                        break;
-                }
+                    0x01 => "Left",
+                    0x02 => "Right",
+                    _ => "None",
+                };
 
                 if (MData[1] > 127)
-                {
                     aX = -(255 - MData[1]);
-                }
                 else
-                {
                     aX = MData[1];
-                }
 
                 if (MData[2] > 127)
-                {
                     aY = -(255 - MData[2]);
-                }
                 else
-                {
                     aY = MData[2];
-                }
 
                 X = Math.Clamp(X + aX, 0, ScreenWidth);
                 Y = Math.Clamp(Y - aY, 0, ScreenHeight);
-
-                return;
             }
+
             return;
         }
     }
