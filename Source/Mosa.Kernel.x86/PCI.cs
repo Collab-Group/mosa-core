@@ -39,16 +39,20 @@ namespace Mosa.Kernel
         AMD = 0x1022,
         VMWare = 0x15AD,
         Bochs = 0x1234,
-        VirtualBox = 0x80EE
+        VirtualBox = 0x80EE,
+        Realtek = 0x10EC
     }
 
     public enum DeviceID
     {
         SVGAIIAdapter = 0x0405,
         PCNETII = 0x2000,
+        PCNETIII = 0x2001,
         BGA = 0x1111,
         VBVGA = 0xBEEF,
-        VBoxGuest = 0xCAFE
+        VBoxGuest = 0xCAFE,
+        AC97 = 0x2415,
+        RTL8139 = 0x8139
     }
 
     public class PCI

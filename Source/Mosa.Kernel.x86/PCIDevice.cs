@@ -209,7 +209,7 @@ namespace Mosa.Kernel
 		/// </summary>
 		/// <param name="aRegister">A register to read.</param>
 		/// <returns>byte value.</returns>
-		protected byte ReadRegister8(byte aRegister)
+		public byte ReadRegister8(byte aRegister)
 		{
 			UInt32 xAddr = GetAddressBase(bus, slot, function) | ((UInt32)(aRegister & 0xFC));
 			//IO.ConfigAddressPort.DWord = xAddr;
@@ -218,7 +218,7 @@ namespace Mosa.Kernel
 			return (byte)(IOPort.In32(ConfigDataPort) >> ((aRegister % 4) * 8) & 0xFF);
 		}
 
-		protected void WriteRegister8(byte aRegister, byte value)
+		public void WriteRegister8(byte aRegister, byte value)
 		{
 			UInt32 xAddr = GetAddressBase(bus, slot, function) | ((UInt32)(aRegister & 0xFC));
 			//IO.ConfigAddressPort.DWord = xAddr;
@@ -232,7 +232,7 @@ namespace Mosa.Kernel
 		/// </summary>
 		/// <param name="aRegister">A register.</param>
 		/// <returns>UInt16 value.</returns>
-		protected UInt16 ReadRegister16(byte aRegister)
+		public UInt16 ReadRegister16(byte aRegister)
 		{
 			UInt32 xAddr = GetAddressBase(bus, slot, function) | ((UInt32)(aRegister & 0xFC));
 			//IO.ConfigAddressPort.DWord = xAddr;
@@ -246,7 +246,7 @@ namespace Mosa.Kernel
 		/// </summary>
 		/// <param name="aRegister">A register.</param>
 		/// <param name="value">A value.</param>
-		protected void WriteRegister16(byte aRegister, ushort value)
+		public void WriteRegister16(byte aRegister, ushort value)
 		{
 			UInt32 xAddr = GetAddressBase(bus, slot, function) | ((UInt32)(aRegister & 0xFC));
 			//IO.ConfigAddressPort.DWord = xAddr;
@@ -255,7 +255,7 @@ namespace Mosa.Kernel
 			IOPort.Out16(ConfigDataPort, value);
 		}
 
-		protected UInt32 ReadRegister32(byte aRegister)
+		public UInt32 ReadRegister32(byte aRegister)
 		{
 			UInt32 xAddr = GetAddressBase(bus, slot, function) | ((UInt32)(aRegister & 0xFC));
 			//IO.ConfigAddressPort.DWord = xAddr;
@@ -264,7 +264,7 @@ namespace Mosa.Kernel
 			return IOPort.In32(ConfigDataPort);
 		}
 
-		protected void WriteRegister32(byte aRegister, uint value)
+		public void WriteRegister32(byte aRegister, uint value)
 		{
 			UInt32 xAddr = GetAddressBase(bus, slot, function) | ((UInt32)(aRegister & 0xFC));
 			//IO.ConfigAddressPort.DWord = xAddr;
