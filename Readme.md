@@ -1,3 +1,5 @@
+# Becomes a mess now. Use the latest releases.
+
 # MOSA-Core
 A fork of the MOSA (Managed Operating System Alliance) project, whose goals are to add useful features into MOSA, while keeping it organized and easy to use.<br/>
 MOSA is a powerful and relatively stable way of creating an operating system in C#.
