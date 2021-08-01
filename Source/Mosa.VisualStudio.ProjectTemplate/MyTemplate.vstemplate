@@ -1,7 +1,7 @@
 <VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
   <TemplateData>
     <Name>MOSA</Name>
-    <Description>(Your project name cannot contain spaces) Use MOSA(nifanfa) to create an operating system</Description>
+    <Description>Default MOSA-Core template (your project name cannot contain spaces)</Description>
     <ProjectType>CSharp</ProjectType>
     <ProjectSubType>
     </ProjectSubType>
@@ -15,11 +15,12 @@
     <Icon>__TemplateIcon.ico</Icon>
   </TemplateData>
   <TemplateContent>
-    <Project TargetFileName="$safeprojectname$.csproj" File="MOSA.csproj" ReplaceParameters="true" >
-      <Folder Name=".vs" TargetFolderName=".vs" />
+    <Project TargetFileName="$safeprojectname$.csproj" File="MOSA.csproj" ReplaceParameters="true">
       <Folder Name="Properties" TargetFolderName="Properties">
         <ProjectItem ReplaceParameters="true" TargetFileName="launchSettings.json">launchSettings.json</ProjectItem>
-        <ProjectItem ReplaceParameters="true" TargetFileName="Run.bat">Run.bat</ProjectItem>
+      </Folder>
+      <Folder Name="Properties" TargetFolderName="obj\Debug">
+        <ProjectItem ReplaceParameters="true" TargetFileName="apphost.exe">apphost.exe</ProjectItem>
       </Folder>
       <ProjectItem ReplaceParameters="true" TargetFileName="Boot.cs">Boot.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="README.txt">README.txt</ProjectItem>

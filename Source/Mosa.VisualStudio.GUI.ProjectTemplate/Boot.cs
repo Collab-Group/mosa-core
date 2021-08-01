@@ -6,7 +6,6 @@ using Mosa.External.x86.Drawing.Fonts;
 using Mosa.External.x86.Driver;
 using Mosa.External.x86.FileSystem;
 using Mosa.Kernel.x86;
-using Mosa.Runtime.x86;
 using System.Drawing;
 
 namespace $safeprojectname$
@@ -40,10 +39,6 @@ namespace $safeprojectname$
             0,0,0,0,0,0,0,1,2,2,1,0,
             0,0,0,0,0,0,0,0,1,1,0,0
         };
-
-        // Cache colors, we currently do not cache the ARGB values in the Color class
-        public static uint black = (uint)Color.Black.ToArgb();
-        public static uint white = (uint)Color.White.ToArgb();
 
         public static void Main()
         {
@@ -87,12 +82,12 @@ namespace $safeprojectname$
             {
                 // Clear screen (either with color or bitmap)
                 //graphics.DrawImage(bitmap, 0, 0);
-                graphics.Clear(black);
+                graphics.Clear((uint)Color.Black.ToArgb());
 
                 // Draw BitFont strings
-                graphics.DrawBitFontString("ArialCustomCharset16", white, "Current Driver is " + graphics.CurrentDriver, 10, 10);
-                graphics.DrawBitFontString("ArialCustomCharset16", white, "FPS is " + FPSMeter.FPS, 10, 26);
-                graphics.DrawBitFontString("ArialCustomCharset16", white, "Available Memory is " + Memory.GetAvailableMemory() / 1048576 + " MB", 10, 42);
+                graphics.DrawBitFontString("ArialCustomCharset16", (uint)Color.White.ToArgb(), "Current Driver is " + graphics.CurrentDriver, 10, 10);
+                graphics.DrawBitFontString("ArialCustomCharset16", (uint)Color.White.ToArgb(), "FPS is " + FPSMeter.FPS, 10, 26);
+                graphics.DrawBitFontString("ArialCustomCharset16", (uint)Color.White.ToArgb(), "Available Memory is " + Memory.GetAvailableMemory() / 1048576 + " MB", 10, 42);
 
                 // Draw cursor
                 DrawCursor(graphics, PS2Mouse.X, PS2Mouse.Y);
@@ -100,9 +95,6 @@ namespace $safeprojectname$
                 // Update graphics (necessary if double buffering) and FPS meter
                 graphics.Update();
                 FPSMeter.Update();
-
-                // Halt the CPU for a moment (decreases FPS at the cost of smoothness and resource efficiency)
-                //Native.Hlt();
             }
         }
 

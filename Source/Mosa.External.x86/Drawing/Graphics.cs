@@ -79,12 +79,13 @@ namespace Mosa.External.x86.Drawing
                     Color
                     );*/
 
-            for (int h = 0; h < aHeight; h++)
-                ASM.MEMFILL(
-                    (uint)(VideoMemoryCacheAddr + ((Width * (Y + h) + X) * Bpp)),
-                    (uint)(aWidth * 4),
-                    Color
-                    );
+            if (X >= LimitX && X < LimitX + LimitWidth && Y >= LimitY && Y < LimitY + LimitHeight)
+                for (int h = 0; h < aHeight; h++)
+                    ASM.MEMFILL(
+                        (uint)(VideoMemoryCacheAddr + ((Width * (Y + h) + X) * Bpp)),
+                        (uint)(aWidth * 4),
+                        Color
+                        );
         }
 
         public virtual void DrawArray(int x, int y, int width, int height, int[] array, uint color)
@@ -131,13 +132,16 @@ namespace Mosa.External.x86.Drawing
         //Only 32Bits
         public virtual void DrawImageASM(Image image, int X, int Y)
         {
-            int h = 0;
-            while ((h++ <= Height - Y) && h <= image.Height)
-                ASM.MEMCPY(
-                    (uint)(VideoMemoryCacheAddr + ((Width * (Y + h) + X) * Bpp)),
-                    (uint)((uint)image.RawData.Address + (image.Width * 4 * h)),
-                    (uint)Math.Clamp(image.Width * 4, 0, (Width - X) * 4)
-                    );
+            if (X >= LimitX && X < LimitX + LimitWidth && Y >= LimitY && Y < LimitY + LimitHeight)
+            {
+                int h = 0;
+                while ((h++ <= Height - Y) && h <= image.Height)
+                    ASM.MEMCPY(
+                        (uint)(VideoMemoryCacheAddr + ((Width * (Y + h) + X) * Bpp)),
+                        (uint)((uint)image.RawData.Address + (image.Width * 4 * h)),
+                        (uint)Math.Clamp(image.Width * 4, 0, (Width - X) * 4)
+                        );
+            }
         }
 
         public virtual void DrawImage(Image image, int X, int Y, bool DrawWithAlpha)

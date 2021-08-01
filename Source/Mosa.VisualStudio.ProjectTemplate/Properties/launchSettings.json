@@ -2,8 +2,8 @@
   "profiles": {
     "Compile and Run": {
       "commandName": "Executable",
-      "executablePath": "cmd",
-      "commandLineArgs": "/c start \"\" ..\\Properties\\Run.bat $safeprojectname$.exe",
+      "executablePath": "C:\\Program Files (x86)\\MOSA-Project\\bin\\Mosa.Launcher.Console.exe",
+      "commandLineArgs": "$safeprojectname$.dll \"\" False",
       "workingDirectory": "bin"
     }
   }
