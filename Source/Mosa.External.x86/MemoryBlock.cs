@@ -63,6 +63,12 @@ namespace Mosa.External.x86
             set { address.Store32(offset * 4, value); }
         }
 
+        public void Fill32(uint offset, uint value, uint length, uint step)
+        {
+            for (uint i = 0; i < length; i += step)
+                address.Store32(offset + i, value);
+        }
+
         public byte Read8(uint offset)
         {
             return address.Load8(offset);

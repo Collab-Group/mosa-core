@@ -38,7 +38,7 @@ namespace Mosa.External.x86.Drawing
             return 0;
         }
 
-        public override void Update()
+        public unsafe override void Update()
         {
             ASM.MEMCPY(svgaAddress, VideoMemoryCacheAddr, (uint)FrameSize);
             vMWareSVGAII.Update();

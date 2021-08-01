@@ -26,7 +26,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Compiler.MosaTypeSyste
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Runtime", "Mosa.Runtime\Mosa.Runtime.csproj", "{77961864-DB33-4189-804F-D774022C96E2}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{F0EFF742-92D5-4219-939A-8F6F8DAB24E5}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!Build", "!Build", "{F0EFF742-92D5-4219-939A-8F6F8DAB24E5}"
 	ProjectSection(SolutionItems) = preProject
 		..\LICENSE.txt = ..\LICENSE.txt
 		..\Readme.md = ..\Readme.md
