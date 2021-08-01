@@ -13,8 +13,8 @@ namespace $safeprojectname$
 {
     public static class Boot
     {
-        public static int Width = 640;
-        public static int Height = 480;
+        public static int Width;
+        public static int Height;
 
         public static int[] cursor = new int[]
         {
@@ -59,10 +59,6 @@ namespace $safeprojectname$
 
         public static void MainThread() 
         {
-            // Initialize the PS/2 peripherals
-            PS2Keyboard.Initialize();
-            PS2Mouse.Initialize(Width, Height);
-
             // Initialize the IDE hard drive
             // MOSA currently only supports FAT12
             IDisk disk = new IDEDisk();
@@ -70,7 +66,14 @@ namespace $safeprojectname$
             FAT12 fs = new FAT12(disk, MBR.PartitionInfos[0]);
 
             // Initialize graphics (default width and height is 640 and 480 respectively)
-            Graphics graphics = GraphicsSelector.GetGraphics(); //GraphicsSelector.GetGraphics(Width, Height);
+            Graphics graphics = GraphicsSelector.GetGraphics();
+
+            Width = graphics.Width;
+            Height = graphics.Height;
+
+            // Initialize the PS/2 peripherals
+            PS2Keyboard.Initialize();
+            PS2Mouse.Initialize(Width, Height);
 
             // BitFont generator : https://github.com/nifanfa/BitFont
             string CustomCharset = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";

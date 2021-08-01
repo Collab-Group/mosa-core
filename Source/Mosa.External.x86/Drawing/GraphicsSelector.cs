@@ -7,9 +7,11 @@ namespace Mosa.External.x86.Drawing
     {
         public static Graphics GetGraphics(int width = 640, int height = 480)
         {
-            // BGA first, then VBE (so that graphics work in VirtualBox for example)
-            /*if (PCI.Exists(VendorID.Bochs, DeviceID.BGA))
-                return new BGAGraphics(width, height);*/
+            // BGA first, then VBE (so that graphics work in Bochs for example)
+            PCIDevice bga = PCI.GetDevice(VendorID.Bochs, DeviceID.BGA);
+
+            if (bga != null)
+                return new BGAGraphics(bga, width, height);
 
             if (VBE.IsVBEAvailable)
                 return new VBEGraphics();

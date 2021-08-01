@@ -1,4 +1,6 @@
-﻿using Mosa.Kernel.x86;
+﻿using Mosa.Kernel;
+using Mosa.Kernel.x86;
+using Mosa.Runtime;
 
 namespace Mosa.External.x86.Driver
 {
@@ -39,14 +41,17 @@ namespace Mosa.External.x86.Driver
 
     public class BGADriver
     {
-        public MemoryBlock VideoMemory;
+        public MemoryBlock LinearFrameBuffer;
 
         public uint Width, Height, Bpp;
 
         public ushort BGADepth;
 
-        public BGADriver(uint width, uint height, uint depth = 32)
+        public BGADriver(PCIDevice device, uint width, uint height, uint depth = 32)
         {
+            if (device == null)
+                Panic.Error("BGADriver PCIDevice is null.");
+
             Width = width;
             Height = height;
             Bpp = depth / 8;
@@ -72,23 +77,25 @@ namespace Mosa.External.x86.Driver
             }
 
             // Set display mode
-            SetMode(false, true);
+            SetMode();
+
+            // TODO : Fix
+            // Set linear frame buffer address
+            LinearFrameBuffer = Memory.GetPhysicalMemory(new Pointer(0xE0000000), Width * Height * Bpp);
         }
 
-        public void SetMode(bool useLinearFrameBuffer, bool clearVideoMemory)
+        public void SetStatus(bool enable)
         {
-            WriteRegister((ushort)VBERegister.VBE_DISPI_INDEX_ENABLE, (ushort)VBERegister.VBE_DISPI_DISABLED);
+            WriteRegister((ushort)VBERegister.VBE_DISPI_INDEX_ENABLE, (ushort)(enable ? ((ushort)VBERegister.VBE_DISPI_ENABLED | (ushort)VBERegister.VBE_DISPI_LFB_ENABLED) : (ushort)VBERegister.VBE_DISPI_DISABLED));
+        }
+
+        public void SetMode()
+        {
+            SetStatus(false);
             WriteRegister((ushort)VBERegister.VBE_DISPI_INDEX_XRES, (ushort)Width);
             WriteRegister((ushort)VBERegister.VBE_DISPI_INDEX_YRES, (ushort)Height);
             WriteRegister((ushort)VBERegister.VBE_DISPI_INDEX_BPP, BGADepth);
-            WriteRegister((ushort)VBERegister.VBE_DISPI_INDEX_ENABLE, (ushort)((ushort)VBERegister.VBE_DISPI_ENABLED |
-                (useLinearFrameBuffer ? (ushort)VBERegister.VBE_DISPI_LFB_ENABLED : 0) |
-                (!clearVideoMemory ? (ushort)VBERegister.VBE_DISPI_NOCLEARMEM : 0)));
-        }
-
-        public static void SetBank(ushort bankNum)
-        {
-            WriteRegister((ushort)VBERegister.VBE_DISPI_INDEX_BANK, bankNum);
+            SetStatus(true);
         }
 
         public static void WriteRegister(ushort index, ushort data)
