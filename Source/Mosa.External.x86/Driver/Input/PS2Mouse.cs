@@ -6,17 +6,17 @@ namespace Mosa.External.x86.Driver
     public static class PS2Mouse
     {
         private const byte Port_KeyData = 0x0060;
-        private const byte Port_KeyStatus = 0x0064;
         private const byte Port_KeyCommand = 0x0064;
         private const byte KeyStatus_Send_NotReady = 0x02;
         private const byte KeyCommand_Write_Mode = 0x60;
         private const byte KBC_Mode = 0x47;
         private const byte KeyCommand_SendTo_Mouse = 0xd4;
         private const byte MouseCommand_Enable = 0xf4;
+        private const byte Mouse_SetSampleRate = 0xF3;
 
         public static void Wait_KBC()
         {
-            while ((IOPort.In8(Port_KeyStatus) & KeyStatus_Send_NotReady) != 0) ;
+            while ((IOPort.In8(Port_KeyCommand) & KeyStatus_Send_NotReady) != 0) ;
         }
 
         public static void Initialize(int width, int height)
@@ -27,19 +27,16 @@ namespace Mosa.External.x86.Driver
             X = ScreenWidth / 2;
             Y = ScreenHeight / 2;
 
-            Wait_KBC();
-            IOPort.Out8(Port_KeyCommand, KeyCommand_Write_Mode);
-            Wait_KBC();
-            IOPort.Out8(Port_KeyData, KBC_Mode);
+            // Set KBC mode
+            WriteCommand(KeyCommand_Write_Mode, KBC_Mode);
 
-            // Enable the mouse
-            Wait_KBC();
-            IOPort.Out8(Port_KeyCommand, KeyCommand_SendTo_Mouse);
-            Wait_KBC();
-            IOPort.Out8(Port_KeyData, MouseCommand_Enable);
+            // Set sample rate
+            WriteCommand(Mouse_SetSampleRate, 200);
+
+            // Enable automatic packet streaming
+            WriteCommand(KeyCommand_SendTo_Mouse, MouseCommand_Enable);
 
             Btn = "";
-
             Console.WriteLine("PS/2 mouse enabled!");
         }
 
@@ -54,6 +51,14 @@ namespace Mosa.External.x86.Driver
 
         public static int ScreenWidth = 0;
         public static int ScreenHeight = 0;
+
+        public static void WriteCommand(byte command, byte value)
+        {
+            Wait_KBC();
+            IOPort.Out8(Port_KeyCommand, command);
+            Wait_KBC();
+            IOPort.Out8(Port_KeyData, value);
+        }
 
         public static void OnInterrupt()
         {
