@@ -1,11 +1,13 @@
-﻿using Mosa.Kernel.x86;
+﻿using Mosa.External.x86;
+using Mosa.External.x86.FileSystem;
+using Mosa.Kernel.x86;
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-//namespace MOSA2
 namespace Mosa.External.x86.FileSystem
+//namespace MOSA2
 {
     //Reference:https://blog.csdn.net/liyun123gx/article/details/38440225
     //Reference:https://blog.csdn.net/tq384998430/article/details/53414142
@@ -288,6 +290,11 @@ namespace Mosa.External.x86.FileSystem
                         buffer[i + k] = ((byte*)item)[k];
                     }
                     Disk.WriteBlock(TargetDirectorySector, 1, buffer);
+
+                    //Disposing
+                    GC.DisposeObject(buffer);
+                    GC.DisposeObject(bufferToWrite);
+                    GC.Free((uint)item, (uint)sizeof(DirectoryItem));
                     return;
                 }
             }
