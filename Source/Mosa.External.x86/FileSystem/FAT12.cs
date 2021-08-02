@@ -64,7 +64,7 @@ namespace Mosa.External.x86.FileSystem
             fAT12Header.SectorsPerFATs = memoryBlock.Read16(0x16);
             fAT12Header.ResvdSector = memoryBlock.Read16(0x0e);
 
-            fileListSectorLength = (uint)((fAT12Header.RootEntryCount * 32 + (IDE.SectorSize - 1)) / IDE.SectorSize);
+            fileListSectorLength = (uint)((fAT12Header.RootEntryCount * FAT12Item.SizePerItem + (IDE.SectorSize - 1)) / IDE.SectorSize);
 
             /*
              * |    Boot   |
@@ -170,14 +170,14 @@ namespace Mosa.External.x86.FileSystem
             Disk.ReadBlock(startSector, fileListSectorLength, data);
 
             uint T = 0;
-            byte[] _data = new byte[32];
+            byte[] _data = new byte[FAT12Item.SizePerItem];
 
             for (; ; )
             {
-                for (uint u = 0; u < 32; u++)
+                for (uint u = 0; u < FAT12Item.SizePerItem; u++)
                     _data[u] = data[u + T];
 
-                T += 32;
+                T += FAT12Item.SizePerItem;
 
                 byte b = _data[0];
 
@@ -324,8 +324,7 @@ namespace Mosa.External.x86.FileSystem
                 if (offset == Data.Length)
                     break;
 
-                // File descriptor size
-                offset += 32;
+                offset += FAT12Item.SizePerItem;
             }
 
             ushort cluster = 0;
