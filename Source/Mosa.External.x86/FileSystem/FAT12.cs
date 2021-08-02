@@ -1,6 +1,5 @@
 ﻿using Mosa.External.x86;
 using Mosa.External.x86.Driver;
-using Mosa.External.x86.Driver.Storage;
 using Mosa.External.x86.Encoding;
 using Mosa.External.x86.FileSystem;
 using Mosa.Kernel.x86;

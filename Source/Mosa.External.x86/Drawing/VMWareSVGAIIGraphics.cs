@@ -1,5 +1,4 @@
 ﻿using Mosa.External.x86.Driver;
-using Mosa.External.x86.Driver.Graphics;
 using Mosa.Runtime.x86;
 
 namespace Mosa.External.x86.Drawing
@@ -39,7 +38,7 @@ namespace Mosa.External.x86.Drawing
             return 0;
         }
 
-        public unsafe override void Update()
+        public override void Update()
         {
             ASM.MEMCPY(svgaAddress, VideoMemoryCacheAddr, (uint)FrameSize);
             vMWareSVGAII.Update();
@@ -48,6 +47,11 @@ namespace Mosa.External.x86.Drawing
         public override void Disable()
         {
             vMWareSVGAII.Disable();
+        }
+
+        public override void Enable()
+        {
+            vMWareSVGAII.Enable();
         }
     }
 }

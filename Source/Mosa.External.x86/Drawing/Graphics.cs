@@ -25,7 +25,7 @@ namespace Mosa.External.x86.Drawing
 
         public string CurrentDriver;
 
-        //UsedX will be the last line of it used.
+        //TotalX will be the last line of it used.
         public virtual int DrawBitFontString(string FontName, uint color, string Text, int X, int Y, int Devide = 0, bool DisableAntiAliasing = false)
         {
             BitFontDescriptor bitFontDescriptor = new BitFontDescriptor();
@@ -43,12 +43,29 @@ namespace Mosa.External.x86.Drawing
                 for (int i = 0; i < Lines[l].Length; i++)
                 {
                     char c = Lines[l][i];
-                    UsedX += BitFont.DrawBitFontChar(this, bitFontDescriptor.Raw, bitFontDescriptor.Size, Color.FromArgb((int)color), bitFontDescriptor.Charset.IndexOf(c), UsedX + X, Y + bitFontDescriptor.Size * l, !DisableAntiAliasing) + 2 + Devide;
+                    UsedX += BitFont.DrawBitFontChar(this, bitFontDescriptor.Raw, bitFontDescriptor.Size, color, bitFontDescriptor.Charset.IndexOf(c), UsedX + X, Y + bitFontDescriptor.Size * l, !DisableAntiAliasing) + 2 + Devide;
                 }
                 TotalX += UsedX;
             }
 
             return TotalX;
+        }
+
+        public void DrawACS16String(uint color, string s, int x, int y)
+        {
+            for (int c = 0; c < s.Length; c++)
+            {
+                int offset = ((byte)s[c] & 0xFF) * 16;
+                byte[] fontbuf = new byte[16];
+
+                for (int k = 0; k < fontbuf.Length; k++)
+                    fontbuf[k] = ASC16.Buffer[offset + k];
+
+                for (int i = 0; i < ASC16.FontHeight; i++)
+                    for (int j = 0; j < ASC16.FontWidth; j++)
+                        if ((fontbuf[i] & (0x80 >> j)) != 0)
+                            DrawPoint(color, x + j + (c * 8), y + i);
+            }
         }
 
         public virtual void DrawFilledRectangle(uint Color, int X, int Y, int aWidth, int aHeight)
@@ -62,12 +79,21 @@ namespace Mosa.External.x86.Drawing
                     Color
                     );*/
 
-            for (int h = 0; h < aHeight; h++)
-                ASM.MEMFILL(
-                    (uint)(VideoMemoryCacheAddr + ((Width * (Y + h) + X) * Bpp)),
-                    (uint)(aWidth * 4),
-                    Color
-                    );
+            if (X >= LimitX && X < LimitX + LimitWidth && Y >= LimitY && Y < LimitY + LimitHeight)
+                for (int h = 0; h < aHeight; h++)
+                    ASM.MEMFILL(
+                        (uint)(VideoMemoryCacheAddr + ((Width * (Y + h) + X) * Bpp)),
+                        (uint)(aWidth * 4),
+                        Color
+                        );
+        }
+
+        public virtual void DrawArray(int x, int y, int width, int height, int[] array, uint color)
+        {
+            for (int h = 0; h < height; h++)
+                for (int w = 0; w < width; w++)
+                    if (array[h * width + w] == 1)
+                        DrawPoint(color, w + x, h + y);
         }
 
         public virtual void DrawRectangle(uint Color, int X, int Y, int Width, int Height, int Weight)
@@ -93,6 +119,8 @@ namespace Mosa.External.x86.Drawing
 
         public abstract void Disable();
 
+        public abstract void Enable();
+
         public virtual void DrawImage(Image image, int X, int Y, int TransparentColor)
         {
             for (int h = 0; h < image.Height; h++)
@@ -104,13 +132,16 @@ namespace Mosa.External.x86.Drawing
         //Only 32Bits
         public virtual void DrawImageASM(Image image, int X, int Y)
         {
-            int h = 0;
-            while ((h++ <= Height - Y) && h <= image.Height)
-                ASM.MEMCPY(
-                    (uint)(VideoMemoryCacheAddr + ((Width * (Y + h) + X) * Bpp)),
-                    (uint)((uint)image.RawData.Address + (image.Width * 4 * h)),
-                    (uint)Math.Clamp(image.Width * 4, 0, (Width - X) * 4)
-                    );
+            if (X >= LimitX && X < LimitX + LimitWidth && Y >= LimitY && Y < LimitY + LimitHeight)
+            {
+                int h = 0;
+                while ((h++ <= Height - Y) && h <= image.Height)
+                    ASM.MEMCPY(
+                        (uint)(VideoMemoryCacheAddr + ((Width * (Y + h) + X) * Bpp)),
+                        (uint)((uint)image.RawData.Address + (image.Width * 4 * h)),
+                        (uint)Math.Clamp(image.Width * 4, 0, (Width - X) * 4)
+                        );
+            }
         }
 
         public virtual void DrawImage(Image image, int X, int Y, bool DrawWithAlpha)

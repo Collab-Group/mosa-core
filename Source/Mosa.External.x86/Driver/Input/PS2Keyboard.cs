@@ -1,11 +1,11 @@
 ﻿using Mosa.Kernel.x86;
 
-namespace Mosa.External.x86.Driver.Input
+namespace Mosa.External.x86.Driver
 {
     public static class PS2Keyboard
     {
         private const byte Port_KeyData = 0x0060;
-        public static byte KData;
+        public static byte KData = 0x00;
 
         public static void Initialize()
         {
@@ -15,15 +15,10 @@ namespace Mosa.External.x86.Driver.Input
         public static void OnInterrupt()
         {
             KeyAvailable = false;
-
             KData = IOPort.In8(Port_KeyData);
-
             KeyAvailable = true;
 
-            if (KData == (byte)KeyCode.CapsLock)
-            {
-                IsCapsLock = !IsCapsLock;
-            }
+            IsCapsLock = KData == (byte)KeyCode.CapsLock;
         }
 
         public static bool KeyAvailable = false;
@@ -37,65 +32,37 @@ namespace Mosa.External.x86.Driver.Input
 
         public static string KeyCodeToString(this KeyCode keyCode)
         {
-            switch (keyCode)
+            return keyCode switch
             {
-                case KeyCode.A:
-                    return "A";
-                case KeyCode.B:
-                    return "B";
-                case KeyCode.C:
-                    return "C";
-                case KeyCode.D:
-                    return "D";
-                case KeyCode.E:
-                    return "E";
-                case KeyCode.F:
-                    return "F";
-                case KeyCode.G:
-                    return "G";
-                case KeyCode.H:
-                    return "H";
-                case KeyCode.I:
-                    return "I";
-                case KeyCode.J:
-                    return "J";
-                case KeyCode.K:
-                    return "K";
-                case KeyCode.L:
-                    return "L";
-                case KeyCode.M:
-                    return "M";
-                case KeyCode.N:
-                    return "N";
-                case KeyCode.O:
-                    return "O";
-                case KeyCode.P:
-                    return "P";
-                case KeyCode.Q:
-                    return "Q";
-                case KeyCode.R:
-                    return "R";
-                case KeyCode.S:
-                    return "S";
-                case KeyCode.T:
-                    return "T";
-                case KeyCode.U:
-                    return "U";
-                case KeyCode.V:
-                    return "V";
-                case KeyCode.W:
-                    return "W";
-                case KeyCode.X:
-                    return "X";
-                case KeyCode.Y:
-                    return "Y";
-                case KeyCode.Z:
-                    return "Z";
-                case KeyCode.Space:
-                    return " ";
-                default:
-                    return "";
-            }
+                KeyCode.A => "A",
+                KeyCode.B => "B",
+                KeyCode.C => "C",
+                KeyCode.D => "D",
+                KeyCode.E => "E",
+                KeyCode.F => "F",
+                KeyCode.G => "G",
+                KeyCode.H => "H",
+                KeyCode.I => "I",
+                KeyCode.J => "J",
+                KeyCode.K => "K",
+                KeyCode.L => "L",
+                KeyCode.M => "M",
+                KeyCode.N => "N",
+                KeyCode.O => "O",
+                KeyCode.P => "P",
+                KeyCode.Q => "Q",
+                KeyCode.R => "R",
+                KeyCode.S => "S",
+                KeyCode.T => "T",
+                KeyCode.U => "U",
+                KeyCode.V => "V",
+                KeyCode.W => "W",
+                KeyCode.X => "X",
+                KeyCode.Y => "Y",
+                KeyCode.Z => "Z",
+                KeyCode.Space => " ",
+                _ => "",
+            };
         }
 
         public enum KeyCode

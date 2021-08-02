@@ -2,7 +2,7 @@
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
 
-namespace Mosa.External.x86.Driver.Audio
+namespace Mosa.External.x86.Driver
 {
     enum Options
     {

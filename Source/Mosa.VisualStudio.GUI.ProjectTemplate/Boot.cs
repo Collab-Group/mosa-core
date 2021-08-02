@@ -6,15 +6,14 @@ using Mosa.External.x86.Drawing.Fonts;
 using Mosa.External.x86.Driver;
 using Mosa.External.x86.FileSystem;
 using Mosa.Kernel.x86;
-using Mosa.Runtime.x86;
 using System.Drawing;
 
 namespace $safeprojectname$
 {
     public static class Boot
     {
-        public static int Width = 640;
-        public static int Height = 480;
+        public static int Width;
+        public static int Height;
 
         public static int[] cursor = new int[]
         {
@@ -41,27 +40,20 @@ namespace $safeprojectname$
             0,0,0,0,0,0,0,0,1,1,0,0
         };
 
-        // Cache colors, we currently do not cache the ARGB values in the Color class
-        public static uint black = (uint)Color.Black.ToArgb();
-        public static uint white = (uint)Color.White.ToArgb();
-
         public static void Main()
         {
-            // Initialize the kernel and interrupts
+            // Initialize the necessary stuff
             Kernel.Setup();
+            ACPI.Initialize();
             IDT.SetInterruptHandler(ProcessInterrupt);
 
-            // Note: Thread Can't Be Created Dynamically
+            // Note: threads can't be created dynamically (for now)
             Scheduler.CreateThread(MainThread, PageFrameAllocator.PageSize);
             Scheduler.Start();
         }
 
         public static void MainThread() 
         {
-            // Initialize the PS/2 peripherals
-            PS2Keyboard.Initialize();
-            PS2Mouse.Initialize(Width, Height);
-
             // Initialize the IDE hard drive
             // MOSA currently only supports FAT12
             IDisk disk = new IDEDisk();
@@ -69,7 +61,14 @@ namespace $safeprojectname$
             FAT12 fs = new FAT12(disk, MBR.PartitionInfos[0]);
 
             // Initialize graphics (default width and height is 640 and 480 respectively)
-            Graphics graphics = GraphicsSelector.GetGraphics(); //GraphicsSelector.GetGraphics(Width, Height);
+            Graphics graphics = GraphicsSelector.GetGraphics();
+
+            Width = graphics.Width;
+            Height = graphics.Height;
+
+            // Initialize the PS/2 peripherals
+            PS2Keyboard.Initialize();
+            PS2Mouse.Initialize(Width, Height);
 
             // BitFont generator : https://github.com/nifanfa/BitFont
             string CustomCharset = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -83,12 +82,12 @@ namespace $safeprojectname$
             {
                 // Clear screen (either with color or bitmap)
                 //graphics.DrawImage(bitmap, 0, 0);
-                graphics.Clear(black);
+                graphics.Clear((uint)Color.Black.ToArgb());
 
                 // Draw BitFont strings
-                graphics.DrawBitFontString("ArialCustomCharset16", white, "Current Driver is " + graphics.CurrentDriver, 10, 10);
-                graphics.DrawBitFontString("ArialCustomCharset16", white, "FPS is " + FPSMeter.FPS, 10, 26);
-                graphics.DrawBitFontString("ArialCustomCharset16", white, "Available Memory is " + Memory.GetAvailableMemory() / 1048576 + " MB", 10, 42);
+                graphics.DrawBitFontString("ArialCustomCharset16", (uint)Color.White.ToArgb(), "Current Driver is " + graphics.CurrentDriver, 10, 10);
+                graphics.DrawBitFontString("ArialCustomCharset16", (uint)Color.White.ToArgb(), "FPS is " + FPSMeter.FPS, 10, 26);
+                graphics.DrawBitFontString("ArialCustomCharset16", (uint)Color.White.ToArgb(), "Available Memory is " + Memory.GetAvailableMemory() / 1048576 + " MB", 10, 42);
 
                 // Draw cursor
                 DrawCursor(graphics, PS2Mouse.X, PS2Mouse.Y);
@@ -96,10 +95,6 @@ namespace $safeprojectname$
                 // Update graphics (necessary if double buffering) and FPS meter
                 graphics.Update();
                 FPSMeter.Update();
-
-                // If the FPS is superior to the mouse speed the mouse won't be smooth
-                // Note that if you remove this you'll have more FPS (the desktop will be smoother)
-                //Native.Hlt();
             }
         }
 
@@ -126,11 +121,11 @@ namespace $safeprojectname$
                 {
                     // Draw the borders of the cursor
                     if (cursor[h * 12 + w] == 1)
-                        graphics.DrawPoint(black, w + x, h + y);
+                        graphics.DrawPoint((uint)Color.Black.ToArgb(), w + x, h + y);
 
                     // Draw the contents of the cursor (excluding the borders)
                     if (cursor[h * 12 + w] == 2)
-                        graphics.DrawPoint(white, w + x, h + y);
+                        graphics.DrawPoint((uint)Color.White.ToArgb(), w + x, h + y);
                 }
         }
     }

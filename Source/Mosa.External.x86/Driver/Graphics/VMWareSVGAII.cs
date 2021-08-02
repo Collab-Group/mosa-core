@@ -2,7 +2,7 @@
 using Mosa.Kernel.x86;
 using Mosa.Runtime;
 
-namespace Mosa.External.x86.Driver.Graphics
+namespace Mosa.External.x86.Driver
 {
     public class VMWareSVGAII
     {

@@ -7,9 +7,16 @@ namespace System.Text
 	/// </summary>
 	public abstract class Encoding
 	{
-		public abstract String GetString(byte[] bytes, int index, int count);
+		public static ASCIIEncoding ASCII;
 
-		public virtual String GetString(byte[] bytes)
+		public static void Setup()
+        {
+			ASCII = new ASCIIEncoding();
+        }
+
+		public abstract string GetString(byte[] bytes, int index, int count);
+
+		public virtual string GetString(byte[] bytes)
 		{
 			return GetString(bytes, 0, bytes.Length);
 		}

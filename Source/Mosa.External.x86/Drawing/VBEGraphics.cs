@@ -1,5 +1,4 @@
 ﻿using Mosa.External.x86.Driver;
-using Mosa.External.x86.Driver.Graphics;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.x86;
 
@@ -17,7 +16,7 @@ namespace Mosa.External.x86.Drawing
 
             Bpp = VBE.BitsPerPixel / 8;
 
-            vbeDriverAddr = (uint)vBEDriver.Video_Memory.Address;
+            vbeDriverAddr = (uint)vBEDriver.VideoMemory.Address;
 
             Width = (int)vBEDriver.ScreenWidth;
             Height = (int)vBEDriver.ScreenHeight;
@@ -31,6 +30,8 @@ namespace Mosa.External.x86.Drawing
         }
 
         public override void Disable() { }
+
+        public override void Enable() { }
 
         public override void DrawPoint(uint Color, int X, int Y)
         {
