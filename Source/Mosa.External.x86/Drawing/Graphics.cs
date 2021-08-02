@@ -79,7 +79,7 @@ namespace Mosa.External.x86.Drawing
                     Color
                     );*/
 
-            if (X >= LimitX && X < LimitX + LimitWidth && Y >= LimitY && Y < LimitY + LimitHeight)
+            if (IsInBounds(X, LimitX, Y, LimitY, LimitWidth, LimitHeight))
                 for (int h = 0; h < aHeight; h++)
                     ASM.MEMFILL(
                         (uint)(VideoMemoryCacheAddr + ((Width * (Y + h) + X) * Bpp)),
@@ -94,6 +94,12 @@ namespace Mosa.External.x86.Drawing
                 for (int w = 0; w < width; w++)
                     if (array[h * width + w] == 1)
                         DrawPoint(color, w + x, h + y);
+        }
+
+        public virtual bool IsInBounds(int x1, int x2, int y1, int y2, int width, int height)
+        {
+            return x1 <= x2 + width && x1 >= x2 &&
+                y1 <= y2 + height && y1 >= y2;
         }
 
         public virtual void DrawRectangle(uint Color, int X, int Y, int Width, int Height, int Weight)
@@ -132,7 +138,7 @@ namespace Mosa.External.x86.Drawing
         //Only 32Bits
         public virtual void DrawImageASM(Image image, int X, int Y)
         {
-            if (X >= LimitX && X < LimitX + LimitWidth && Y >= LimitY && Y < LimitY + LimitHeight)
+            if (IsInBounds(X, LimitX, Y, LimitY, LimitWidth, LimitHeight))
             {
                 int h = 0;
                 while ((h++ <= Height - Y) && h <= image.Height)
