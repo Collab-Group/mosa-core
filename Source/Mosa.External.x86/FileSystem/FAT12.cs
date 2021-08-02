@@ -74,7 +74,7 @@ namespace Mosa.External.x86.FileSystem
              */
             fileListSector0ffset = (uint)(partitionInfo.LBA + fAT12Header.ResvdSector + fAT12Header.SectorsPerFATs * 2);
 
-            fileAreaSectorOffset = (fAT12Header.ResvdSector + ((uint)fAT12Header.NumberOfFATs * fAT12Header.SectorsPerFATs) + ((fAT12Header.RootEntryCount * 32u) / IDE.SectorSize));
+            fileAreaSectorOffset = fAT12Header.ResvdSector + ((uint)fAT12Header.NumberOfFATs * fAT12Header.SectorsPerFATs) + (fAT12Header.RootEntryCount * 32u / IDE.SectorSize);
         }
 
         public bool Exists(string Name)
@@ -352,6 +352,18 @@ namespace Mosa.External.x86.FileSystem
                 buf[i] = Buffer[i];
 
             Disk.WriteBlock(GetFileSectorOffset(cluster), 1, buf);
+        }
+
+        public void Format()
+        {
+            byte[] Data = new byte[partitionInfo.Size];
+            Disk.WriteBlock(fileListSector0ffset, 1, Data);
+
+            byte[] buf = new byte[IDE.SectorSize];
+            for (int i = 0; i < buf.Length; i++)
+                buf[i] = Data[i];
+
+            Disk.WriteBlock(GetFileSectorOffset(1), 1, buf);
         }
 
         public class FAT12Item
