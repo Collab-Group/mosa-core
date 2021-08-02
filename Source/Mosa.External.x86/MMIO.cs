@@ -51,9 +51,7 @@ namespace Mosa.External.x86
         public static void Map(uint address, uint size)
         {
             for (uint i = address; i < address + size; i += PageFrameAllocator.PageSize)
-            {
                 PageTable.MapVirtualAddressToPhysical(i, i);
-            }
         }
     }
 }

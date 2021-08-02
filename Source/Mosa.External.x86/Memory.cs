@@ -1,7 +1,5 @@
 ﻿using Mosa.Kernel.x86;
 using Mosa.Runtime;
-using Mosa.Runtime.x86;
-using System;
 
 namespace Mosa.External.x86
 {
@@ -9,13 +7,7 @@ namespace Mosa.External.x86
     {
         public static MemoryBlock GetPhysicalMemory(Pointer address, uint size)
         {
-            var start = (uint)address.ToInt32();
-
-            for (var at = start; at < start + size; at += PageFrameAllocator.PageSize)
-            {
-                PageTable.MapVirtualAddressToPhysical(at, at);
-            }
-
+            MMIO.Map((uint)address, size);
             return new MemoryBlock(address, size);
         }
 
