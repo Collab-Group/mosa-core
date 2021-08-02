@@ -7,7 +7,7 @@ using Mosa.Runtime.x86;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MOSA2
+namespace Mosa.External.x86.FileSystem
 {
     public unsafe class FAT12
     {
@@ -126,7 +126,7 @@ namespace MOSA2
                     fileInfo = v;
 
             if (fileInfo.Name == "")
-                Panic.Error("No such file: " + Name);
+                return;
 
             uint count;
             if (fileInfo.Size <= IDE.SectorSize)
@@ -276,7 +276,7 @@ namespace MOSA2
                     fileInfo = v;
 
             if (fileInfo.Name == "")
-                Panic.Error("No such file: " + Name);
+                return;
 
             Disk.WriteBlock(fileListSector0ffset, 1, Buffer);
 
