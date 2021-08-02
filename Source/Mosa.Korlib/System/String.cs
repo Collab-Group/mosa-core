@@ -881,6 +881,17 @@ namespace System
 			return s;
 		}
 
+		public unsafe static string FromPointer(byte* p, int size,byte ignore)
+		{
+			string s = "";
+			for (int i = 0; i < size; i++)
+			{
+				if ((char)(p[i]) == ignore) continue;
+				s += ((char)(p[i])).ToString();
+			}
+			return s;
+		}
+
 		public static string Format(string format, params object[] args)
 		{
 			string result = "";
