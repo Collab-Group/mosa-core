@@ -876,7 +876,7 @@ namespace System
 			string s = "";
 			for (int i = 0; i < size; i++)
 			{
-				s += ((char)(p[i])).ToString();
+				s += ((char)p[i]).ToString();
 			}
 			return s;
 		}
@@ -886,8 +886,8 @@ namespace System
 			string s = "";
 			for (int i = 0; i < size; i++)
 			{
-				if ((char)(p[i]) == ignore) continue;
-				s += ((char)(p[i])).ToString();
+				if ((char)p[i] == ignore) continue;
+				s += ((char)p[i]).ToString();
 			}
 			return s;
 		}
