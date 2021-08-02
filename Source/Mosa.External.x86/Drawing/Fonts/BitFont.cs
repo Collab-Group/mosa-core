@@ -32,17 +32,14 @@ namespace Mosa.External.x86.Drawing.Fonts
 			RegisteredBitFont.Add(bitFontDescriptor);
 		}
 
-		public static int DrawBitFontChar(Graphics graphics, byte[] Raw, int Size, uint Color, int Index, int X, int Y, bool UseAntiAliasing)
+		public static int DrawBitFontChar(Graphics graphics, byte[] Raw, int Size, int Size8, uint Color, byte RedOfColor, int Index, int X, int Y, bool UseAntiAliasing)
 		{
-			if (Index == -1)
+			if (Index < 0)
 				return Size / 2;
 
 			int MaxX = 0;
 			bool LastPixelIsNotDrawn = false;
-			int Size8 = Size / 8;
 			int SizePerFont = Size * Size8 * Index;
-
-			byte Red = (byte)((Color >> 16) & 0xFF);
 
 			for (int h = 0; h < Size; h++)
 				for (int aw = 0; aw < Size8; aw++)
@@ -64,9 +61,10 @@ namespace Mosa.External.x86.Drawing.Fonts
 								if (UseAntiAliasing)
 								{
 									Color ac = System.Drawing.Color.FromArgb((int)graphics.GetPoint(x - 1, y));
-									byte r = (byte)(((Red * 127 + 127 * ac.GetRed()) >> 8) & 0xFF);
-									byte g = (byte)(((Red * 127 + 127 * ac.GetGreen()) >> 8) & 0xFF);
-									byte b = (byte)(((Red * 127 + 127 * ac.GetBlue()) >> 8) & 0xFF);
+
+									byte r = (byte)(((RedOfColor + (127 * ac.GetRed())) >> 8) & 0xFF);
+									byte g = (byte)(((RedOfColor + (127 * ac.GetGreen())) >> 8) & 0xFF);
+									byte b = (byte)(((RedOfColor + (127 * ac.GetBlue())) >> 8) & 0xFF);
 									graphics.DrawPoint((uint)System.Drawing.Color.ToArgb(ac.GetAlpha(), r, g, b), x - 1, y);
 								}
 

@@ -26,7 +26,7 @@ namespace Mosa.External.x86.Drawing
         public string CurrentDriver;
 
         //TotalX will be the last line of it used.
-        public virtual int DrawBitFontString(string FontName, uint color, string Text, int X, int Y, int Devide = 0, bool DisableAntiAliasing = false)
+        public virtual int DrawBitFontString(string FontName, uint color, string Text, int X, int Y, int Divide = 0, bool DisableAntiAliasing = false)
         {
             BitFontDescriptor bitFontDescriptor = new BitFontDescriptor();
 
@@ -34,8 +34,13 @@ namespace Mosa.External.x86.Drawing
                 if (v.Name == FontName)
                     bitFontDescriptor = v;
 
+            int Size = bitFontDescriptor.Size;
+
             int TotalX = 0;
             string[] Lines = Text.Split('\n');
+
+            int Size8 = Size / 8;
+            byte RedOfColor = (byte)(((color >> 16) & 0xFF) * 127);
 
             for (int l = 0; l < Lines.Length; l++)
             {
@@ -43,7 +48,7 @@ namespace Mosa.External.x86.Drawing
                 for (int i = 0; i < Lines[l].Length; i++)
                 {
                     char c = Lines[l][i];
-                    UsedX += BitFont.DrawBitFontChar(this, bitFontDescriptor.Raw, bitFontDescriptor.Size, color, bitFontDescriptor.Charset.IndexOf(c), UsedX + X, Y + bitFontDescriptor.Size * l, !DisableAntiAliasing) + 2 + Devide;
+                    UsedX += BitFont.DrawBitFontChar(this, bitFontDescriptor.Raw, Size, Size8, color, RedOfColor, bitFontDescriptor.Charset.IndexOf(c), UsedX + X, Y + bitFontDescriptor.Size * l, !DisableAntiAliasing) + 2 + Divide;
                 }
                 TotalX += UsedX;
             }
@@ -51,7 +56,7 @@ namespace Mosa.External.x86.Drawing
             return TotalX;
         }
 
-        public void DrawACS16String(uint color, string s, int x, int y)
+        public virtual void DrawACS16String(uint color, string s, int x, int y)
         {
             for (int c = 0; c < s.Length; c++)
             {
@@ -140,12 +145,41 @@ namespace Mosa.External.x86.Drawing
         {
             if (IsInBounds(X, LimitX, Y, LimitY, LimitWidth, LimitHeight))
             {
-                int h = 0;
+                /*int h = 0;
                 while ((h++ <= Height - Y) && h <= image.Height)
                     ASM.MEMCPY(
                         (uint)(VideoMemoryCacheAddr + ((Width * (Y + h) + X) * Bpp)),
                         (uint)((uint)image.RawData.Address + (image.Width * 4 * h)),
                         (uint)Math.Clamp(image.Width * 4, 0, (Width - X) * 4)
+                        );*/
+
+                for (int h = 0; h < image.Height; h++)
+                    ASM.MEMCPY(
+                        (uint)(VideoMemoryCacheAddr + ((Width * (Y + h) + X) * Bpp)),
+                        (uint)((uint)image.RawData.Address + (image.Width * 4 * h)),
+                        (uint)Math.Clamp(image.Width * 4, 0, (Width - X) * 4)
+                        );
+            }
+        }
+
+        //Only 32Bits
+        public virtual void DrawImageASM(MemoryBlock block, int X, int Y, int W, int H)
+        {
+            if (IsInBounds(X, LimitX, Y, LimitY, LimitWidth, LimitHeight))
+            {
+                /*int h = 0;
+                while ((h++ <= Height - Y) && h <= H)
+                    ASM.MEMCPY(
+                        (uint)(VideoMemoryCacheAddr + ((Width * (Y + h) + X) * Bpp)),
+                        (uint)((uint)block.Address + (W * 4 * h)),
+                        (uint)Math.Clamp(W * 4, 0, (Width - X) * 4)
+                        );*/
+
+                for (int h = 0; h < H; h++)
+                    ASM.MEMCPY(
+                        (uint)(VideoMemoryCacheAddr + ((Width * (Y + h) + X) * Bpp)),
+                        (uint)((uint)block.Address + (W * 4 * h)),
+                        (uint)Math.Clamp(W * 4, 0, (Width - X) * 4)
                         );
             }
         }
@@ -387,11 +421,12 @@ namespace Mosa.External.x86.Drawing
         public virtual MemoryBlock ScaleImage(Image Image, int NewWidth, int NewHeight)
         {
             int w1 = Image.Width, h1 = Image.Height;
-            //MemoryLeak Maybe
+            // Potential memory leak
             MemoryBlock temp = new MemoryBlock(Image.RawData.Size);
-            int x_ratio = ((w1 << 16) / NewWidth) + 1, y_ratio = ((h1 << 16) / NewHeight) + 1;
 
+            int x_ratio = ((w1 << 16) / NewWidth) + 1, y_ratio = ((h1 << 16) / NewHeight) + 1;
             int x2, y2;
+
             for (int i = 0; i < NewHeight; i++)
             {
                 for (int j = 0; j < NewWidth; j++)
@@ -403,31 +438,6 @@ namespace Mosa.External.x86.Drawing
             }
 
             return temp;
-        }
-
-        public virtual void DrawImage(Image Image, int X, int Y, int W, int H, bool DrawWithAlpha)
-        {
-            MemoryBlock pixels = ScaleImage(Image, W, H);
-
-            for (int h = 0; h < H; h++)
-                for (int w = 0; w < W; w++)
-                    if (DrawWithAlpha)
-                    {
-                        Color foreground = Color.FromArgb(pixels[(uint)(W * h + w)]);
-                        Color background = Color.FromArgb((int)GetPoint(X + w, Y + h));
-
-                        int alpha = foreground.GetAlpha();
-                        int inv_alpha = 255 - alpha;
-
-                        byte newR = (byte)(((foreground.GetRed() * alpha + inv_alpha * background.GetRed()) >> 8) & 0xFF);
-                        byte newG = (byte)(((foreground.GetGreen() * alpha + inv_alpha * background.GetGreen()) >> 8) & 0xFF);
-                        byte newB = (byte)(((foreground.GetBlue() * alpha + inv_alpha * background.GetBlue()) >> 8) & 0xFF);
-
-                        DrawPoint((uint)Color.ToArgb(newR, newG, newB), X + w, Y + h);
-                    }
-                    else DrawPoint((uint)pixels[(uint)(W * h + w)], X + w, Y + h);
-
-            pixels.Free();
         }
 
         public virtual void TrimLine(int x1, int y1, int x2, int y2)
