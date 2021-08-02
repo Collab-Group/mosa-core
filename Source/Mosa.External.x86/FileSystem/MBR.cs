@@ -12,12 +12,12 @@ namespace Mosa.External.x86.FileSystem
 
     public unsafe class MBR
     {
-        public static List<PartitionInfo> PartitionInfos { get; private set; }
-        public static MemoryBlock MBRDataBlock { get; private set; }
+        public List<PartitionInfo> PartitionInfos { get; private set; }
+        public MemoryBlock MBRDataBlock { get; private set; }
 
-        public static bool Initialized { get; private set; }
+        public bool Initialized { get; private set; }
 
-        public static void Initialize(IDisk disk)
+        public void Initialize(IDisk disk)
         {
             if (Initialized)
                 return;
@@ -32,7 +32,7 @@ namespace Mosa.External.x86.FileSystem
             Initialized = true;
         }
 
-        private static void LoadPartitionInfo()
+        private void LoadPartitionInfo()
         {
             for (int i = 0x1BE; i < 0x1FE; i += 16)
             {

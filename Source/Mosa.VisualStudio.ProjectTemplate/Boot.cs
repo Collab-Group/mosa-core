@@ -28,10 +28,11 @@ namespace $safeprojectname$
             PS2Keyboard.Initialize();
 
             // Initialize the IDE hard drive
-            // MOSA currently only supports FAT12
+            // MOSA currently only supports FAT12 and FAT32
             IDisk disk = new IDEDisk();
-            MBR.Initialize(disk);
-            FAT12 fs = new FAT12(disk, MBR.PartitionInfos[0]);
+            MBR mBR = new MBR();
+            mBR.Initialize(disk);
+            FAT32 fs= new FAT32(disk, mBR.PartitionInfos[0]);
             //byte[] b = fs.ReadAllBytes("/TEST1.TXT");
 
             Console.WriteLine("MOSA booted successfully! Type anything and get an echo of what you've typed.");
