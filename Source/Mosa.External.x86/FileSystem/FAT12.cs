@@ -330,7 +330,7 @@ namespace Mosa.External.x86.FileSystem
 
             ushort cluster = 0;
             foreach (var v in GetFiles("/"))
-                if (v.Cluster > cluster && !v.IsDirectory && v.ParentPath == @"/")
+                if (v.Cluster > cluster && !v.IsDirectory && v.ParentPath == Path)
                     cluster = v.Cluster;
 
             cluster++;
