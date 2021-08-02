@@ -126,7 +126,7 @@ namespace Mosa.External.x86.FileSystem
                     fileInfo = v;
 
             if (fileInfo.Name == "")
-                return;
+                return null;
 
             uint count;
             if (fileInfo.Size <= IDE.SectorSize)
