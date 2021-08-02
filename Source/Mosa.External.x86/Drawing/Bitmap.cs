@@ -1,7 +1,7 @@
-﻿using Mosa.External.x86.Encoding;
-using Mosa.Kernel.x86;
+﻿using Mosa.Kernel.x86;
 using Mosa.Runtime;
 using System.Drawing;
+using System.Text;
 
 namespace Mosa.External.x86.Drawing
 {
@@ -23,7 +23,7 @@ namespace Mosa.External.x86.Drawing
 
             BitmapHeader bitmapHeader = new BitmapHeader();
 
-            bitmapHeader.Type = "" + ASCII.GetChar(memoryBlock.Read8(0)) + ASCII.GetChar(memoryBlock.Read8(1));
+            bitmapHeader.Type = "" + Encoding.ASCII.GetChar(memoryBlock.Read8(0)) + Encoding.ASCII.GetChar(memoryBlock.Read8(1));
             bitmapHeader.Size = memoryBlock.Read32(2);
             bitmapHeader.DataSectionOffset = memoryBlock.Read32(0xA);
             bitmapHeader.Width = memoryBlock.Read32(0x12);

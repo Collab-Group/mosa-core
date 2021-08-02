@@ -1,10 +1,10 @@
 ﻿using Mosa.External.x86;
 using Mosa.External.x86.Driver;
-using Mosa.External.x86.Encoding;
 using Mosa.External.x86.FileSystem;
 using Mosa.Kernel.x86;
 using Mosa.Runtime;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Mosa.External.x86.FileSystem
 //namespace MOSA1
@@ -56,7 +56,7 @@ namespace Mosa.External.x86.FileSystem
             fAT12Header = new FAT12Header() { OEMName = "" };
             for (int i = 0; i < 8; i++)
             {
-                fAT12Header.OEMName += ASCII.GetChar(memoryBlock.Read8((uint)(0x3 + i)));
+                fAT12Header.OEMName += Encoding.ASCII.GetChar(memoryBlock.Read8((uint)(0x3 + i)));
             }
 
             fAT12Header.SectorsPerCluster = memoryBlock.Read8(0xD);
@@ -213,7 +213,7 @@ namespace Mosa.External.x86.FileSystem
                 {
                     break;
                 }
-                fileInfo.Name += ASCII.GetChar(_data[i]);
+                fileInfo.Name += Encoding.ASCII.GetChar(_data[i]);
             }
 
             if (_data[8] != 0x20)
@@ -228,7 +228,7 @@ namespace Mosa.External.x86.FileSystem
                 {
                     break;
                 }
-                fileInfo.Name += ASCII.GetChar(_data[i]);
+                fileInfo.Name += Encoding.ASCII.GetChar(_data[i]);
             }
             //Type
             if (_data[0xB] == 0x10)
