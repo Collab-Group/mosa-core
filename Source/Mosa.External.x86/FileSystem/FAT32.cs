@@ -153,6 +153,7 @@ namespace Mosa.External.x86.FileSystem
                 if (v.Parent + v.Name == FileName)
                 {
                     uint count = GetSectorsWillUse(v.Size);
+                    Console.WriteLine($"Count:{count}");
                     byte[] buffer = new byte[count * SectorSize];
                     Disk.ReadBlock(GetSectorOffset(v.Cluster), count, buffer);
 
@@ -176,8 +177,8 @@ namespace Mosa.External.x86.FileSystem
             uint result = 1;
             if (size > SectorSize)
             {
-                result = result / SectorSize;
-                if (result % size != 0)
+                result = size / SectorSize;
+                if (size % SectorSize != 0)
                 {
                     result++;
                 }
