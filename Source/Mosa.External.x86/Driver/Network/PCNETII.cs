@@ -104,8 +104,29 @@ namespace Mosa.External.x86.Driver
             uint address = (uint)InitBlock.Address;
 
             // Actually set up the card registers
-            WriteCSR32(1, address >> 16 & 0xFF);
-            WriteCSR32(2, address & 0xFF);
+            WriteCSR32(1, address & 0xFF);
+            WriteCSR32(2, address >> 16 & 0xFF);
+
+            // Enable transmit interrupt mask
+            WriteCSR32(3, ReadCSR32(3) | (1 << 9));
+
+            // Enable interrupt done mask
+            WriteCSR32(3, ReadCSR32(3) | (1 << 8));
+
+            // Disable big-endian
+            WriteCSR32(3, (uint)(ReadCSR32(3) & ~(1 << 2)));
+
+            // Automatically pad Ethernet packets that are too short to be at least 64 bytes
+            WriteCSR32(4, ReadCSR32(4) | (1 << 11));
+
+            // Enable interrupts and set bit 0 of CSR0
+            WriteCSR32(0, ReadCSR32(0) | (1 << 6) | (1 << 0));
+
+            // Wait until initialization is done
+            while ((ReadCSR32(0) & (1 << 8 - 1)) == 0) ;
+
+            // Start the card
+            WriteCSR32(0, (uint)(ReadCSR32(0) & ~(1 << 0) & ~(1 << 2) | (1 << 1)));
 
             Console.WriteLine("Successfully initialized and enabled the AMD PCNETII card!");
         }
