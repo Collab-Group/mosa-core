@@ -69,25 +69,29 @@ namespace Mosa.External.x86.Driver
         {
             uint a = (uint)Intrinsic.GetObjectAddress(Data);
 
-            // DMA Channel 1
-            IOPort.Out8(0x0A, 5);
+            // Channel 1
+            byte channel = 0x01;
+
+            // Program DMA
+            IOPort.Out8(0x0A, (byte)(channel + 0x04));
             IOPort.Out8(0x0C, 1);
-            IOPort.Out8(0x0B, 0x49);
+            IOPort.Out8(0x0B, (byte)(channel + 0x48));
             IOPort.Out8(0x83, (byte)(a >> 16 & 0xFF));
             IOPort.Out8(0x02, (byte)(a & 0xFF));
             IOPort.Out8(0x02, (byte)(a >> 8 & 0xFF));
             IOPort.Out8(0x03, (byte)(Data.Length & 0xFF));
             IOPort.Out8(0x03, (byte)(Data.Length >> 8 & 0xFF));
-            IOPort.Out8(0x0A, 1);
+            IOPort.Out8(0x0A, channel);
 
             // Program Sound Blaster 16
-            IOPort.Out8((ushort)DSP.Write, 0x40);
+            IOPort.Out8((ushort)DSP.Write, (byte)Options.SetTimeConstant);
             IOPort.Out8((ushort)DSP.Write, 64);
+
             IOPort.Out8((ushort)DSP.Write, 0xC0);
             IOPort.Out8((ushort)DSP.Write, 0x00);
 
-            IOPort.Out8((ushort)DSP.Write, (byte)(Data.Length & 0xFF));
-            IOPort.Out8((ushort)DSP.Write, (byte)(Data.Length >> 8 & 0xFF));
+            IOPort.Out8((ushort)DSP.Write, (byte)((Data.Length - 1) & 0xFF));
+            IOPort.Out8((ushort)DSP.Write, (byte)((Data.Length - 1) >> 8 & 0xFF));
         }
     }
 }
