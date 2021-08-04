@@ -205,36 +205,6 @@ namespace Mosa.External.x86.Drawing
                     else DrawPoint((uint)image.RawData[(uint)(image.Width * h + w)], X + w, Y + h);
         }
 
-        public virtual void BlurImage(Image image, int intensity)
-        {
-            for (int w = 0; w < image.Width; w++)
-                for (int h = 0; h < image.Height; h++)
-                {
-                    int r = 0, g = 0, b = 0, a = 0, counter = 0;
-
-                    for (int ww = w - intensity; ww < w + intensity; ww++)
-                        for (int hh = h - intensity; hh < h + intensity; hh++)
-                            if (ww >= 0 && hh >= 0 && ww < image.Width && hh < image.Height)
-                            {
-                                Color color = Color.FromArgb(image.RawData[(uint)(image.Width * hh + ww)]);
-
-                                r += color.GetRed();
-                                g += color.GetGreen();
-                                b += color.GetBlue();
-                                a += color.GetAlpha();
-
-                                counter++;
-                            }
-
-                    r /= counter;
-                    g /= counter;
-                    b /= counter;
-                    a /= counter;
-
-                    DrawPoint((uint)Color.ToArgb((byte)a, (byte)r, (byte)g, (byte)b), w, h);
-                }
-        }
-
         public void SetLimit(int X, int Y, int Width, int Height)
         {
             LimitX = X;
