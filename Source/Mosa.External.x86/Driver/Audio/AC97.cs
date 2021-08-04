@@ -100,7 +100,6 @@ namespace Mosa.External.x86.Driver.Audio
             {
                 BufferDescriptor* desc = (BufferDescriptor*)(BufferListAddr + (sizeof(BufferDescriptor) * k));
                 desc->Addr = (uint)(PCMRawData.Address + i);
-                //No Idea Why
                 desc->Size = BufferLength;
                 desc->Attr = 0b0000_0000_0000_0011;
                 k++;
