@@ -217,10 +217,6 @@ namespace Mosa.Launcher.Console
 
             string path = @"C:\Users\" + System.Environment.UserName + @"\VirtualBox VMs";
             string vdi = path + @"\MOSA\MOSA.vdi";
-            if (File.Exists(vdi))
-            {
-                File.Copy(Path.Combine(OutputFolder, "MOSA.vdi"), vdi, true);
-            }
             if (!Directory.Exists(path + @"\MOSA"))
             {
                 // Create VM directory
@@ -241,6 +237,11 @@ namespace Mosa.Launcher.Console
                 processStartInfo.Arguments = $"storageattach \"MOSA\" --storagectl IDE --port 1 --device 0 --type dvddrive --medium \"{ISOFilePath}\"";
                 Process p2 = Process.Start(processStartInfo);
                 p2.WaitForExit();
+
+                // Attach output ISO
+                processStartInfo.Arguments = $"storageattach \"MOSA\" --storagectl IDE --port 0 --device 0 --type hdd --medium \"{vdi}\"";
+                Process p3 = Process.Start(processStartInfo);
+                p3.WaitForExit();
             }
 
             ConsoleColor color = System.Console.ForegroundColor;
