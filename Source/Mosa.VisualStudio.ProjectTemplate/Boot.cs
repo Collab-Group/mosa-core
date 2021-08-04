@@ -32,6 +32,7 @@ namespace $safeprojectname$
             IDisk disk = new IDEDisk();
             MBR mBR = new MBR();
             mBR.Initialize(disk);
+            //FileSystem Takes Time
             FAT12 fs = new FAT12(disk, mBR.PartitionInfos[0]);
             //byte[] b = fs.ReadAllBytes("TEST1.TXT");
 

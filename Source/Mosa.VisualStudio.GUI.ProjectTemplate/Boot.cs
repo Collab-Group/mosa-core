@@ -59,6 +59,7 @@ namespace $safeprojectname$
             IDisk disk = new IDEDisk();
             MBR mBR = new MBR();
             mBR.Initialize(disk);
+            //FileSystem Takes Time
             FAT12 fs = new FAT12(disk, mBR.PartitionInfos[0]);
 
             // Initialize graphics (default width and height is 640 and 480 respectively)
