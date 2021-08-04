@@ -246,6 +246,7 @@ namespace Mosa.Launcher.Console
 
             ConsoleColor color = System.Console.ForegroundColor;
             System.Console.ForegroundColor = ConsoleColor.Yellow;
+            System.Console.WriteLine("Warning: If this is your first time using this version. Make sure there's no virtual machine which is named \"MOSA\". If so please delete it");
             System.Console.WriteLine("If It Asks You Select Boot Disk");
             System.Console.WriteLine("Please Press Cancel");
             System.Console.ForegroundColor = color;
