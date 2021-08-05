@@ -7,7 +7,6 @@ namespace System.Drawing
     public class Image
     {
         public MemoryBlock RawData;
-        public int Length;
         public int Bpp;
         public int Width;
         public int Height;
@@ -35,7 +34,6 @@ namespace System.Drawing
                 Width = NewWidth,
                 Height = NewHeight,
                 Bpp = 32,
-                Length = Width * Height * 4,
                 RawData = temp
             };
 
