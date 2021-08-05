@@ -36,7 +36,7 @@ namespace Mosa.External.x86.Drawing
 
         public override void DrawPoint(uint Color, int X, int Y)
         {
-            if (IsInBounds(X, LimitX, Y, LimitY, LimitWidth, LimitHeight))
+            if (IsInBounds(X,Y))
                 switch (Bpp)
                 {
                     case 2:
@@ -53,7 +53,7 @@ namespace Mosa.External.x86.Drawing
 
 		public override uint GetPoint(int X, int Y)
         {
-            if (IsInBounds(X, LimitX, Y, LimitY, LimitWidth, LimitHeight))
+            if (IsInBounds(X,Y))
                 switch (Bpp) 
                 {
                     case 4:

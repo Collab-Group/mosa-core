@@ -84,6 +84,17 @@ namespace Mosa.External.x86.Drawing
             if (X >= this.Width) return;
             if (Y >= this.Height) return;
 
+            if (X < 0)
+            {
+                aWidth += X;
+                X = 0;
+            }
+            if (Y < 0)
+            {
+                aHeight += Y;
+                Y = 0;
+            }
+
             for (int h = 0; h < aHeight; h++)
                 ASM.MEMFILL(
                     (uint)(VideoMemoryCacheAddr + ((Width * (Y + h) + X) * Bpp)),
@@ -100,10 +111,9 @@ namespace Mosa.External.x86.Drawing
                         DrawPoint(color, w + x, h + y);
         }
 
-        public virtual bool IsInBounds(int x1, int x2, int y1, int y2, int width, int height)
+        internal virtual bool IsInBounds(int X, int Y)
         {
-            return x1 <= x2 + width && x1 >= x2 &&
-                y1 <= y2 + height && y1 >= y2;
+            return X >= LimitX && X <= LimitX + LimitWidth && Y >= LimitY && Y <= LimitY + LimitHeight;
         }
 
         public virtual void DrawRectangle(uint Color, int X, int Y, int Width, int Height, int Weight)
@@ -118,18 +128,14 @@ namespace Mosa.External.x86.Drawing
 
         public virtual void DrawFilledRoundedRectangle(uint color, int x, int y, int width, int height, int radius)
         {
-            SetLimit(x, y, width - 1, height - 1);
-
             DrawFilledRectangle(color, x + radius, y, width - radius * 2, height);
             DrawFilledRectangle(color, x, y + radius, width, height - radius * 2);
 
             DrawFilledCircle(color, x + radius, y + radius, radius);
-            DrawFilledCircle(color, x + width - radius, y + radius, radius);
+            DrawFilledCircle(color, x + width - radius - 1, y + radius, radius);
 
-            DrawFilledCircle(color, x + radius, y + height - radius, radius);
-            DrawFilledCircle(color, x + width - radius, y + height - radius, radius);
-
-            ResetLimit();
+            DrawFilledCircle(color, x + radius, y + height - radius - 1, radius);
+            DrawFilledCircle(color, x + width - radius - 1, y + height - radius - 1, radius);
         }
 
         public abstract void DrawPoint(uint Color, int X, int Y);

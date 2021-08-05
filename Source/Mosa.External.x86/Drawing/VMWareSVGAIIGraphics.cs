@@ -26,13 +26,13 @@ namespace Mosa.External.x86.Drawing
 
         public override void DrawPoint(uint Color, int X, int Y)
         {
-            if (IsInBounds(X, LimitX, Y, LimitY, LimitWidth, LimitHeight))
+            if (IsInBounds(X, Y))
                 vMWareSVGAII.Video_Memory.Write32((uint)(FrameSize + ((Width * Y + X) * Bpp)), Color);
         }
 
         public override uint GetPoint(int X, int Y)
         {
-            if (IsInBounds(X, LimitX, Y, LimitY, LimitWidth, LimitHeight))
+            if (IsInBounds(X, Y))
                 return vMWareSVGAII.Video_Memory.Read32((uint)(FrameSize + ((Width * Y + X) * Bpp)));
 
             return 0;
