@@ -1,4 +1,5 @@
 ﻿using Mosa.Kernel.x86;
+using Mosa.Runtime;
 using System.Drawing;
 using System.Text;
 
@@ -43,7 +44,7 @@ namespace Mosa.External.x86.Drawing
             this.Height = (int)bitmapHeader.Height;
             this.Length = Width * Height;
             this.Bpp = (int)bitmapHeader.Bpp;
-            this.RawData = new MemoryBlock((uint)(Length * (Bpp / 8)));
+            this.RawData = new MemoryBlock((uint)(Length * Bpp));
 
 
             int[] temp = new int[Width];
