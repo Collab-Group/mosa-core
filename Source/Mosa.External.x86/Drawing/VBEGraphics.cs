@@ -1,5 +1,6 @@
 ﻿using Mosa.External.x86.Driver;
 using Mosa.Kernel.x86;
+using Mosa.Runtime;
 using Mosa.Runtime.x86;
 
 namespace Mosa.External.x86.Drawing
@@ -23,7 +24,7 @@ namespace Mosa.External.x86.Drawing
 
             CurrentDriver = "VBE";
 
-			memoryBlock = new MemoryBlock(KernelMemory.AllocateVirtualMemory((uint)FrameSize), (uint)FrameSize);
+			memoryBlock = new MemoryBlock((uint)FrameSize);
             VideoMemoryCacheAddr = (uint)memoryBlock.Address;
 
             ResetLimit();

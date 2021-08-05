@@ -75,22 +75,19 @@ namespace Mosa.External.x86.Drawing
 
         public virtual void DrawFilledRectangle(uint Color, int X, int Y, int aWidth, int aHeight)
         {
-            // The problem is either the while loop, Math.Clamp, or both
-            /*int h = 0;
-            while ((h++ <= Height - Y) && h <= aHeight)
+            //Limit Won't Work
+            aWidth = Math.Clamp(aWidth, 0, this.Width - X);
+            aHeight = Math.Clamp(aHeight, 0, this.Height - Y);
+
+            if (X >= this.Width) return;
+            if (Y >= this.Height) return;
+
+            for (int h = 0; h < aHeight; h++)
                 ASM.MEMFILL(
                     (uint)(VideoMemoryCacheAddr + ((Width * (Y + h) + X) * Bpp)),
-                    (uint)Math.Clamp(aWidth * 4, 0, (Width - X) * 4),
+                    (uint)(aWidth * Bpp),
                     Color
-                    );*/
-
-            if (IsInBounds(X, LimitX, Y, LimitY, LimitWidth, LimitHeight))
-                for (int h = 0; h < aHeight; h++)
-                    ASM.MEMFILL(
-                        (uint)(VideoMemoryCacheAddr + ((Width * (Y + h) + X) * Bpp)),
-                        (uint)(aWidth * 4),
-                        Color
-                        );
+                    );
         }
 
         public virtual void DrawArray(int x, int y, int width, int height, int[] array, uint color)
@@ -143,45 +140,41 @@ namespace Mosa.External.x86.Drawing
         //Only 32Bits
         public virtual void DrawImageASM(Image image, int X, int Y)
         {
-            if (IsInBounds(X, LimitX, Y, LimitY, LimitWidth, LimitHeight))
-            {
-                /*int h = 0;
-                while ((h++ <= Height - Y) && h <= image.Height)
-                    ASM.MEMCPY(
-                        (uint)(VideoMemoryCacheAddr + ((Width * (Y + h) + X) * Bpp)),
-                        (uint)((uint)image.RawData.Address + (image.Width * 4 * h)),
-                        (uint)Math.Clamp(image.Width * 4, 0, (Width - X) * 4)
-                        );*/
-
-                for (int h = 0; h < image.Height; h++)
-                    ASM.MEMCPY(
-                        (uint)(VideoMemoryCacheAddr + ((Width * (Y + h) + X) * Bpp)),
-                        (uint)((uint)image.RawData.Address + (image.Width * 4 * h)),
-                        (uint)Math.Clamp(image.Width * 4, 0, (Width - X) * 4)
-                        );
-            }
+            //Limit Won't Work
+            for (int h = 0; h < Math.Clamp(image.Height, 0, this.Height - Y); h++)
+                ASM.MEMCPY(
+                    (uint)(this.VideoMemoryCacheAddr + ((this.Width * (Y + h) + X) * this.Bpp)),
+                    (uint)((uint)image.RawData.Address + (image.Width * 4 * h)),
+                    (uint)Math.Clamp(image.Width * 4, 0, (this.Width - X) * 4)
+                    );
         }
 
-        //Only 32Bits
-        public virtual void DrawImageASM(MemoryBlock block, int X, int Y, int W, int H)
+        public virtual void DrawScaledImage(Image Image, int X, int Y, int NewWidth, int NewHeight)
         {
-            if (IsInBounds(X, LimitX, Y, LimitY, LimitWidth, LimitHeight))
-            {
-                /*int h = 0;
-                while ((h++ <= Height - Y) && h <= H)
-                    ASM.MEMCPY(
-                        (uint)(VideoMemoryCacheAddr + ((Width * (Y + h) + X) * Bpp)),
-                        (uint)((uint)block.Address + (W * 4 * h)),
-                        (uint)Math.Clamp(W * 4, 0, (Width - X) * 4)
-                        );*/
+            int w1 = Image.Width, h1 = Image.Height;
+            MemoryBlock temp = new MemoryBlock((uint)(NewWidth * NewHeight * 4));
 
-                for (int h = 0; h < H; h++)
-                    ASM.MEMCPY(
-                        (uint)(VideoMemoryCacheAddr + ((Width * (Y + h) + X) * Bpp)),
-                        (uint)((uint)block.Address + (W * 4 * h)),
-                        (uint)Math.Clamp(W * 4, 0, (Width - X) * 4)
-                        );
+            int x_ratio = ((w1 << 16) / NewWidth) + 1, y_ratio = ((h1 << 16) / NewHeight) + 1;
+            int x2, y2;
+
+            for (int i = 0; i < NewHeight; i++)
+            {
+                for (int j = 0; j < NewWidth; j++)
+                {
+                    x2 = ((j * x_ratio) >> 16);
+                    y2 = ((i * y_ratio) >> 16);
+                    temp[(uint)((i * NewWidth) + j)] = Image.RawData[(uint)((y2 * w1) + x2)];
+                }
             }
+
+            for (int h = 0; h < Math.Clamp(NewHeight, 0, this.Height - Y); h++)
+                ASM.MEMCPY(
+                    (uint)(this.VideoMemoryCacheAddr + ((this.Width * (Y + h) + X) * this.Bpp)),
+                    (uint)((uint)temp.Address + (NewWidth * 4 * h)),
+                    (uint)Math.Clamp(NewWidth * 4, 0, (this.Width - X) * 4)
+                    );
+
+            temp.Free();
         }
 
         public virtual void DrawImage(Image image, int X, int Y, bool DrawWithAlpha)
@@ -217,8 +210,8 @@ namespace Mosa.External.x86.Drawing
         {
             LimitX = 0;
             LimitY = 0;
-            LimitWidth = Width;
-            LimitHeight = Height;
+            LimitWidth = Width - 1;
+            LimitHeight = Height - 1;
         }
 
         /* Functions from Cosmos */

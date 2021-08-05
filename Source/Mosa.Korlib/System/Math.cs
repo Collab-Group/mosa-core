@@ -224,7 +224,7 @@ namespace System
 		{
 			if (min > max)
 			{
-				ThrowMinMaxException(min, max);
+				return 0;
 			}
 
 			if (value < min)
@@ -244,7 +244,7 @@ namespace System
 		{
 			if (min > max)
 			{
-				ThrowMinMaxException(min, max);
+				return 0;
 			}
 
 			if (value < min)
@@ -264,7 +264,7 @@ namespace System
 		{
 			if (min > max)
 			{
-				ThrowMinMaxException(min, max);
+				return 0;
 			}
 
 			if (value < min)
@@ -284,7 +284,7 @@ namespace System
 		{
 			if (min > max)
 			{
-				ThrowMinMaxException(min, max);
+				return 0;
 			}
 
 			if (value < min)
@@ -304,7 +304,7 @@ namespace System
 		{
 			if (min > max)
 			{
-				ThrowMinMaxException(min, max);
+				return 0;
 			}
 
 			if (value < min)
@@ -325,7 +325,7 @@ namespace System
 		{
 			if (min > max)
 			{
-				ThrowMinMaxException(min, max);
+				return 0;
 			}
 
 			if (value < min)
@@ -345,7 +345,7 @@ namespace System
 		{
 			if (min > max)
 			{
-				ThrowMinMaxException(min, max);
+				return 0;
 			}
 
 			if (value < min)
@@ -366,7 +366,7 @@ namespace System
 		{
 			if (min > max)
 			{
-				ThrowMinMaxException(min, max);
+				return 0;
 			}
 
 			if (value < min)
@@ -388,7 +388,7 @@ namespace System
 		{
 			if (min > max)
 			{
-				ThrowMinMaxException(min, max);
+				return 0;
 			}
 
 			if (value < min)
@@ -410,7 +410,7 @@ namespace System
 		{
 			if (min > max)
 			{
-				ThrowMinMaxException(min, max);
+				return 0;
 			}
 
 			if (value < min)
