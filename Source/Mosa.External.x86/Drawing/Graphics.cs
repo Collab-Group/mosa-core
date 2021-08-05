@@ -173,34 +173,6 @@ namespace Mosa.External.x86.Drawing
                     );
         }
 
-        public virtual void DrawScaledImage(Image Image, int X, int Y, int NewWidth, int NewHeight)
-        {
-            int w1 = Image.Width, h1 = Image.Height;
-            MemoryBlock temp = new MemoryBlock((uint)(NewWidth * NewHeight * 4));
-
-            int x_ratio = ((w1 << 16) / NewWidth) + 1, y_ratio = ((h1 << 16) / NewHeight) + 1;
-            int x2, y2;
-
-            for (int i = 0; i < NewHeight; i++)
-            {
-                for (int j = 0; j < NewWidth; j++)
-                {
-                    x2 = ((j * x_ratio) >> 16);
-                    y2 = ((i * y_ratio) >> 16);
-                    temp[(uint)((i * NewWidth) + j)] = Image.RawData[(uint)((y2 * w1) + x2)];
-                }
-            }
-
-            for (int h = 0; h < Math.Clamp(NewHeight, 0, this.Height - Y); h++)
-                ASM.MEMCPY(
-                    (uint)(this.VideoMemoryCacheAddr + ((this.Width * (Y + h) + X) * this.Bpp)),
-                    (uint)((uint)temp.Address + (NewWidth * 4 * h)),
-                    (uint)Math.Clamp(NewWidth * 4, 0, (this.Width - X) * 4)
-                    );
-
-            temp.Free();
-        }
-
         public virtual void DrawImage(Image image, int X, int Y, bool DrawWithAlpha)
         {
             for (int h = 0; h < image.Height; h++)
@@ -433,28 +405,6 @@ namespace Mosa.External.x86.Drawing
             DrawLine(Color, V1x, V1y, V2x, V2y);
             DrawLine(Color, V1x, V1y, V3x, V3y);
             DrawLine(Color, V2x, V2y, V3x, V3y);
-        }
-
-        public virtual MemoryBlock ScaleImage(Image Image, int NewWidth, int NewHeight)
-        {
-            int w1 = Image.Width, h1 = Image.Height;
-            // Potential memory leak
-            MemoryBlock temp = new MemoryBlock(Image.RawData.Size);
-
-            int x_ratio = ((w1 << 16) / NewWidth) + 1, y_ratio = ((h1 << 16) / NewHeight) + 1;
-            int x2, y2;
-
-            for (int i = 0; i < NewHeight; i++)
-            {
-                for (int j = 0; j < NewWidth; j++)
-                {
-                    x2 = ((j * x_ratio) >> 16);
-                    y2 = ((i * y_ratio) >> 16);
-                    temp[(uint)((i * NewWidth) + j)] = Image.RawData[(uint)((y2 * w1) + x2)];
-                }
-            }
-
-            return temp;
         }
 
         public virtual void TrimLine(int x1, int y1, int x2, int y2)
