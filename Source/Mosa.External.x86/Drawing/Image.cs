@@ -34,7 +34,7 @@ namespace System.Drawing
             {
                 Width = NewWidth,
                 Height = NewHeight,
-                Bpp = 4,
+                Bpp = 32,
                 Length = Width * Height * 4,
                 RawData = temp
             };
