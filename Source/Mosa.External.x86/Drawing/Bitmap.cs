@@ -43,7 +43,7 @@ namespace Mosa.External.x86.Drawing
             this.Height = (int)bitmapHeader.Height;
             this.Length = (int)(Width * Height * (bitmapHeader.Bpp / 8));
             this.Bpp = (int)bitmapHeader.Bpp;
-            this.RawData = new MemoryBlock((uint)(Length * (Bpp / 8)));
+            this.RawData = new MemoryBlock((uint)Length);
 
 
             int[] temp = new int[Width];
