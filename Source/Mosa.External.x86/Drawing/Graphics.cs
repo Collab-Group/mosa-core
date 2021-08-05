@@ -116,6 +116,22 @@ namespace Mosa.External.x86.Drawing
             DrawFilledRectangle(Color, X, Y + (Height - Weight), Width, Weight);
         }
 
+        public virtual void DrawFilledRoundedRectangle(uint color, int x, int y, int width, int height, int radius)
+        {
+            SetLimit(x, y, width - 1, height - 1);
+
+            DrawFilledRectangle(color, x + radius, y, width - radius * 2, height);
+            DrawFilledRectangle(color, x, y + radius, width, height - radius * 2);
+
+            DrawFilledCircle(color, x + radius, y + radius, radius);
+            DrawFilledCircle(color, x + width - radius, y + radius, radius);
+
+            DrawFilledCircle(color, x + radius, y + height - radius, radius);
+            DrawFilledCircle(color, x + width - radius, y + height - radius, radius);
+
+            ResetLimit();
+        }
+
         public abstract void DrawPoint(uint Color, int X, int Y);
 
         public abstract uint GetPoint(int X, int Y);
