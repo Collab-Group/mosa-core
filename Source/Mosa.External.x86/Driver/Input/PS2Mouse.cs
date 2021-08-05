@@ -23,9 +23,6 @@ namespace Mosa.External.x86.Driver
             byte _status;
 
             Hlt();
-            Out8(Command, 0xAD);
-
-            Hlt();
             Out8(Command, 0xA8);
 
             Hlt();
