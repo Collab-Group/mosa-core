@@ -63,6 +63,8 @@ namespace Mosa.External.x86.Drawing
                 int offset = ((byte)s[c] & 0xFF) * 16;
                 byte[] fontbuf = new byte[16];
 
+                if (ASC16.Buffer == null) ASC16.Setup();
+
                 for (int k = 0; k < fontbuf.Length; k++)
                     fontbuf[k] = ASC16.Buffer[offset + k];
 
