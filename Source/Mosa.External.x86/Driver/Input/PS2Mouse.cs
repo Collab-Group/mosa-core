@@ -59,7 +59,7 @@ namespace Mosa.External.x86.Driver
                 Console.WriteLine("Wheel Available");
             }
 
-            Btn = "";
+            Btn = "None";
             Console.WriteLine("PS/2 mouse enabled!");
         }
 
