@@ -1,13 +1,11 @@
-﻿using Mosa.Runtime.x86;
-
-namespace Mosa.Kernel.x86
+﻿namespace Mosa.Kernel.x86
 {
     public class PIT
     {
         public const byte SquareWave = 0x36;
         public const uint Frequency = 1193182;
         //No More Than 1000
-        public const ushort Hz = 100;
+        public const ushort Hz = 200;
         public static ushort modeControlPort;
         public static ushort counter0Divisor;
         private static ulong tickCount;
@@ -37,7 +35,7 @@ namespace Mosa.Kernel.x86
             {
                 tickCount += 1000 / Hz;
             }
-            Tick++;
+            Tick += 1000 / Hz;
         }
 
         public static void Wait(uint millisecond)
