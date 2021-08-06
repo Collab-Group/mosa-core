@@ -111,7 +111,7 @@ namespace Mosa.External.x86.Drawing
                         DrawPoint(color, w + x, h + y);
         }
 
-        internal virtual bool IsInBounds(int X, int Y)
+        public virtual bool IsInBounds(int X, int Y)
         {
             return X >= LimitX && X <= LimitX + LimitWidth && Y >= LimitY && Y <= LimitY + LimitHeight;
         }
