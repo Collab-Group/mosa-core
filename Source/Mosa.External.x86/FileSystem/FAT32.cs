@@ -309,6 +309,19 @@ namespace Mosa.External.x86.FileSystem
             goto Retry;
         }
 
+        public bool Exist(string FileName) 
+        {
+            string Path = FileName.Substring(0, FileName.LastIndexOf('/') + 1);
+            string Name = FileName.Substring(Path.Length);
+
+            foreach(var v in Items) 
+            {
+                if (v.Name == Name && v.Parent == Path) return true;
+            }
+
+            return false;
+        }
+
         public void ReadList(uint sector, string parent)
         {
             //When it is root directory
