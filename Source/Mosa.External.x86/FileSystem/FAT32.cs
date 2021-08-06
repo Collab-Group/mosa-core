@@ -276,7 +276,6 @@ namespace Mosa.External.x86.FileSystem
                 bufferToWrite[i] = Data[i];
             }
             Disk.WriteBlock(GetSectorOffset(Cluster), SectorsWillUse, bufferToWrite);
-            Items.Add(Item);
             //WriteItem
             uint Index = 0;
             byte[] buffer = new byte[SectorSize];
@@ -296,6 +295,13 @@ namespace Mosa.External.x86.FileSystem
                     GC.DisposeObject(buffer);
                     GC.DisposeObject(bufferToWrite);
                     GC.Free((uint)item, (uint)sizeof(DirectoryItem));
+
+                    Items.Add(new ADirectoryItem()
+                    {
+                        Item = item,
+                        Name = Name,
+                        Parent = Path
+                    });
                     return;
                 }
             }
