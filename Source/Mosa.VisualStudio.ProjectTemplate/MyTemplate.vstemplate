@@ -18,6 +18,7 @@
     <Project TargetFileName="$safeprojectname$.csproj" File="MOSA.csproj" ReplaceParameters="true">
       <Folder Name="Properties" TargetFolderName="Properties">
         <ProjectItem ReplaceParameters="true" TargetFileName="launchSettings.json">launchSettings.json</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="Run.bat">Run.bat</ProjectItem>
       </Folder>
       <Folder Name="Properties" TargetFolderName="obj\Debug">
         <ProjectItem ReplaceParameters="true" TargetFileName="apphost.exe">apphost.exe</ProjectItem>
