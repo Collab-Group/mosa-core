@@ -311,7 +311,11 @@ namespace Mosa.External.x86.FileSystem
 
         public bool Exist(string FileName) 
         {
-            string Path = FileName.Substring(0, FileName.LastIndexOf('/') + 1);
+            string Path = "/";
+            if (FileName[0] == '/') 
+            {
+                Path = FileName.Substring(0, FileName.LastIndexOf('/') + 1);
+            }
             string Name = FileName.Substring(Path.Length);
 
             foreach(var v in Items) 
