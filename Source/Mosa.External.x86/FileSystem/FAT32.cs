@@ -276,7 +276,7 @@ namespace Mosa.External.x86.FileSystem
                 bufferToWrite[i] = Data[i];
             }
             Disk.WriteBlock(GetSectorOffset(Cluster), SectorsWillUse, bufferToWrite);
-
+            Items.Add(Item);
             //WriteItem
             uint Index = 0;
             byte[] buffer = new byte[SectorSize];
