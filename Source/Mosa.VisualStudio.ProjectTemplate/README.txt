@@ -1,1 +1,1 @@
-To enable VBE, modify launchSettings.json which is in Properties folder and change the False to True, and vice versa if you want to disable VBE.
+Check out /Properties/Run.bat
