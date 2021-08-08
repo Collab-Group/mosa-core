@@ -78,17 +78,21 @@ namespace Mosa.External.x86.Drawing
         public virtual void DrawFilledRectangle(uint Color, int X, int Y, int aWidth, int aHeight)
         {
             //Limit Won't Work
-            aWidth = Math.Clamp(aWidth, 0, this.Width - X);
-            aHeight = Math.Clamp(aHeight, 0, this.Height - Y);
+            aWidth = Math.Clamp(aWidth, 0, Width - X);
+            aHeight = Math.Clamp(aHeight, 0, Height - Y);
 
-            if (X >= this.Width) return;
-            if (Y >= this.Height) return;
+            if (X >= Width)
+                return;
+
+            if (Y >= Height)
+                return;
 
             if (X < 0)
             {
                 aWidth += X;
                 X = 0;
             }
+
             if (Y < 0)
             {
                 aHeight += Y;
@@ -109,6 +113,11 @@ namespace Mosa.External.x86.Drawing
                 for (int w = 0; w < width; w++)
                     if (array[h * width + w] == 1)
                         DrawPoint(color, w + x, h + y);
+        }
+
+        public virtual bool IsInBounds(int X, int X2, int Y, int Y2, int W, int H)
+        {
+            return X >= X2 && X <= X2 + W && Y >= Y2 && Y <= Y2 + H;
         }
 
         internal virtual bool IsInBounds(int X, int Y)
@@ -165,11 +174,11 @@ namespace Mosa.External.x86.Drawing
         public virtual void DrawImageASM(Image image, int X, int Y)
         {
             //Limit Won't Work
-            for (int h = 0; h < Math.Clamp(image.Height, 0, this.Height - Y); h++)
+            for (int h = 0; h < Math.Clamp(image.Height, 0, Height - Y); h++)
                 ASM.MEMCPY(
-                    (uint)(this.VideoMemoryCacheAddr + ((this.Width * (Y + h) + X) * this.Bpp)),
+                    (uint)(VideoMemoryCacheAddr + ((Width * (Y + h) + X) * Bpp)),
                     (uint)((uint)image.RawData.Address + (image.Width * 4 * h)),
-                    (uint)Math.Clamp(image.Width * 4, 0, (this.Width - X) * 4)
+                    (uint)Math.Clamp(image.Width * 4, 0, (Width - X) * 4)
                     );
         }
 
@@ -180,7 +189,7 @@ namespace Mosa.External.x86.Drawing
 
             int x_ratio = ((w1 << 16) / NewWidth) + 1, y_ratio = ((h1 << 16) / NewHeight) + 1;
             int x2, y2;
-
+            
             for (int i = 0; i < NewHeight; i++)
             {
                 for (int j = 0; j < NewWidth; j++)
@@ -191,11 +200,11 @@ namespace Mosa.External.x86.Drawing
                 }
             }
 
-            for (int h = 0; h < Math.Clamp(NewHeight, 0, this.Height - Y); h++)
+            for (int h = 0; h < Math.Clamp(NewHeight, 0, Height - Y); h++)
                 ASM.MEMCPY(
-                    (uint)(this.VideoMemoryCacheAddr + ((this.Width * (Y + h) + X) * this.Bpp)),
+                    (uint)(VideoMemoryCacheAddr + ((Width * (Y + h) + X) * Bpp)),
                     (uint)((uint)temp.Address + (NewWidth * 4 * h)),
-                    (uint)Math.Clamp(NewWidth * 4, 0, (this.Width - X) * 4)
+                    (uint)Math.Clamp(NewWidth * 4, 0, (Width - X) * 4)
                     );
 
             temp.Free();
