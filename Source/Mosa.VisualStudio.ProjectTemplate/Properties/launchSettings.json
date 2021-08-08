@@ -3,7 +3,7 @@
     "Compile and Run": {
       "commandName": "Executable",
       "executablePath": "cmd",
-      "commandLineArgs": "/c start /min \"\" ..\\Properties\\Run.bat $safeprojectname$.dll",
+      "commandLineArgs": "/c start \"\" ..\\Properties\\Run.bat $safeprojectname$.dll",
       "workingDirectory": "bin"
     }
   }
