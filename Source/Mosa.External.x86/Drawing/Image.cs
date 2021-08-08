@@ -1,6 +1,5 @@
 ﻿using Mosa.External.x86;
 using Mosa.Runtime;
-using Mosa.Runtime.x86;
 
 namespace System.Drawing
 {
@@ -13,7 +12,7 @@ namespace System.Drawing
 
         public Image ScaleImage(int NewWidth, int NewHeight)
         {
-            int w1 = this.Width, h1 = this.Height;
+            int w1 = Width, h1 = Height;
             MemoryBlock temp = new MemoryBlock((uint)(NewWidth * NewHeight * 4));
 
             int x_ratio = ((w1 << 16) / NewWidth) + 1, y_ratio = ((h1 << 16) / NewHeight) + 1;
@@ -25,7 +24,7 @@ namespace System.Drawing
                 {
                     x2 = ((j * x_ratio) >> 16);
                     y2 = ((i * y_ratio) >> 16);
-                    temp[(uint)((i * NewWidth) + j)] = this.RawData[(uint)((y2 * w1) + x2)];
+                    temp[(uint)((i * NewWidth) + j)] = RawData[(uint)((y2 * w1) + x2)];
                 }
             }
 
@@ -33,7 +32,7 @@ namespace System.Drawing
             {
                 Width = NewWidth,
                 Height = NewHeight,
-                Bpp = 32,
+                Bpp = Bpp,
                 RawData = temp
             };
 
