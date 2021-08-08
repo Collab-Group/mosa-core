@@ -207,29 +207,15 @@ namespace Mosa.Launcher.Console
                 return;
             }
 
-            DirectoryInfo directoryInfo = new DirectoryInfo(AppFolder + @"\Tools\virtualbox");
-            foreach (var v in directoryInfo.GetFiles())
-                v.CopyTo(Path.Combine(OutputFolder, v.Name), true);
-
             ProcessStartInfo processStartInfo = new ProcessStartInfo();
             processStartInfo.UseShellExecute = false;
             processStartInfo.FileName = VirtualBoxPath;
 
-            string path = @"C:\Users\" + System.Environment.UserName + @"\VirtualBox VMs";
-            string vdi = path + @"\MOSA\MOSA.vdi";
+            string path = @"C:\Users\" + Environment.UserName + @"\VirtualBox VMs";
             if (!Directory.Exists(path + @"\MOSA"))
             {
-                // Create VM directory
-                Directory.CreateDirectory(path + @"\MOSA");
-
-                string vbox = path + @"\MOSA\MOSA.vbox";
-
-                // Copy VM files to VM directory
-                File.Copy(Path.Combine(OutputFolder, "MOSA.vbox"), vbox);
-                File.Copy(Path.Combine(OutputFolder, "MOSA.vdi"), vdi);
-
-                // Register VM
-                processStartInfo.Arguments = "registervm \"" + vbox + "\"";
+                //Import VM
+                processStartInfo.Arguments = $"import \"{AppFolder + @"\Tools\virtualbox\MOSA.ova"}\"";
                 Process p1 = Process.Start(processStartInfo);
                 p1.WaitForExit();
 
@@ -237,16 +223,11 @@ namespace Mosa.Launcher.Console
                 processStartInfo.Arguments = $"storageattach \"MOSA\" --storagectl IDE --port 1 --device 0 --type dvddrive --medium \"{ISOFilePath}\"";
                 Process p2 = Process.Start(processStartInfo);
                 p2.WaitForExit();
-
-                // Attach output ISO
-                processStartInfo.Arguments = $"storageattach \"MOSA\" --storagectl IDE --port 0 --device 0 --type hdd --medium \"{vdi}\"";
-                Process p3 = Process.Start(processStartInfo);
-                p3.WaitForExit();
             }
 
             ConsoleColor color = System.Console.ForegroundColor;
             System.Console.ForegroundColor = ConsoleColor.Yellow;
-            System.Console.WriteLine("Warning: If this is your first time using this version. Make sure there's no virtual machine which is named \"MOSA\". If so please delete it");
+            System.Console.WriteLine("Warning: If this is your first time using this version(Last modify time: 5th Augest 2021 23:56). Make sure there's no virtual machine which is named \"MOSA\". If so please delete it");
             System.Console.WriteLine("If It Asks You Select Boot Disk");
             System.Console.WriteLine("Please Press Cancel");
             System.Console.ForegroundColor = color;

@@ -24,5 +24,37 @@ namespace Mosa.External.x86
             GC.DisposeObject(ls);
             return result;
         }
+
+        public static string PadLeft(this string str, int totalWidth, char paddingChar)
+        {
+            if (totalWidth < str.Length) return str;
+            int len = totalWidth - str.Length;
+            string result = "";
+            for (int i = 0; i < len; i++)
+            {
+                result += paddingChar;
+            }
+            result = result + str;
+
+            GC.DisposeObject(str);
+
+            return result;
+        }
+
+        public static string PadRight(this string str, int totalWidth, char paddingChar)
+        {
+            if (totalWidth < str.Length) return str;
+            int len = totalWidth - str.Length;
+            string result = "";
+            for (int i = 0; i < len; i++)
+            {
+                result += paddingChar;
+            }
+            result = str + result;
+
+            GC.DisposeObject(str);
+
+            return result;
+        }
     }
 }

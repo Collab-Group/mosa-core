@@ -3,7 +3,7 @@
     "Compile and Run": {
       "commandName": "Executable",
       "executablePath": "cmd",
-      "commandLineArgs": "/c start \"\" \"C:\\Program Files (x86)\\MOSA-Project\\bin\\Mosa.Launcher.Console.exe\" $safeprojectname$.dll \"\" False",
+      "commandLineArgs": "/c start \"\" ..\\Properties\\Run.bat $safeprojectname$.dll",
       "workingDirectory": "bin"
     }
   }

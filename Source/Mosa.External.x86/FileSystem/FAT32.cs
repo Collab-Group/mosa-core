@@ -276,7 +276,6 @@ namespace Mosa.External.x86.FileSystem
                 bufferToWrite[i] = Data[i];
             }
             Disk.WriteBlock(GetSectorOffset(Cluster), SectorsWillUse, bufferToWrite);
-
             //WriteItem
             uint Index = 0;
             byte[] buffer = new byte[SectorSize];
@@ -296,11 +295,35 @@ namespace Mosa.External.x86.FileSystem
                     GC.DisposeObject(buffer);
                     GC.DisposeObject(bufferToWrite);
                     GC.Free((uint)item, (uint)sizeof(DirectoryItem));
+
+                    Items.Add(new ADirectoryItem()
+                    {
+                        Item = item,
+                        Name = Name,
+                        Parent = Path
+                    });
                     return;
                 }
             }
             Index++;
             goto Retry;
+        }
+
+        public bool Exist(string FileName) 
+        {
+            string Path = "/";
+            if (FileName[0] == '/') 
+            {
+                Path = FileName.Substring(0, FileName.LastIndexOf('/') + 1);
+            }
+            string Name = FileName.Substring(Path.Length);
+
+            foreach(var v in Items) 
+            {
+                if (v.Name == Name && v.Parent == Path) return true;
+            }
+
+            return false;
         }
 
         public void ReadList(uint sector, string parent)

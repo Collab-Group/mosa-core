@@ -48,8 +48,11 @@ namespace $safeprojectname$
                     switch (keyCode)
                     {
                         case PS2Keyboard.KeyCode.Delete:
-                            Console.RemovePreviousOne();
-                            Input = Input.Substring(0, Input.Length - 1);
+                            if (Input.Length != 0)
+                            {
+                                Console.RemovePreviousOne();
+                                Input = Input.Substring(0, Input.Length - 1);
+                            }
                             break;
 
                         case PS2Keyboard.KeyCode.Enter:

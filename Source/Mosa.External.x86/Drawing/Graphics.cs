@@ -115,12 +115,13 @@ namespace Mosa.External.x86.Drawing
                         DrawPoint(color, w + x, h + y);
         }
 
+
         public virtual bool IsInBounds(int X, int X2, int Y, int Y2, int W, int H)
         {
             return X >= X2 && X <= X2 + W && Y >= Y2 && Y <= Y2 + H;
         }
 
-        internal virtual bool IsInBounds(int X, int Y)
+        public virtual bool IsInBounds(int X, int Y)
         {
             return X >= LimitX && X <= LimitX + LimitWidth && Y >= LimitY && Y <= LimitY + LimitHeight;
         }
@@ -442,28 +443,6 @@ namespace Mosa.External.x86.Drawing
             DrawLine(Color, V1x, V1y, V2x, V2y);
             DrawLine(Color, V1x, V1y, V3x, V3y);
             DrawLine(Color, V2x, V2y, V3x, V3y);
-        }
-
-        public virtual MemoryBlock ScaleImage(Image Image, int NewWidth, int NewHeight)
-        {
-            int w1 = Image.Width, h1 = Image.Height;
-            // Potential memory leak
-            MemoryBlock temp = new MemoryBlock(Image.RawData.Size);
-
-            int x_ratio = ((w1 << 16) / NewWidth) + 1, y_ratio = ((h1 << 16) / NewHeight) + 1;
-            int x2, y2;
-
-            for (int i = 0; i < NewHeight; i++)
-            {
-                for (int j = 0; j < NewWidth; j++)
-                {
-                    x2 = ((j * x_ratio) >> 16);
-                    y2 = ((i * y_ratio) >> 16);
-                    temp[(uint)((i * NewWidth) + j)] = Image.RawData[(uint)((y2 * w1) + x2)];
-                }
-            }
-
-            return temp;
         }
 
         public virtual void TrimLine(int x1, int y1, int x2, int y2)

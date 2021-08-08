@@ -1,23 +1,16 @@
 ﻿using Mosa.Kernel.x86;
 using System;
+using static Mosa.Runtime.x86.Native;
 
 namespace Mosa.External.x86.Driver
 {
     public static class PS2Mouse
     {
-        private const byte Port_KeyData = 0x0060;
-        private const byte Port_KeyCommand = 0x0064;
-        private const byte KeyStatus_Send_NotReady = 0x02;
-        private const byte KeyCommand_Write_Mode = 0x60;
-        private const byte KBC_Mode = 0x47;
-        private const byte KeyCommand_SendTo_Mouse = 0xd4;
-        private const byte MouseCommand_Enable = 0xf4;
-        private const byte Mouse_SetSampleRate = 0xF3;
+        private const byte Data = 0x0060;
+        private const byte Command = 0x0064;
 
-        public static void Wait_KBC()
-        {
-            while ((IOPort.In8(Port_KeyCommand) & KeyStatus_Send_NotReady) != 0) ;
-        }
+        private const byte SetDefaults = 0xF6;
+        private const byte EnableDataReporting = 0xF4;
 
         public static void Initialize(int width, int height)
         {
@@ -27,16 +20,43 @@ namespace Mosa.External.x86.Driver
             X = ScreenWidth / 2;
             Y = ScreenHeight / 2;
 
-            // Set KBC mode
-            WriteCommand(KeyCommand_Write_Mode, KBC_Mode);
+            byte _status;
 
-            // Set sample rate
-            WriteCommand(Mouse_SetSampleRate, 200);
+            Hlt();
+            Out8(Command, 0xA8);
 
-            // Enable automatic packet streaming
-            WriteCommand(KeyCommand_SendTo_Mouse, MouseCommand_Enable);
+            Hlt();
+            Out8(Command, 0x20);
+            Hlt();
+            _status = ((byte)(In8(0x60) | 3));
+            Hlt();
+            Out8(Command, 0x60);
+            Hlt();
+            Out8(Data, _status);
 
-            Btn = "";
+            WriteRegister(SetDefaults);
+            WriteRegister(EnableDataReporting);
+
+            WriteRegister(0xF2);
+
+            WriteRegister(0xF3);
+            WriteRegister(200);
+
+            WriteRegister(0xF3);
+            WriteRegister(100);
+
+            WriteRegister(0xF3);
+            WriteRegister(80);
+
+            WriteRegister(0xF2);
+
+            byte result = ReadRegister();
+            if (result == 3)
+            {
+                Console.WriteLine("Wheel Available");
+            }
+
+            Btn = "None";
             Console.WriteLine("PS/2 mouse enabled!");
         }
 
@@ -52,17 +72,25 @@ namespace Mosa.External.x86.Driver
         public static int ScreenWidth = 0;
         public static int ScreenHeight = 0;
 
-        public static void WriteCommand(byte command, byte value)
+        public static void WriteRegister(byte value)
         {
-            Wait_KBC();
-            IOPort.Out8(Port_KeyCommand, command);
-            Wait_KBC();
-            IOPort.Out8(Port_KeyData, value);
+            Hlt();
+            Out8(Command, 0xD4);
+            Hlt();
+            Out8(Data, value);
+
+            ReadRegister();
+        }
+
+        public static byte ReadRegister()
+        {
+            Hlt();
+            return In8(Data);
         }
 
         public static void OnInterrupt()
         {
-            byte D = IOPort.In8(Port_KeyData);
+            byte D = IOPort.In8(Data);
 
             if (Phase == 0)
             {
