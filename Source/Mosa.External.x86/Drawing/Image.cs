@@ -11,7 +11,7 @@ namespace System.Drawing
         public int Width;
         public int Height;
 
-        public Image ScaledImage(int NewWidth, int NewHeight)
+        public Image ScaleImage(int NewWidth, int NewHeight)
         {
             int w1 = this.Width, h1 = this.Height;
             MemoryBlock temp = new MemoryBlock((uint)(NewWidth * NewHeight * 4));
