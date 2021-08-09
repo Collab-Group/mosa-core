@@ -147,9 +147,9 @@ namespace Mosa.External.x86.Driver
         }
 
         private static int TXPair = 0;
-        public override bool SendPacket(byte* buffer,uint length)
+        public override bool SendPacket(byte* buffer, uint length)
         {
-            ASM.MEMCPY((uint)TX, (uint)buffer,length);
+            ASM.MEMCPY((uint)TX, (uint)buffer, length);
 
             IOPort.Out32(StartRegisters[TXPair], (uint)TX);
             IOPort.Out32(CommandRegisters[TXPair], length);
