@@ -1,13 +1,14 @@
 ﻿using Mosa.Kernel;
 using Mosa.Kernel.x86;
 using Mosa.Runtime;
+using Mosa.Runtime.x86;
 using System.Runtime.InteropServices;
 
 namespace Mosa.External.x86.Driver
 {
     //https://wiki.osdev.org/RTL8139
 
-    public unsafe class RTL8139
+    public unsafe class RTL8139 : Network
     {
         public static uint IOBase;
         public static byte* RX;
@@ -22,8 +23,9 @@ namespace Mosa.External.x86.Driver
         private static byte[] StartRegisters;
         private static byte[] CommandRegisters;
 
-        public static void Initialize()
+        public RTL8139()
         {
+
             StartRegisters = new byte[] { 0x20, 0x24, 0x28, 0x2C };
             CommandRegisters = new byte[] { 0x10, 0x14, 0x18, 0x1C };
 
@@ -94,7 +96,7 @@ namespace Mosa.External.x86.Driver
 
 
         //Read Inerrupt By device.InterruptLine
-        internal static void OnInterrupt()
+        public override void OnInterrupt()
         {
             ushort STS = IOPort.In16((ushort)(IOBase + ISR));
             IOPort.Out16((ushort)(IOBase + ISR), STS);
@@ -122,7 +124,7 @@ namespace Mosa.External.x86.Driver
             public ushort Size;
         }
 
-        public static void Receive()
+        public void Receive()
         {
             byte* Buffer = RX;
             int Index = RXIndex;
@@ -145,18 +147,17 @@ namespace Mosa.External.x86.Driver
         }
 
         private static int TXPair = 0;
-        public static void Send(byte[] Buffer)
+        public override bool SendPacket(byte* buffer,uint length)
         {
-            for (int i = 0; i < Buffer.Length; i++)
-            {
-                TX[i] = Buffer[i];
-            }
+            ASM.MEMCPY((uint)TX, (uint)buffer,length);
 
             IOPort.Out32(StartRegisters[TXPair], (uint)TX);
-            IOPort.Out32(CommandRegisters[TXPair], (uint)Buffer.Length);
+            IOPort.Out32(CommandRegisters[TXPair], length);
 
             TXPair++;
             if (TXPair > 3) TXPair = 0;
+
+            return true;
         }
     }
 }
