@@ -65,6 +65,24 @@ namespace Mosa.Kernel.x86
 			Native.Out8(PIC2_Data, slaveMask);
 		}
 
+		public static void ClearMask(byte IRQline)
+		{
+			ushort port;
+			byte value;
+
+			if (IRQline < 8)
+			{
+				port = 0x21;
+			}
+			else
+			{
+				port = 0xA1;
+				IRQline -= 8;
+			}
+			value = (byte)(IOPort.In8(port) & ~(1 << IRQline));
+			IOPort.Out8(port, value);
+		}
+
 		/// <summary>
 		/// Sends the end of interrupt.
 		/// </summary>
