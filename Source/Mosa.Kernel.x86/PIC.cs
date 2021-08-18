@@ -65,21 +65,39 @@ namespace Mosa.Kernel.x86
 			Native.Out8(PIC2_Data, slaveMask);
 		}
 
-		public static void ClearMask(byte IRQline)
+		public static void ClearMask(byte IRQ)
 		{
 			ushort port;
 			byte value;
 
-			if (IRQline < 8)
+			if (IRQ < 8)
 			{
 				port = 0x21;
 			}
 			else
 			{
 				port = 0xA1;
-				IRQline -= 8;
+				IRQ -= 8;
 			}
-			value = (byte)(IOPort.In8(port) & ~(1 << IRQline));
+			value = (byte)(IOPort.In8(port) & ~(1 << IRQ));
+			IOPort.Out8(port, value);
+		}
+
+		public static void Mask(byte IRQ)
+		{
+			ushort port;
+			byte value;
+
+			if (IRQ < 8)
+			{
+				port = 0x21;
+			}
+			else
+			{
+				port = 0xA1;
+				IRQ -= 8;
+			}
+			value = (byte)(IOPort.In8(port) | (1 << IRQ));
 			IOPort.Out8(port, value);
 		}
 
