@@ -1,4 +1,5 @@
 ﻿using Mosa.Kernel.x86;
+using Mosa.Runtime;
 using System.Drawing;
 using System.Text;
 
@@ -72,6 +73,11 @@ namespace Mosa.External.x86.Drawing
                 //Console.WriteLine(Color.FromArgb(temp[w]).ToString());
                 w++;
             }
+
+            GC.DisposeObject(memoryBlock);
+            GC.DisposeObject(temp);
+            GC.DisposeObject(bitmapHeader);
+
             return;
         }
     }
