@@ -16,12 +16,12 @@ namespace Mosa.Kernel.x86
         // This means we can have much cleaner code below.
         private static byte[] TypeAgnosticGetBytes(object o)
         {
-            if (o is int @int) return BitConverter.GetBytes(@int);
-            if (o is uint int1) return BitConverter.GetBytes(int1);
-            if (o is long int2) return BitConverter.GetBytes(int2);
-            if (o is ulong int3) return BitConverter.GetBytes(int3);
-            if (o is short int4) return BitConverter.GetBytes(int4);
-            if (o is ushort int5) return BitConverter.GetBytes(int5);
+            if (o is int) return BitConverter.GetBytes((int)o);
+            if (o is uint) return BitConverter.GetBytes((uint)o);
+            if (o is long) return BitConverter.GetBytes((long)o);
+            if (o is ulong) return BitConverter.GetBytes((ulong)o);
+            if (o is short) return BitConverter.GetBytes((short)o);
+            if (o is ushort) return BitConverter.GetBytes((ushort)o);
             if (o is byte || o is sbyte) return new byte[] { (byte)o };
 
             throw new ArgumentException("Unsupported object type found");
