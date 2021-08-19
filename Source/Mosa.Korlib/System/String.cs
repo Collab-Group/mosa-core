@@ -561,7 +561,27 @@ namespace System
 			return IndexOf(value, startIndex, length - startIndex);
 		}
 
+		public int IndexOf(string value, int startIndex)
+		{
+			return IndexOf(value, startIndex, length - startIndex);
+		}
+
 		public int IndexOf(char value, int startIndex, int count)
+		{
+			if (startIndex < 0)
+				throw new ArgumentOutOfRangeException("startIndex", "< 0");
+			if (count < 0)
+				throw new ArgumentOutOfRangeException("count", "< 0");
+			if (startIndex > length - count)
+				throw new ArgumentOutOfRangeException("startIndex + count > this.length");
+
+			if ((startIndex == 0 && length == 0) || (startIndex == length) || (count == 0))
+				return -1;
+
+			return IndexOfImpl(value, startIndex, count);
+		}
+
+		public int IndexOf(string value, int startIndex, int count)
 		{
 			if (startIndex < 0)
 				throw new ArgumentOutOfRangeException("startIndex", "< 0");
