@@ -104,6 +104,8 @@ namespace System.IO
 
 		//		delegate void WriteDelegate (byte[] buffer, int offset, int count);
 
+		public abstract void CopyTo(Stream destination);
+
 		/// <summary>
 		///
 		/// </summary>
