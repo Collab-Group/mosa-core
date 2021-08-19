@@ -1,5 +1,6 @@
 ﻿using Mosa.Runtime;
 using Mosa.Runtime.x86;
+using System.Collections.Generic;
 
 namespace Mosa.External.x86
 {
@@ -40,6 +41,17 @@ namespace Mosa.External.x86
                 Write8((uint)i, data[i]);
         }
 
+        public MemoryBlock(List<byte> data)
+        {
+            size = (uint)data.Count;
+
+            address = GC.AllocateObject(size);
+            IsManaged = true;
+
+            for (int i = 0; i < data.Count; i++)
+                Write8((uint)i, data[i]);
+        }
+
         public MemoryBlock(int[] data)
         {
             size = (uint)data.Length * 4;
@@ -48,6 +60,17 @@ namespace Mosa.External.x86
             IsManaged = true;
 
             for (int i = 0; i < data.Length; i++)
+                this[(uint)i] = data[i];
+        }
+
+        public MemoryBlock(List<int> data)
+        {
+            size = (uint)data.Count * 4;
+
+            address = GC.AllocateObject(size);
+            IsManaged = true;
+
+            for (int i = 0; i < data.Count; i++)
                 this[(uint)i] = data[i];
         }
 
