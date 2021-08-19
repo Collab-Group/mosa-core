@@ -65,6 +65,7 @@ namespace $safeprojectname$
             */
 
             // Initialize graphics (default width and height is 640 and 480 respectively)
+            // Make sure you've already enabled VMSVGA(in VirtualBox) or VBE(in Run.bat)
             Graphics graphics = GraphicsSelector.GetGraphics();
 
             Width = graphics.Width;
