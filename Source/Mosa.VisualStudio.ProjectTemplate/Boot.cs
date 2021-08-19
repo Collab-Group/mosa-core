@@ -14,7 +14,7 @@ namespace $safeprojectname$
         {
             // Initialize the necessary stuff
             Kernel.Setup();
-            ACPI.Initialize();
+            //ACPI.Initialize();
             IDT.SetInterruptHandler(ProcessInterrupt);
 
             // Note: threads can't be created dynamically (for now)
@@ -29,11 +29,11 @@ namespace $safeprojectname$
 
             // Initialize the IDE hard drive
             // MOSA currently only supports FAT12 and FAT32 (but FAT32 doesn't work correctly in VirtualBox for now)
-            IDisk disk = new IDEDisk();
-            MBR mBR = new MBR();
-            mBR.Initialize(disk);
+            //IDisk disk = new IDEDisk();
+            //MBR mBR = new MBR();
+            //mBR.Initialize(disk);
             //FileSystem Takes Time
-            FAT12 fs = new FAT12(disk, mBR.PartitionInfos[0]);
+            //FAT12 fs = new FAT12(disk, mBR.PartitionInfos[0]);
             //byte[] b = fs.ReadAllBytes("TEST1.TXT");
 
             Console.WriteLine("MOSA booted successfully! Type anything and get an echo of what you've typed.");
