@@ -34,7 +34,7 @@ Typically, on macOS and Linux, you'll have to use **Mono**. MOSA-Core uses .NET 
 A GUI-based demo of MOSA-Core is available [here](https://github.com/nifanfa/MOSA-GUI-Sample).
 
 # Contributors
-<a href = "https://github.com/Tanu-N-Prabhu/Python/graphs/contributors">
+<a href = "https://contrib.rocks/image?repo=nifanfa/MOSA-Core/graphs/contributors">
   <img src = "https://contrib.rocks/image?repo=nifanfa/MOSA-Core"/>
 </a>
 
