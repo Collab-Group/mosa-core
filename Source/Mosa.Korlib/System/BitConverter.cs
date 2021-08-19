@@ -96,7 +96,160 @@ namespace System
 			return bytes;
 		}
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+        /* https://referencesource.microsoft.com/#mscorlib/system/bitconverter.cs,e8230d40857425ba */
+
+        // Converts an array of bytes into a short.
+        public static unsafe short ToInt16(byte[] value, int startIndex)
+        {
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
+
+            if ((uint)startIndex >= value.Length)
+                throw new ArgumentOutOfRangeException(nameof(startIndex));
+
+            if (startIndex > value.Length - 2)
+                throw new ArgumentException("Start index is too high.");
+
+            fixed (byte* pbyte = &value[startIndex])
+            {
+                if (startIndex % 2 == 0)
+                { // data is aligned 
+                    return *((short*)pbyte);
+                }
+                else
+                {
+                    if (IsLittleEndian)
+                    {
+                        return (short)((*pbyte) | (*(pbyte + 1) << 8));
+                    }
+                    else
+                    {
+                        return (short)((*pbyte << 8) | (*(pbyte + 1)));
+                    }
+                }
+            }
+        }
+
+        // Converts an array of bytes into an int.  
+        public static unsafe int ToInt32(byte[] value, int startIndex)
+        {
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
+
+            if ((uint)startIndex >= value.Length)
+                throw new ArgumentOutOfRangeException(nameof(startIndex));
+
+            if (startIndex > value.Length - 4)
+                throw new ArgumentException("Start index is too high.");
+
+            fixed (byte* pbyte = &value[startIndex])
+            {
+                if (startIndex % 4 == 0)
+                { // data is aligned 
+                    return *((int*)pbyte);
+                }
+                else
+                {
+                    if (IsLittleEndian)
+                    {
+                        return (*pbyte) | (*(pbyte + 1) << 8) | (*(pbyte + 2) << 16) | (*(pbyte + 3) << 24);
+                    }
+                    else
+                    {
+                        return (*pbyte << 24) | (*(pbyte + 1) << 16) | (*(pbyte + 2) << 8) | (*(pbyte + 3));
+                    }
+                }
+            }
+        }
+
+        // Converts an array of bytes into a long.  
+        public static unsafe long ToInt64(byte[] value, int startIndex)
+        {
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
+
+            if ((uint)startIndex >= value.Length)
+                throw new ArgumentOutOfRangeException(nameof(startIndex));
+
+            if (startIndex > value.Length - 8)
+                throw new ArgumentException("Start index is too high.");
+
+            fixed (byte* pbyte = &value[startIndex])
+            {
+                if (startIndex % 8 == 0)
+                { // data is aligned 
+                    return *((long*)pbyte);
+                }
+                else
+                {
+                    if (IsLittleEndian)
+                    {
+                        int i1 = (*pbyte) | (*(pbyte + 1) << 8) | (*(pbyte + 2) << 16) | (*(pbyte + 3) << 24);
+                        int i2 = (*(pbyte + 4)) | (*(pbyte + 5) << 8) | (*(pbyte + 6) << 16) | (*(pbyte + 7) << 24);
+                        return (uint)i1 | ((long)i2 << 32);
+                    }
+                    else
+                    {
+                        int i1 = (*pbyte << 24) | (*(pbyte + 1) << 16) | (*(pbyte + 2) << 8) | (*(pbyte + 3));
+                        int i2 = (*(pbyte + 4) << 24) | (*(pbyte + 5) << 16) | (*(pbyte + 6) << 8) | (*(pbyte + 7));
+                        return (uint)i2 | ((long)i1 << 32);
+                    }
+                }
+            }
+        }
+
+
+        // Converts an array of bytes into an ushort.
+        [CLSCompliant(false)]
+        public static ushort ToUInt16(byte[] value, int startIndex)
+        {
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
+
+            if ((uint)startIndex >= value.Length)
+                throw new ArgumentOutOfRangeException(nameof(startIndex));
+
+            if (startIndex > value.Length - 2)
+                throw new ArgumentException("Start index is too high.");
+
+            return (ushort)ToInt16(value, startIndex);
+        }
+
+        // Converts an array of bytes into an uint.
+        // 
+        [CLSCompliant(false)]
+        public static uint ToUInt32(byte[] value, int startIndex)
+        {
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
+
+            if ((uint)startIndex >= value.Length)
+                throw new ArgumentOutOfRangeException(nameof(startIndex));
+
+            if (startIndex > value.Length - 4)
+                throw new ArgumentException("Start index is too high.");
+
+            return (uint)ToInt32(value, startIndex);
+        }
+
+        // Converts an array of bytes into an unsigned long.
+        // 
+        [CLSCompliant(false)]
+        public static ulong ToUInt64(byte[] value, int startIndex)
+        {
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
+
+            if ((uint)startIndex >= value.Length)
+                throw new ArgumentOutOfRangeException(nameof(startIndex));
+
+            if (startIndex > value.Length - 8)
+                throw new ArgumentException("Start index is too high.");
+
+            return (ulong)ToInt64(value, startIndex);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static unsafe long DoubleToInt64Bits(double value)
 		{
 			return *((long*)&value);
