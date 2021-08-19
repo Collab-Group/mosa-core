@@ -33,6 +33,11 @@ Typically, on macOS and Linux, you'll have to use **Mono**. MOSA-Core uses .NET 
 # Demo
 A GUI-based demo of MOSA-Core is available [here](https://github.com/nifanfa/MOSA-GUI-Sample).
 
+# Contributors
+<a href = "https://github.com/nifanfa/MOSA-Core/graphs/contributors">
+  <img src = "https://contrib.rocks/image?repo=nifanfa/MOSA-Core"/>
+</a>
+
 # License
 
 MOSA is licensed under the [New BSD License](http://en.wikipedia.org/wiki/New_BSD).
@@ -71,4 +76,3 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY 
 OF SUCH DAMAGE.
-
