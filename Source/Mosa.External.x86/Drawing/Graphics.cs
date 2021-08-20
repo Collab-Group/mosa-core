@@ -39,16 +39,13 @@ namespace Mosa.External.x86.Drawing
             int TotalX = 0;
             string[] Lines = Text.Split('\n');
 
-            int Size8 = Size / 8;
-            byte RedOfColor = (byte)(((color >> 16) & 0xFF) * 127);
-
             for (int l = 0; l < Lines.Length; l++)
             {
                 int UsedX = 0;
                 for (int i = 0; i < Lines[l].Length; i++)
                 {
                     char c = Lines[l][i];
-                    UsedX += BitFont.DrawBitFontChar(this, bitFontDescriptor.Raw, Size, Size8, color, RedOfColor, bitFontDescriptor.Charset.IndexOf(c), UsedX + X, Y + bitFontDescriptor.Size * l, !DisableAntiAliasing) + 2 + Divide;
+                    UsedX += BitFont.DrawBitFontChar(this, bitFontDescriptor.Raw, Size, color, bitFontDescriptor.Charset.IndexOf(c), UsedX + X, Y + bitFontDescriptor.Size * l, !DisableAntiAliasing) + 2 + Divide;
                 }
                 TotalX += UsedX;
             }
