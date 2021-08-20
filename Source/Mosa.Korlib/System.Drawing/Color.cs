@@ -39,6 +39,7 @@
                 return new Color(KnownColor.Transparent);
             }
         }
+
         /// <include file='doc\Color.uex' path='docs/doc[@for="Color.AliceBlue"]/*' />
         /// <devdoc>
         ///    <para>[To be supplied.]</para>
