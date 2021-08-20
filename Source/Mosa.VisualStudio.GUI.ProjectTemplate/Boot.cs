@@ -47,7 +47,6 @@ namespace $safeprojectname$
             //ACPI.Initialize();
             IDT.SetInterruptHandler(ProcessInterrupt);
 
-            // Note: threads can't be created dynamically (for now)
             Scheduler.CreateThread(MainThread, PageFrameAllocator.PageSize);
             Scheduler.Start();
         }
