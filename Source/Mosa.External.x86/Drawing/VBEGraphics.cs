@@ -56,6 +56,10 @@ namespace Mosa.External.x86.Drawing
             if (IsInBounds(X,Y))
                 switch (Bpp) 
                 {
+                    case 2:
+                        return System.Drawing.Color.Convert565RGBto8888RGB(memoryBlock.Read16((uint)((Width * Y + X) * Bpp)));
+                    case 3:
+                        return memoryBlock.Read24((uint)((Width * Y + X) * Bpp)) | 0x00FFFFFF;
                     case 4:
                         return memoryBlock.Read32((uint)((Width * Y + X) * Bpp));
                 }
