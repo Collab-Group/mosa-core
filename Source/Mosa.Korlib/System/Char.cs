@@ -132,5 +132,53 @@ namespace System
 
 			return (char)(c + 32);
 		}
+
+		public static bool IsSurrogate(char c)
+		{
+			return c >= 0x00d800 && c <= 0x00dfff;
+		}
+
+		public static bool IsSurrogate(string s, int index)
+		{
+			if (s == null)
+				throw new ArgumentNullException(nameof(s));
+
+			if (((uint)index) >= ((uint)s.Length))
+				throw new ArgumentOutOfRangeException(nameof(index));
+
+			return IsSurrogate(s[index]);
+		}
+
+		public static bool IsHighSurrogate(char c)
+		{
+			return (c >= '\ud800') && (c <= '\udbff');
+		}
+
+		public static bool IsHighSurrogate(string s, int index)
+		{
+			if (s == null)
+				throw new ArgumentNullException(nameof(s));
+
+			if (index < 0 || index >= s.Length)
+				throw new ArgumentOutOfRangeException(nameof(index));
+
+			return IsHighSurrogate(s[index]);
+		}
+
+		public static bool IsLowSurrogate(char c)
+		{
+			return (c >= '\udc00') && (c <= '\udfff');
+		}
+
+		public static bool IsLowSurrogate(string s, int index)
+		{
+			if (s == null)
+				throw new ArgumentNullException(nameof(s));
+
+			if (index < 0 || index >= s.Length)
+				throw new ArgumentOutOfRangeException(nameof(index));
+
+			return IsLowSurrogate(s[index]);
+		}
 	}
 }
