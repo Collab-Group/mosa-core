@@ -18,6 +18,11 @@ namespace System.Drawing
             RawData = new MemoryBlock((uint)(width * height * Bpp));
         }
 
+        public Image()
+        {
+
+        }
+
         public Image ScaleImage(int NewWidth, int NewHeight)
         {
             int w1 = Width, h1 = Height;
