@@ -14,8 +14,9 @@ namespace Mosa.External.x86.Driver
 
         public static void OnInterrupt()
         {
-            KeyAvailable = false;
             KData = IOPort.In8(Port_KeyData);
+            if (KeyCodeToString((KeyCode)KData) == "null") return;
+
             KeyAvailable = true;
 
             IsCapsLock = KData == (byte)KeyCode.CapsLock;
@@ -97,7 +98,29 @@ namespace Mosa.External.x86.Driver
                 KeyCode.Keypad9 => "9",
                 KeyCode.KeypadMinus => "-",
                 KeyCode.KeypadPlus => "+",
-                _ => ""
+                KeyCode.F1 => "",
+                KeyCode.F2 => "",
+                KeyCode.F3 => "",
+                KeyCode.F4 => "",
+                KeyCode.F5 => "",
+                KeyCode.F6 => "",
+                KeyCode.F7 => "",
+                KeyCode.F8 => "",
+                KeyCode.F9 => "",
+                KeyCode.F10 => "",
+                KeyCode.F11 => "",
+                KeyCode.F12 => "",
+                KeyCode.LeftCTRL => "",
+                KeyCode.LeftShift => "",
+                KeyCode.RightShift => "",
+                KeyCode.LeftAlt => "",
+                KeyCode.NumLock => "",
+                KeyCode.ScrollLock => "",
+                KeyCode.CapsLock => "",
+                KeyCode.Delete => "",
+                KeyCode.Enter => "",
+                KeyCode.ESC => "",
+                _ => "null"
             };
         }
 
