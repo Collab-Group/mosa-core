@@ -5,7 +5,7 @@ namespace Mosa.External.x86.Drawing
 {
     public class VirtualGraphics : Graphics
     {
-        Image bitmap;
+        public Image bitmap;
 
         public VirtualGraphics(int Width, int Height)
         {
