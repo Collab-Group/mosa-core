@@ -10,6 +10,19 @@ namespace System.Drawing
         public int Width;
         public int Height;
 
+        public Image(int width, int height)
+        {
+            Width = width;
+            Height = height;
+            Bpp = 4;
+            RawData = new MemoryBlock((uint)(width * height * Bpp));
+        }
+
+        public Image()
+        {
+
+        }
+
         public Image ScaleImage(int NewWidth, int NewHeight)
         {
             int w1 = Width, h1 = Height;
@@ -39,7 +52,7 @@ namespace System.Drawing
             return image;
         }
 
-        public void Dispose() 
+        public void Dispose()
         {
             RawData.Free();
             GC.DisposeObject(this);
