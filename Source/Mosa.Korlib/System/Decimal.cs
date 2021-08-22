@@ -161,6 +161,18 @@ namespace System
 			hi = 0;
 		}
 
+		public static decimal ToDecimal(byte[] buffer)
+		{
+			if (buffer == null || buffer.Length < 16)
+				throw new ArgumentNullException(nameof(buffer));
+
+			int lo = buffer[0] | (buffer[1] << 8) | (buffer[2] << 16) | (buffer[3] << 24);
+			int mid = buffer[4] | (buffer[5] << 8) | (buffer[6] << 16) | (buffer[7] << 24);
+			int hi = buffer[8] | (buffer[9] << 8) | (buffer[10] << 16) | (buffer[11] << 24);
+			int flags = buffer[12] | (buffer[13] << 8) | (buffer[14] << 16) | (buffer[15] << 24);
+			return new decimal(lo, mid, hi, flags);
+		}
+
 		//
 		// Decimal <==> Currency conversion.
 		//
