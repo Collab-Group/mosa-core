@@ -700,6 +700,16 @@ namespace System
 			return LastIndexOfImpl(value, startIndex, count);
 		}
 
+		public char[] ToCharArray()
+        {
+			char[] array = new char[Length];
+
+			for (int i = 0; i < Length; i++)
+				array[i] = this[i];
+
+			return array;
+        }
+
 		private int IndexOfImpl(char value, int startIndex, int count)
 		{
 			for (int i = startIndex; i < count; i++)
