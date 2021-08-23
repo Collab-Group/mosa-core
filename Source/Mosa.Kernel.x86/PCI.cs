@@ -52,7 +52,15 @@ namespace Mosa.Kernel
         VBVGA = 0xBEEF,
         VBoxGuest = 0xCAFE,
         AC97 = 0x2415,
-        RTL8139 = 0x8139
+        RTL8139 = 0x8139,
+        Intel82540EM = 0x100E,
+        Intel82545EM = 0x100F,
+        Intel82543GC = 0x1004,
+        Intel82541PI = 0x107C,
+        Intel82571EB = 0x105E,
+        Intel82574LAnd82583L = 0x10D3,
+        IntelICH10Integrated = 0x10DE,
+        IntelICH10RIntegrated = 0x10CD
     }
 
     public class PCI

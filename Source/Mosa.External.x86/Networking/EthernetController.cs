@@ -17,14 +17,14 @@ namespace Mosa.External.x86.Networking
                 if (dev.VendorID == (ushort)VendorID.Intel)
                 {
                     if (
-                        dev.DeviceID == 0x100E || //Intel® 82540EM Gigabit Ethernet Controller
-                        dev.DeviceID == 0x100F || //Intel® 82545EM Gigabit Ethernet Controller
-                        dev.DeviceID == 0x1004 || //Intel® 82543GC Gigabit Ethernet Controller
-                        dev.DeviceID == 0x107C || //Intel® 82541PI Gigabit Ethernet Controller
-                        dev.DeviceID == 0x105E || //Intel® 82571EB Gigabit Ethernet Controller
-                        dev.DeviceID == 0x10D3 || //Intel® 82574L/82583L Gigabit Ethernet Controller
-                        dev.DeviceID == 0x10DE || //Intel® ICH10 Intergrated Gigabit Ethernet Controller
-                        dev.DeviceID == 0x10CD    //Intel® ICH10R Intergrated Gigabit Ethernet Controller
+                        dev.DeviceID == (ushort)DeviceID.Intel82540EM || //Intel® 82540EM Gigabit Ethernet Controller
+                        dev.DeviceID == (ushort)DeviceID.Intel82545EM || //Intel® 82545EM Gigabit Ethernet Controller
+                        dev.DeviceID == (ushort)DeviceID.Intel82543GC || //Intel® 82543GC Gigabit Ethernet Controller
+                        dev.DeviceID == (ushort)DeviceID.Intel82541PI || //Intel® 82541PI Gigabit Ethernet Controller
+                        dev.DeviceID == (ushort)DeviceID.Intel82571EB || //Intel® 82571EB Gigabit Ethernet Controller
+                        dev.DeviceID == (ushort)DeviceID.Intel82574LAnd82583L || //Intel® 82574L/82583L Gigabit Ethernet Controller
+                        dev.DeviceID == (ushort)DeviceID.IntelICH10Integrated || //Intel® ICH10 Intergrated Gigabit Ethernet Controller
+                        dev.DeviceID == (ushort)DeviceID.IntelICH10RIntegrated    //Intel® ICH10R Intergrated Gigabit Ethernet Controller
                         )
                     {
                         //Must Be Static. MOSA Compiler Got Some Problems
