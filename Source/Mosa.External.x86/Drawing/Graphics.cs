@@ -26,7 +26,8 @@ namespace Mosa.External.x86.Drawing
         public string CurrentDriver;
 
         //TotalX will be the last line of it used.
-        public virtual int DrawBitFontString(string FontName, uint color, string Text, int X, int Y, int Divide = 0, bool DisableAntiAliasing = false)
+        /*
+        public virtual int DrawBitFontString(string FontName, uint color, string Text, int X, int Y, int Divide = 0)
         {
             BitFontDescriptor bitFontDescriptor = new BitFontDescriptor();
 
@@ -45,7 +46,35 @@ namespace Mosa.External.x86.Drawing
                 for (int i = 0; i < Lines[l].Length; i++)
                 {
                     char c = Lines[l][i];
-                    UsedX += BitFont.DrawBitFontChar(this, bitFontDescriptor.Raw, Size, color, bitFontDescriptor.Charset.IndexOf(c), UsedX + X, Y + bitFontDescriptor.Size * l, !DisableAntiAliasing) + 2 + Divide;
+                    UsedX += BitFont.DrawBitFontChar(this, bitFontDescriptor.Raw, Size, color, bitFontDescriptor.Charset.IndexOf(c), UsedX + X, Y + bitFontDescriptor.Size * l) + 2 + Divide;
+                }
+                TotalX += UsedX;
+            }
+
+            return TotalX;
+        }
+        */
+
+        public virtual int DrawBitFontString(string FontName, uint color, string Text, int X, int Y, int Divide = 0)
+        {
+            BitFontDescriptor bitFontDescriptor = new BitFontDescriptor();
+
+            foreach (var v in BitFont.RegisteredBitFont)
+                if (v.Name == FontName)
+                    bitFontDescriptor = v;
+
+            int Size = bitFontDescriptor.Size;
+
+            int TotalX = 0;
+            string[] Lines = Text.Split('\n');
+
+            for (int l = 0; l < Lines.Length; l++)
+            {
+                int UsedX = 0;
+                for (int i = 0; i < Lines[l].Length; i++)
+                {
+                    char c = Lines[l][i];
+                    UsedX += BitFont.DrawBitFontChar(this, bitFontDescriptor.Raw, Size, color, bitFontDescriptor.Charset.IndexOf(c), UsedX + X, Y + bitFontDescriptor.Size * l) + 2 + Divide;
                 }
                 TotalX += UsedX;
             }
