@@ -1,7 +1,9 @@
-﻿using Mosa.External.x86.Networking;
+﻿/*
+using Mosa.External.x86.Networking;
 using Mosa.Kernel;
 using Mosa.Kernel.x86;
 using Mosa.Runtime;
+
 using Mosa.Runtime.x86;
 
 namespace Mosa.External.x86.Driver
@@ -89,7 +91,7 @@ namespace Mosa.External.x86.Driver
             TxBufferPtr = (uint)TxBuffers;
 
             // Initialize init structure
-            /* Start Cosmos code */
+            // Start Cosmos code
             InitBlock = new MemoryBlock(28);
 
             InitBlock.Write32(0x00, (0x4 << 28) | (0x4 << 20));
@@ -99,7 +101,7 @@ namespace Mosa.External.x86.Driver
             InitBlock.Write32(0x10, 0x0);
             InitBlock.Write32(0x14, (uint)Rdes);
             InitBlock.Write32(0x18, (uint)Tdes);
-            /* End Cosmos code */
+            // End Cosmos code
 
             uint address = (uint)InitBlock.Address;
 
@@ -276,3 +278,4 @@ namespace Mosa.External.x86.Driver
         }
     }
 }
+*/
