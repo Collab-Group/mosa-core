@@ -2,6 +2,7 @@
 
 using Mosa.Kernel.x86.Smbios;
 using Mosa.Runtime;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Mosa.Kernel.x86
@@ -34,6 +35,8 @@ namespace Mosa.Kernel.x86
 			PageTable.Setup();
 			VirtualPageAllocator.Setup();
 			GC.Setup();
+
+			IDT.INTs = new List<IDT.INT>();
 
 			Scheduler.Setup();
 			SmbiosManager.Setup();

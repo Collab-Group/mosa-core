@@ -3,6 +3,7 @@
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
 using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -2259,12 +2260,33 @@ namespace Mosa.Kernel.x86
 
 				default:
 					{
+						if(INTs!= null) 
+						{
+							foreach(var v in INTs) 
+							{
+								if (v.IRQ == stack->Interrupt) Native.Call(v.Method);
+							}
+						}
 						Interrupt?.Invoke(stack->Interrupt, stack->ErrorCode);
 						break;
 					}
 			}
 
 			PIC.SendEndOfInterrupt(stack->Interrupt);
+		}
+
+		public static List<INT> INTs;
+
+		public struct INT 
+		{
+			public uint IRQ;
+			public uint Method;
+
+            public INT(uint irq,Action action)
+            {
+				this.IRQ = irq;
+				this.Method = (uint)Intrinsic.GetDelegateMethodAddress(action);
+            }
 		}
 
 		private unsafe static void Error(IDTStack* stack, string message)
