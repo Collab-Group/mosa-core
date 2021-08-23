@@ -87,9 +87,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 			Overrides = (overrides = new List<MosaMethod>()).AsReadOnly();
 		}
 
-		internal MosaMethod Clone()
+		override internal MosaMethod Clone()
 		{
-			var result = (MosaMethod)base.MemberwiseClone();
+			var result = (MosaMethod)base.Clone();
 
 			result.GenericArguments = (result.genericArguments = new GenericArgumentsCollection(genericArguments));
 
