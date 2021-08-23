@@ -2237,36 +2237,33 @@ namespace Mosa.Kernel.x86
 					Error(stack, "SIMD Floating-Point Exception");
 					break;
 
-				case 0x20:
-					PIT.OnInterrupt();
-
-					PIC.SendEndOfInterrupt(stack->Interrupt);
-
-					Interrupt?.Invoke(stack->Interrupt, stack->ErrorCode);
-
-					//Must Be Here. So It Can Switch The Threads
-					Native.Int(Scheduler.ClockIRQ);
-					return;
-
-				//We Are Not Expected To Support Floppy Disk. So We Use It As Thread Clock IRQ
-				//0x26 IRQ6
-				case Scheduler.ClockIRQ:
-					Scheduler.ClockInterrupt(new Pointer(stackStatePointer));
-					break;
-
-				case Scheduler.ThreadTerminationSignalIRQ:
-					Scheduler.TerminateCurrentThread();
-					break;
-
 				default:
 					{
-						if(INTs!= null) 
+						if (stack->Interrupt == 0x20)
 						{
-							foreach(var v in INTs) 
-							{
-								if (v.IRQ == stack->Interrupt) Native.Call(v.Method);
-							}
+							PIT.OnInterrupt();
+							//Must Be Here. So It Can Switch The Threads
+							PIC.SendEndOfInterrupt(stack->Interrupt);
+							Native.Int(Scheduler.ClockIRQ);
+							return;
 						}
+
+						if (stack->Interrupt == Scheduler.ClockIRQ)
+						{
+							Scheduler.ClockInterrupt((Pointer)stackStatePointer);
+						}
+
+						if (stack->Interrupt == Scheduler.ThreadTerminationSignalIRQ)
+						{
+							Scheduler.TerminateCurrentThread();
+						}
+
+						if (INTs != null) foreach (var v in INTs) if (v.IRQ == stack->Interrupt) 
+								{
+									GC.DisposeObject(v);
+									Native.Call(v.Method);
+								};
+
 						Interrupt?.Invoke(stack->Interrupt, stack->ErrorCode);
 						break;
 					}
