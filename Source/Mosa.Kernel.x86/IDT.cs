@@ -16,7 +16,7 @@ namespace Mosa.Kernel.x86
 	{
 		public delegate void InterruptHandler(uint irq, uint error);
 
-		private static InterruptHandler Interrupt;
+		public static event InterruptHandler OnInterrupt;
 
 		#region IDT Entry Offsets
 
@@ -53,7 +53,7 @@ namespace Mosa.Kernel.x86
 
 		public static void SetInterruptHandler(InterruptHandler interruptHandler)
 		{
-			Interrupt = interruptHandler;
+			OnInterrupt = interruptHandler;
 		}
 
 		/// <summary>
@@ -2245,7 +2245,7 @@ namespace Mosa.Kernel.x86
 									Native.Call(v.Method);
 								};
 
-						Interrupt?.Invoke(stack->Interrupt, stack->ErrorCode);
+						OnInterrupt?.Invoke(stack->Interrupt, stack->ErrorCode);
 
 						if (stack->Interrupt == 0x20)
 						{
