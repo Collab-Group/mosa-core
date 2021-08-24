@@ -44,6 +44,8 @@ namespace Mosa.External.x86.Networking
             BroadIP = new byte[] { 0xFF, 0xFF, 0xFF, 0xFF };
             BroadMAC = new byte[] { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
+            MACAddress = new byte[6];
+
             Console.Write("IP Address: ");
             for (int i = 0; i < 4; i++) Console.Write($"{IPAddress[i]}{((i == 3) ? "" : ":")}");
             Console.WriteLine();

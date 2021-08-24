@@ -37,7 +37,9 @@ namespace Mosa.External.x86.Networking
         }
 
         //Interface
-        //Check Out Intel825XX.cs Line 66
+        //Check Out Intel825XX.cs Line 67
+        //Check Out Intel825XX.cs Line 235
+        //If You Want To Implement A Network Driver You Must Set Ethernet.MACAddress
         public abstract void Send(byte* Buffer, ushort Length);
     }
 }

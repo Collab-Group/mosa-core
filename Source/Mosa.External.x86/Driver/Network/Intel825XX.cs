@@ -65,7 +65,6 @@ namespace Mosa.External.x86.Driver
             }
 
             //Must be set
-            Ethernet.MACAddress = new byte[6];
             if (!HasEEPROM)
             {
                 Ethernet.MACAddress[0] = In8(BAR0 + 0x5400);
