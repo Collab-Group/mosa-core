@@ -47,7 +47,7 @@ namespace Mosa.External.x86.Networking
             MACAddress = new byte[6];
 
             Console.Write("IP Address: ");
-            for (int i = 0; i < 4; i++) Console.Write($"{IPAddress[i]}{((i == 3) ? "" : ":")}");
+            for (int i = 0; i < 4; i++) Console.Write($"{IPAddress[i]}{((i == 3) ? "" : ".")}");
             Console.WriteLine();
         }
 
