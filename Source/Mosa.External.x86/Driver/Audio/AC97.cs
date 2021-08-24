@@ -1,5 +1,4 @@
-﻿using Mosa.External.x86;
-using Mosa.Kernel;
+﻿using Mosa.Kernel;
 using Mosa.Kernel.x86;
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
@@ -30,7 +29,7 @@ namespace Mosa.External.x86.Driver.Audio
         public const ushort ListLength = 32;
         public const ushort BufferLength = 0xFFFE;
 
-        public static bool Exsist = false;
+        public static bool Exists = false;
 
         public static byte max = 0;
 
@@ -38,21 +37,22 @@ namespace Mosa.External.x86.Driver.Audio
 
         public static byte* Buffer;
 
-        public static unsafe void Init()
+        public static byte IRQ;
+
+        public static unsafe void Initialize()
         {
             foreach (var device in PCI.Devices)
-            {
                 if (device.ClassID == 0x04 && device.Subclass == 0x01)
                 {
-                    Console.WriteLine("AC97 Device Found");
+                    Console.WriteLine("AC97 device found!");
 
                     device.EnableDevice();
-                    Console.WriteLine($"INT:{device.InterruptLine}");
+                    IRQ = device.InterruptLine;
+
+                    Console.WriteLine($"IRQ: {IRQ}");
 
                     NAM = device.BaseAddressBar[0].BaseAddress;
                     NABM = device.BaseAddressBar[1].BaseAddress;
-
-                    IDT.INTs.Add(new IDT.INT(0x20u, OnInterrupt));
 
                     Out8((ushort)(NABM + (ushort)Options.GlobalControlStat), 0x02);
 
@@ -64,10 +64,9 @@ namespace Mosa.External.x86.Driver.Audio
 
                     Buffer = (byte*)GC.AllocateObject(1024 * 1024);
 
-                    Console.WriteLine("AC97 Initialized");
-                    Exsist = true;
+                    Console.WriteLine("Successfully initialized the AC97 device!");
+                    Exists = true;
                 }
-            }
         }
 
         private static int Status;
@@ -75,7 +74,7 @@ namespace Mosa.External.x86.Driver.Audio
 
         private static void OnInterrupt()
         {
-            if (!Exsist) return;
+            if (!Exists) return;
 
             Status = In16((ushort)(NABM + PCM.OutStatusRegister));
             if (Status != 0) Out16((ushort)(NABM + PCM.OutStatusRegister), (ushort)(Status & 0x1E));
@@ -92,7 +91,7 @@ namespace Mosa.External.x86.Driver.Audio
         //48Khz DualChannel
         public static unsafe void Play(byte[] Data)
         {
-            if (!Exsist) return;
+            if (!Exists) return;
 
             int k = 0;
 
