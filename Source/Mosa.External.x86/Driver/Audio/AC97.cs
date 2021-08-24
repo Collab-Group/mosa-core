@@ -72,7 +72,7 @@ namespace Mosa.External.x86.Driver.Audio
         private static int Status;
         public static bool Finished { get => Status == 7; }
 
-        private static void OnInterrupt()
+        public static void OnInterrupt()
         {
             if (!Exists) return;
 
