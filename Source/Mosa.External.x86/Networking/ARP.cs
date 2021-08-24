@@ -98,6 +98,8 @@ namespace Mosa.External.x86.Networking
 
         public static byte[] Lookup(byte[] IP)
         {
+            if (EthernetController.Controller == null) return;
+
             foreach (var v in ARPEntries)
             {
                 if (
