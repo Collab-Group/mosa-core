@@ -2239,6 +2239,14 @@ namespace Mosa.Kernel.x86
 
 				default:
 					{
+						if (INTs != null) foreach (var v in INTs) if (v.IRQ == stack->Interrupt)
+								{
+									GC.DisposeObject(v);
+									Native.Call(v.Method);
+								};
+
+						Interrupt?.Invoke(stack->Interrupt, stack->ErrorCode);
+
 						if (stack->Interrupt == 0x20)
 						{
 							PIT.OnInterrupt();
@@ -2257,14 +2265,6 @@ namespace Mosa.Kernel.x86
 						{
 							Scheduler.TerminateCurrentThread();
 						}
-
-						if (INTs != null) foreach (var v in INTs) if (v.IRQ == stack->Interrupt) 
-								{
-									GC.DisposeObject(v);
-									Native.Call(v.Method);
-								};
-
-						Interrupt?.Invoke(stack->Interrupt, stack->ErrorCode);
 						break;
 					}
 			}
