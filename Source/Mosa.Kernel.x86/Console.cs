@@ -83,18 +83,20 @@ namespace Mosa.Kernel.x86
 
 		private static void Previous()
 		{
-			if (CursorLeft >= 0 && CursorTop >= 0)
+			if (CursorLeft == 0 && CursorTop == 0)
 			{
-				if (CursorLeft == 0 && CursorTop == 0)
-				{
-					return;
-				}
+				return;
+			}
 
 
-				if (CursorLeft != 0)
-				{
-					CursorLeft--;
-				}
+			if (CursorLeft != 0)
+			{
+				CursorLeft--;
+			}
+			else
+			{
+				CursorTop--;
+				CursorLeft = Columns - 1;
 			}
 		}
 
