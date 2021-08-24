@@ -2,6 +2,8 @@
 using Mosa.Kernel;
 using Mosa.Kernel.x86;
 using Mosa.Runtime;
+using Mosa.Runtime.x86;
+using System;
 using System.Runtime.InteropServices;
 using static Mosa.Runtime.x86.Native;
 
@@ -30,33 +32,37 @@ namespace Mosa.External.x86.Driver.Audio
 
         public static bool Exsist = false;
 
-        public static byte index = 0;
         public static byte max = 0;
 
         public static Pointer BufferListAddr;
 
-        public static unsafe void Initialize()
+        public static byte* Buffer;
+
+        public static unsafe void Init()
         {
-            foreach (var v in PCI.Devices)
+            foreach (var device in PCI.Devices)
             {
-                if (v.ClassID == 0x04 && v.Subclass == 0x01)
+                if (device.ClassID == 0x04 && device.Subclass == 0x01)
                 {
                     Console.WriteLine("AC97 Device Found");
 
-                    v.EnableDevice();
+                    device.EnableDevice();
+                    Console.WriteLine($"INT:{device.InterruptLine}");
 
-                    NAM = v.BaseAddressBar[0].BaseAddress;
-                    NABM = v.BaseAddressBar[1].BaseAddress;
+                    NAM = device.BaseAddressBar[0].BaseAddress;
+                    NABM = device.BaseAddressBar[1].BaseAddress;
 
+                    IDT.INTs.Add(new IDT.INT(0x20u, OnInterrupt));
 
                     Out8((ushort)(NABM + (ushort)Options.GlobalControlStat), 0x02);
 
-                    //                                                   11110000
                     Out8((ushort)(NABM + (ushort)PCM.OutControlRegister), 0xF0);
 
                     BufferListAddr = GC.AllocateObject((uint)(ListLength * sizeof(BufferDescriptor)));
 
                     Out32((ushort)(NAM + (ushort)Options.MasterVolume), 0x2020);
+
+                    Buffer = (byte*)GC.AllocateObject(1024 * 1024);
 
                     Console.WriteLine("AC97 Initialized");
                     Exsist = true;
@@ -64,22 +70,15 @@ namespace Mosa.External.x86.Driver.Audio
             }
         }
 
-        public static ushort status = 0;
+        private static int Status;
+        public static bool Finished { get => Status == 7; }
 
-        public static void OnInterrupt()
+        private static void OnInterrupt()
         {
             if (!Exsist) return;
 
-            status = In16((ushort)(NABM + PCM.OutStatusRegister));
-            if (status != 0) Out16((ushort)(NABM + PCM.OutStatusRegister), (ushort)(status & 0x1E));
-
-            if (status == 7)
-            {
-                index = (byte)((index + 1) % (max - 1));
-                UpdateIndex();
-            }
-
-            Console.WriteLine($"Status:{status}");
+            Status = In16((ushort)(NABM + PCM.OutStatusRegister));
+            if (Status != 0) Out16((ushort)(NABM + PCM.OutStatusRegister), (ushort)(Status & 0x1E));
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -91,33 +90,38 @@ namespace Mosa.External.x86.Driver.Audio
         }
 
         //48Khz DualChannel
-        public static unsafe void Play(MemoryBlock PCMRawData)
+        public static unsafe void Play(byte[] Data)
         {
             if (!Exsist) return;
 
-            uint k = 0;
-            for (uint i = 0; i < PCMRawData.Size - (PCMRawData.Size % BufferLength); i += BufferLength * 2)
+            int k = 0;
+
+            fixed (byte* P = Data) ASM.MEMCPY((uint)Buffer, (uint)P, (uint)Data.Length);
+
+            for (uint i = 0; i < Math.Clamp(Data.Length, 0, 1024 * 1024) - (Math.Clamp(Data.Length, 0, 1024 * 1024) % BufferLength); i += BufferLength * 2)
             {
                 BufferDescriptor* desc = (BufferDescriptor*)(BufferListAddr + (sizeof(BufferDescriptor) * k));
-                desc->Addr = (uint)(PCMRawData.Address + i);
+                desc->Addr = (uint)(Buffer + i);
                 desc->Size = BufferLength;
                 desc->Attr = 0b0000_0000_0000_0011;
                 k++;
             }
+
+            if (k > 0) k--;
             max = (byte)(k & 0xFF);
 
             Out8((ushort)(NABM + (ushort)PCM.OutControlRegister), 0x2);
-            PIT.Wait(10);
 
             Out32((ushort)(NABM + (ushort)PCM.OutBufferDescriptorBar), (uint)BufferListAddr);
 
-            index = 0;
-            UpdateIndex();
+            SetIndex(max);
+
+            GC.DisposeObject(Data);
 
             Play();
         }
 
-        private static void UpdateIndex()
+        private static void SetIndex(byte index)
         {
             Out8((ushort)(NABM + (ushort)PCM.OutLastValidIndex), index);
         }
