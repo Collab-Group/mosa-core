@@ -1,5 +1,4 @@
-﻿using Mosa.External.x86;
-using Mosa.External.x86.FileSystem;
+﻿using Mosa.External.x86.Driver;
 using Mosa.Kernel.x86;
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
@@ -68,6 +67,9 @@ namespace Mosa.External.x86.FileSystem
             public string Name;
             public string Parent;
             public DirectoryItem* Item;
+
+            public uint FountAtSec;
+            public uint FountAtOffset;
 
             public uint Cluster
             {
@@ -205,6 +207,31 @@ namespace Mosa.External.x86.FileSystem
         {
             if (FileName[0] != '/') FileName = "/" + FileName;
 
+            foreach (var v in Items)
+            {
+                if (v.Parent + v.Name == FileName)
+                {
+                    byte[] _Buffer = new byte[512];
+                    fixed (byte* _P = _Buffer)
+                    {
+                        Disk.ReadBlock(v.FountAtSec, 1, _Buffer);
+                        DirectoryItem* _Item = (DirectoryItem*)(_P + v.FountAtOffset);
+                        _Item->Size = (uint)Data.Length;
+                        uint _Clus = (uint)(_Item->ClusterHigh << 16 | _Item->ClusterLow);
+
+                        uint _CNT = (uint)(_Item->Size / IDE.SectorSize + ((_Item->Size % IDE.SectorSize) != 0 ? 1 : 0));
+                        byte[] _B = new byte[IDE.SectorSize * _CNT];
+                        for (int i = 0; i < Data.Length; i++) _B[i] = Data[i];
+                        Disk.WriteBlock(GetSectorOffset(_Clus), _CNT, _B);
+
+                        GC.DisposeObject(_B);
+                        GC.DisposeObject(_Buffer);
+
+                        return;
+                    }
+                }
+            }
+
             uint SectorsWillUse = GetSectorsWillUse((uint)Data.Length);
             uint ClusterWillUse = GetClustersWillUse((uint)Data.Length);
 
@@ -309,16 +336,16 @@ namespace Mosa.External.x86.FileSystem
             goto Retry;
         }
 
-        public bool Exist(string FileName) 
+        public bool Exist(string FileName)
         {
             string Path = "/";
-            if (FileName[0] == '/') 
+            if (FileName[0] == '/')
             {
                 Path = FileName.Substring(0, FileName.LastIndexOf('/') + 1);
             }
             string Name = FileName.Substring(Path.Length);
 
-            foreach(var v in Items) 
+            foreach (var v in Items)
             {
                 if (v.Name == Name && v.Parent == Path) return true;
             }
@@ -362,7 +389,10 @@ namespace Mosa.External.x86.FileSystem
                     ADirectoryItem aDirectoryItem = new ADirectoryItem()
                     {
                         Item = item,
-                        Parent = parent
+                        Parent = parent,
+
+                        FountAtSec = sector + Index,
+                        FountAtOffset = i
                     };
                     if (item->Attribute == Attributes.SubDirectory)
                     {
