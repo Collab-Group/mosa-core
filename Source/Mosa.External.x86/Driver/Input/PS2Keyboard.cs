@@ -19,7 +19,7 @@ namespace Mosa.External.x86.Driver
 
             KeyAvailable = true;
 
-            IsCapsLock = KData == (byte)KeyCode.CapsLock;
+            if (KData == (byte)KeyCode.CapsLock) IsCapsLock = !IsCapsLock;
         }
 
         public static bool KeyAvailable = false;
