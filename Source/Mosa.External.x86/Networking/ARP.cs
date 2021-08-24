@@ -98,7 +98,7 @@ namespace Mosa.External.x86.Networking
 
         public static byte[] Lookup(byte[] IP)
         {
-            if (EthernetController.Controller == null) return null;
+            if (EthernetController.Controller == null) return Ethernet.BroadMAC;
 
             foreach (var v in ARPEntries)
             {
