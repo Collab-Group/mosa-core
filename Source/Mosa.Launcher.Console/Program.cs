@@ -212,7 +212,7 @@ namespace Mosa.Launcher.Console
             processStartInfo.FileName = VirtualBoxPath;
 
             string path = @"C:\Users\" + Environment.UserName + @"\VirtualBox VMs";
-            if (!Directory.Exists(path + @"\MOSA"))
+            if (!File.Exists(path + @"\MOSA\MOSA.vbox"))
             {
                 //Import VM
                 processStartInfo.Arguments = $"import \"{AppFolder + @"\Tools\virtualbox\MOSA.ova"}\"";
