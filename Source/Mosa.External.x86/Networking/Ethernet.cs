@@ -85,6 +85,8 @@ namespace Mosa.External.x86.Networking
 
         public static void SendPacket(byte[] DestMAC, ushort Type, byte* Payload, ushort PayloadLength)
         {
+            if (EthernetController.Controller == null) return;
+
             //Max Packet Size
             byte* buffer = (byte*)GC.AllocateObject(ushort.MaxValue);
             EthernetHeader* header = (EthernetHeader*)buffer;
