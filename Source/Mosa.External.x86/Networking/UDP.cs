@@ -35,12 +35,7 @@ namespace Mosa.External.x86.Networking
         }
 
         public delegate void PacketReceivedHandler(byte[] Buffer, ushort Port);
-        public static PacketReceivedHandler ReceivedHandler;
-
-        public static void SetReceivedHandler(PacketReceivedHandler handler) 
-        {
-            ReceivedHandler = handler;
-        }
+        public static event PacketReceivedHandler OnReceived;
 
         internal static void HandlePacket(byte* frame, ushort length)
         {
@@ -54,7 +49,7 @@ namespace Mosa.External.x86.Networking
             {
                 ASM.MEMCPY((uint)P, (uint)frame, length);
             }
-            ReceivedHandler?.Invoke(Buffer, Ethernet.SwapLeftRight(header->DestPort));
+            OnReceived?.Invoke(Buffer, Ethernet.SwapLeftRight(header->DestPort));
             GC.DisposeObject(Buffer);
         }
     }
