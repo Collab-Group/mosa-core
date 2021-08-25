@@ -9,6 +9,8 @@ namespace Mosa.Kernel.x86
     /// </summary>
     public static class CMOS
     {
+        private static byte B;
+
         /// <summary>
         /// Gets the specified index.
         /// </summary>
@@ -62,7 +64,7 @@ namespace Mosa.Kernel.x86
         {
             get
             {
-                byte B = Get(0);
+                B = Get(0);
                 return (byte)((B & 0x0F) + ((B / 16) * 10));
             }
         }
@@ -75,7 +77,7 @@ namespace Mosa.Kernel.x86
         {
             get
             {
-                byte B = Get(2);
+                B = Get(2);
                 return (byte)((B & 0x0F) + ((B / 16) * 10));
             }
         }
@@ -88,7 +90,7 @@ namespace Mosa.Kernel.x86
         {
             get
             {
-                byte B = Get(4);
+                B = Get(4);
                 return (byte)(((B & 0x0F) + ((B & 0x70) / 16 * 10)) | (B & 0x80));
             }
         }
@@ -101,7 +103,7 @@ namespace Mosa.Kernel.x86
         {
             get
             {
-                byte B = Get(9);
+                B = Get(9);
                 return (byte)((B & 0x0F) + ((B / 16) * 10));
             }
         }
@@ -114,7 +116,7 @@ namespace Mosa.Kernel.x86
         {
             get
             {
-                byte B = Get(8);
+                B = Get(8);
                 return (byte)((B & 0x0F) + ((B / 16) * 10));
             }
         }
@@ -127,7 +129,7 @@ namespace Mosa.Kernel.x86
         {
             get
             {
-                byte B = Get(7);
+                B = Get(7);
                 return (byte)((B & 0x0F) + ((B / 16) * 10));
             }
         }
