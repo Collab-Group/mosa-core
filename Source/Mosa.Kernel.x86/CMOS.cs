@@ -95,6 +95,15 @@ namespace Mosa.Kernel.x86
             }
         }
 
+        public static byte Century
+        {
+            get
+            {
+                B = Get(0x32);
+                return (byte)((B & 0x0F) + ((B / 16) * 10));
+            }
+        }
+
         /// <summary>
         /// Gets the year.
         /// </summary>
