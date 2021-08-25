@@ -129,7 +129,9 @@ namespace Mosa.External.x86.FileSystem
             Partition = partition;
             Items = new List<ADirectoryItem>();
 
-            DBR = (FAT32_DBR*)ReadBlock(Partition.LBA, 1).Address;
+            byte[] Buffer = new byte[512];
+            disk.ReadBlock(Partition.LBA, 1, Buffer);
+            fixed (byte* P = Buffer) DBR = (FAT32_DBR*)P;
             Console.WriteLine($"OEMName:{string.FromPointer(DBR->BS_OEMName, 8)}");
             Console.WriteLine($"FileSystemType:{string.FromPointer(DBR->BS_FilSysType1, 8)}");
 
@@ -217,6 +219,8 @@ namespace Mosa.External.x86.FileSystem
                         Disk.ReadBlock(v.FountAtSec, 1, _Buffer);
                         DirectoryItem* _Item = (DirectoryItem*)(_P + v.FountAtOffset);
                         _Item->Size = (uint)Data.Length;
+                        Disk.WriteBlock(v.FountAtSec, 1, _Buffer);
+
                         uint _Clus = (uint)(_Item->ClusterHigh << 16 | _Item->ClusterLow);
 
                         uint _CNT = (uint)(_Item->Size / IDE.SectorSize + ((_Item->Size % IDE.SectorSize) != 0 ? 1 : 0));
@@ -244,15 +248,20 @@ namespace Mosa.External.x86.FileSystem
             uint Cluster = 3;
             uint TargetDirectorySector = 0;
 
-            uint LastClusters = 0;
-            uint LastClusterInItems = 0;
-
             foreach (var v in Items)
             {
-                if (v.Cluster > LastClusterInItems)
+                if (v.Cluster + GetClustersWillUse(v.Size) > Cluster)
                 {
-                    LastClusterInItems = v.Cluster;
-                    LastClusters = GetClustersWillUse(v.Size);
+                    if (v.Item->Attribute != Attributes.SubDirectory)
+                    {
+                        Cluster = v.Cluster;
+                        Cluster += GetClustersWillUse(v.Size);
+                    }
+                    else
+                    {
+                        Cluster = v.Cluster;
+                        Cluster += 1;
+                    }
                 }
 
                 if (Path != "/")
@@ -262,16 +271,19 @@ namespace Mosa.External.x86.FileSystem
                         TargetDirectorySector = GetSectorOffset(v.Cluster);
                     }
                 }
-                else
-                {
-                    TargetDirectorySector = GetSectorOffset(DBR->BPB_RootClus);
-                }
             }
 
-            Cluster = LastClusterInItems;
-            Cluster += LastClusters;
+            if (Path == "/")
+            {
+                TargetDirectorySector = GetSectorOffset(DBR->BPB_RootClus);
+            }
+
+            if (TargetDirectorySector == 0) Console.WriteLine("No Such Directory");
 
             DirectoryItem* item = (DirectoryItem*)GC.AllocateObject((uint)sizeof(DirectoryItem));
+
+            item->CreateDate = (ushort)((CMOS.Century * 100 + CMOS.Year - 1980) << 9 | CMOS.Month << 5 | CMOS.Day);
+
             ASM.MEMFILL((uint)item, 11, 0x20);
             for (int i = 0; i < 8; i++)
             {
@@ -368,59 +380,54 @@ namespace Mosa.External.x86.FileSystem
             uint Index = 0;
             do
             {
+                byte[] Buffer = new byte[512];
                 //Use Cluster Per Sector? 
-                MemoryBlock block = ReadBlock(sector + Index, 1);
-                for (uint i = 0; i < 512; i += 32)
+                Disk.ReadBlock(sector + Index, 1, Buffer);
+                fixed (byte* P = Buffer)
                 {
-                    switch (Native.Get8((uint)(block.Address + i)))
+                    for (uint i = 0; i < 512; i += 32)
                     {
-                        case Status.Empty:
-                            block.Free();
-                            Console.WriteLine("Finish");
-                            return;
-                        case Status.SpecialFile:
-                            continue;
-                        case Status.Deleted:
-                            continue;
-                    }
-                    DirectoryItem* item = (DirectoryItem*)GC.AllocateObject((uint)sizeof(DirectoryItem));
-                    ASM.MEMCPY((uint)item, (uint)(block.Address + i), 32);
+                        switch (Native.Get8((uint)(P + i)))
+                        {
+                            case Status.Empty:
+                                GC.DisposeObject(Buffer);
+                                Console.WriteLine("Finish");
+                                return;
+                            case Status.SpecialFile:
+                                continue;
+                            case Status.Deleted:
+                                continue;
+                        }
+                        DirectoryItem* item = (DirectoryItem*)GC.AllocateObject((uint)sizeof(DirectoryItem));
+                        ASM.MEMCPY((uint)item, (uint)(P + i), 32);
 
-                    ADirectoryItem aDirectoryItem = new ADirectoryItem()
-                    {
-                        Item = item,
-                        Parent = parent,
+                        ADirectoryItem aDirectoryItem = new ADirectoryItem()
+                        {
+                            Item = item,
+                            Parent = parent,
 
-                        FountAtSec = sector + Index,
-                        FountAtOffset = i
-                    };
-                    if (item->Attribute == Attributes.SubDirectory)
-                    {
-                        aDirectoryItem.Name = string.FromPointer(item->Name, 8, 0x20) + string.FromPointer(item->Name + 8, 3, 0x20);
-                    }
-                    else
-                    {
-                        aDirectoryItem.Name = string.FromPointer(item->Name, 8, 0x20) + "." + string.FromPointer(item->Name + 8, 3, 0x20);
-                    }
-                    Items.Add(aDirectoryItem);
+                            FountAtSec = sector + Index,
+                            FountAtOffset = i
+                        };
+                        if (item->Attribute == Attributes.SubDirectory)
+                        {
+                            aDirectoryItem.Name = string.FromPointer(item->Name, 8, 0x20) + string.FromPointer(item->Name + 8, 3, 0x20);
+                        }
+                        else
+                        {
+                            aDirectoryItem.Name = string.FromPointer(item->Name, 8, 0x20) + "." + string.FromPointer(item->Name + 8, 3, 0x20);
+                        }
+                        Items.Add(aDirectoryItem);
 
-                    if (item->Attribute == Attributes.SubDirectory)
-                    {
-                        //Maybe Bugs
-                        ReadList(GetSectorOffset(Items[Items.Count - 1].Cluster), parent + string.FromPointer(item->Name, 8, 0x20) + "/");
+                        if (item->Attribute == Attributes.SubDirectory)
+                        {
+                            //Maybe Bugs
+                            ReadList(GetSectorOffset(Items[Items.Count - 1].Cluster), parent + string.FromPointer(item->Name, 8, 0x20) + "/");
+                        }
                     }
+                    GC.DisposeObject(Buffer);
                 }
-                block.Free();
             } while (Index++ != -1);
-        }
-
-        public MemoryBlock ReadBlock(uint sector, uint count)
-        {
-            byte[] buffer = new byte[SectorSize * count];
-            Disk.ReadBlock(sector, count, buffer);
-            MemoryBlock block = new MemoryBlock(buffer);
-            GC.DisposeObject(buffer);
-            return block;
         }
     }
 }
