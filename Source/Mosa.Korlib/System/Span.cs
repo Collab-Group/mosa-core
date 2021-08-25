@@ -1,4 +1,4 @@
-// Copyright (c) MOSA Project. Licensed under the New BSD License.
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
@@ -11,14 +11,6 @@ namespace System
 	{
 		internal readonly ByReference<T> _pointer;
 		private readonly int _length;
-
-		public T Pointer
-		{
-			get
-			{
-				return _pointer.Value;
-			}
-		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public unsafe Span(void* pointer, int length)
