@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 namespace Mosa.External.x86.FileSystem
 //namespace MOSA2
 {
+    //TO-DO Windows Can't Find The File Specificed. And The Sector Of The File Is Totally Correct Item Is Correct Too
     //Reference:https://blog.csdn.net/liyun123gx/article/details/38440225
     //Reference:https://blog.csdn.net/tq384998430/article/details/53414142
     public unsafe class FAT32
@@ -17,7 +18,7 @@ namespace Mosa.External.x86.FileSystem
         {
             public fixed byte BS_jmpBoot[3];        //跳转指令 offset: 0
             public fixed byte BS_OEMName[8];        //原始制造商 offset: 3
-            public fixed byte BPB_BytesPerSec[2];   //每扇区字节数 offset:11
+            public ushort BPB_BytesPerSec;   //每扇区字节数 offset:11
             public byte BPB_SecPerClus;             //每簇扇区数 offset:13
             public ushort BPB_RsvdSecCnt;           //保留扇区数目 offset:14
             public byte BPB_NumFATs;                //此卷中FAT表数 offset:16
@@ -135,7 +136,8 @@ namespace Mosa.External.x86.FileSystem
             Console.WriteLine($"OEMName:{string.FromPointer(DBR->BS_OEMName, 8)}");
             Console.WriteLine($"FileSystemType:{string.FromPointer(DBR->BS_FilSysType1, 8)}");
 
-            uint RootDirectorySector = GetSectorOffset(DBR->BPB_RootClus);
+            RootDirectorySector = Partition.LBA + DBR->BPB_RsvdSecCnt + DBR->BPB_FATSz32 * DBR->BPB_NumFATs + (DBR->BPB_RootClus - 2u) * DBR->BPB_SecPerClus;
+            Console.WriteLine($"Root Directory Cluster:{DBR->BPB_RootClus}");
             Console.WriteLine($"Root Directory Sector:{RootDirectorySector}");
 
             Console.WriteLine($"Sectors Per Cluster:{DBR->BPB_SecPerClus}");
@@ -143,9 +145,11 @@ namespace Mosa.External.x86.FileSystem
             ReadList(RootDirectorySector, "/");
         }
 
+        private uint RootDirectorySector;
+
         public uint GetSectorOffset(uint Cluster)
         {
-            return Partition.LBA + DBR->BPB_RsvdSecCnt + DBR->BPB_FATSz32 * DBR->BPB_NumFATs + (Cluster - 2) * DBR->BPB_SecPerClus;
+            return RootDirectorySector + ((Cluster - 2) * DBR->BPB_SecPerClus);
         }
 
         public byte[] ReadAllBytes(string FileName)
@@ -283,6 +287,14 @@ namespace Mosa.External.x86.FileSystem
             DirectoryItem* item = (DirectoryItem*)GC.AllocateObject((uint)sizeof(DirectoryItem));
 
             item->CreateDate = (ushort)((CMOS.Century * 100 + CMOS.Year - 1980) << 9 | CMOS.Month << 5 | CMOS.Day);
+            item->CreateTime = (ushort)(CMOS.Hour << 11 | CMOS.Minute << 5 | CMOS.Second);
+
+            item->LastModifyDate = item->CreateDate;
+            item->LastModifyTime = item->CreateTime;
+
+            item->LastAccessDate = item->CreateDate;
+
+            item->Reserved = 0x10;
 
             ASM.MEMFILL((uint)item, 11, 0x20);
             for (int i = 0; i < 8; i++)
