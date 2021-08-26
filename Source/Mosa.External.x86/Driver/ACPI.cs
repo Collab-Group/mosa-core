@@ -2,7 +2,6 @@
 using Mosa.Runtime;
 using System.Runtime.InteropServices;
 using Mosa.Runtime.x86;
-using Mosa.Kernel;
 using System;
 
 namespace Mosa.External.x86.Driver
@@ -238,16 +237,108 @@ namespace Mosa.External.x86.Driver
             EnableACPI();
         }
 
+        private static byte ParseInteger(byte* s5_addr, ulong* value)
+        {
+            byte op = *s5_addr++;
+            if (op == 0x0)
+            { // ZeroOp
+                *value = 0;
+                return 1; // 1 Op Byte
+            }
+            else if (op == 0x1)
+            { // OneOp
+                *value = 1;
+                return 1; // 1 Op Byte
+            }
+            else if (op == 0xFF)
+            { // OnesOp
+                *value = unchecked((ulong)~0);
+                return 1; // 1 Op Byte
+            }
+            else if (op == 0xA)
+            { // ByteConst
+                *value = s5_addr[0];
+                return 2; // 1 Type Byte, 1 Data Byte
+            }
+            else if (op == 0xB)
+            { // WordConst
+                *value = (ulong)(s5_addr[0] | (s5_addr[1] << 8));
+                return 3; // 1 Type Byte, 3 Data Bytes
+            }
+            else if (op == 0xC)
+            { // DWordConst
+                *value = s5_addr[0] | ((uint)s5_addr[1] << 8) | ((uint)s5_addr[2] << 16) | ((uint)s5_addr[3] << 24);
+                return 5; // 1 Type Byte, 4 Data Bytes
+            }
+            else if (op == 0xE)
+            { // QWordConst
+                *value = s5_addr[0] | ((ulong)s5_addr[1] << 8) | ((ulong)s5_addr[2] << 16) | ((ulong)s5_addr[3] << 24)
+                    | ((ulong)s5_addr[4] << 32) | ((ulong)s5_addr[5] << 40) | ((ulong)s5_addr[6] << 48) | ((ulong)s5_addr[7] << 56);
+                return 9; // 1 Type Byte, 8 Data Bytes
+            }
+            else
+            {
+                return 0; // No Integer, so something weird
+            }
+        }
+
         //https://github.com/mintsuki-org/facp_shutdown_hack/blob/master/facp_shutdown_hack.c
         public static void Shutdown()
         {
             if (FADT != null && Enabled)
             {
-                if (PCI.Exists(VendorID.VirtualBox, DeviceID.VBoxGuest))
-                    Native.Out16(0x4004, 0x3400);
-                else if (PCI.Exists(VendorID.Bochs, DeviceID.BGA))
-                    Native.Out16(0xB004, 0x2000);
-                else { } // We might support QEMU (address 0x604, value 0x2000 for newer versions of QEMU) but we also need to detect QEMU
+                byte* dsdtPtr = (byte*)(UIntPtr)FADT->Dsdt + 36;
+                uint dsdtLen = *((uint*)((UIntPtr)FADT->Dsdt + 4)) - 36;
+
+                byte* s5_addr;
+                for (int i = 0; i < dsdtLen; i++)
+                    if ((dsdtPtr + i)[0] == '_' && (dsdtPtr + i)[1] == 'S' && (dsdtPtr + i)[2] == '5' && (dsdtPtr + i)[3] == '_')
+                    {
+                        s5_addr = dsdtPtr + i;
+
+                        s5_addr += 4; // Skip last part of NameSeg, the earlier segments of the NameString were already tackled by the search loop
+                        if (*s5_addr++ != 0x12) // Assert that it is a PackageOp, if its a Method or something there's not much we can do with such a basic parser
+                        {
+                            Console.WriteLine("_S5_ is a method.");
+                            return;
+                        }
+                        s5_addr += ((*s5_addr & 0xc0) >> 6) + 1; // Skip PkgLength
+                        if (*s5_addr++ < 2) // Make sure there are at least 2 elements, which we need, normally there are 4
+                        {
+                            Console.WriteLine("_S5_ has less than 2 elements.");
+                            return;
+                        }
+
+                        ulong value = 0;
+                        byte size = ParseInteger(s5_addr, &value);
+                        if (size == 0) // Wasn't able to parse it
+                        {
+                            Console.WriteLine("Couldn't parse SLP_TYPa.");
+                            return;
+                        }
+
+                        ushort SLP_TYPa = (ushort)(value << 10);
+                        s5_addr += size;
+
+                        size = ParseInteger(s5_addr, &value);
+                        if (size == 0) // Wasn't able to parse it
+                        {
+                            Console.WriteLine("Couldn't parse SLP_TYPb.");
+                            return;
+                        }
+
+                        ushort SLP_TYPb = (ushort)(value << 10);
+                        s5_addr += size;
+
+                        // Maybe enable ACPI here?
+
+                        Native.Out16((ushort)FADT->PM1aControlBlock, (ushort)(SLP_TYPa | (1 << 13)));
+                        if (FADT->PM1bControlBlock != 0)
+                            Native.Out16((ushort)FADT->PM1bControlBlock, (ushort)(SLP_TYPb | (1 << 13)));
+                    }
+
+                Console.WriteLine("No _S5_ found!");
+                return;
             }
         }
 
