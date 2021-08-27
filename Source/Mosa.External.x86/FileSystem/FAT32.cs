@@ -1,4 +1,9 @@
-﻿using Mosa.External.x86.Driver;
+﻿//Reference:https://blog.csdn.net/liyun123gx/article/details/38440225
+//Reference:https://blog.csdn.net/tq384998430/article/details/53414142
+//Reference:https://blog.csdn.net/qq_37770927/article/details/103284871
+
+using Mosa.External.x86;
+using Mosa.External.x86.FileSystem;
 using Mosa.Kernel.x86;
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
@@ -6,11 +11,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 namespace Mosa.External.x86.FileSystem
-//namespace MOSA2
 {
-    //TO-DO Windows Can't Find The File Specificed. And The Sector Of The File Is Totally Correct Item Is Correct Too
-    //Reference:https://blog.csdn.net/liyun123gx/article/details/38440225
-    //Reference:https://blog.csdn.net/tq384998430/article/details/53414142
     public unsafe class FAT32
     {
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -226,12 +227,16 @@ namespace Mosa.External.x86.FileSystem
                         Disk.ReadBlock(v.FountAtSec, 1, _Buffer);
                         DirectoryItem* _Item = (DirectoryItem*)(_P + v.FountAtOffset);
                         _Item->Size = (uint)Data.Length;
+
+                        _Item->LastModifyDate = (ushort)((CMOS.Century * 100 + CMOS.Year - 1980) << 9 | CMOS.Month << 5 | CMOS.Day);
+                        _Item->LastModifyTime = (ushort)(CMOS.Hour << 11 | CMOS.Minute << 5 | CMOS.Second);
+
                         Disk.WriteBlock(v.FountAtSec, 1, _Buffer);
 
                         uint _Clus = (uint)(_Item->ClusterHigh << 16 | _Item->ClusterLow);
 
-                        uint _CNT = (uint)(_Item->Size / IDE.SectorSize + ((_Item->Size % IDE.SectorSize) != 0 ? 1 : 0));
-                        byte[] _B = new byte[IDE.SectorSize * _CNT];
+                        uint _CNT = (uint)(_Item->Size / DBR->BPB_BytesPerSec + ((_Item->Size % DBR->BPB_BytesPerSec) != 0 ? 1 : 0));
+                        byte[] _B = new byte[DBR->BPB_BytesPerSec * _CNT];
                         for (int i = 0; i < Data.Length; i++) _B[i] = Data[i];
                         Disk.WriteBlock(GetSectorOffset(_Clus), _CNT, _B);
 
