@@ -18,7 +18,7 @@ namespace Mosa.External.x86.FileSystem
         {
             public fixed byte BS_jmpBoot[3];        //跳转指令 offset: 0
             public fixed byte BS_OEMName[8];        //原始制造商 offset: 3
-            public ushort BPB_BytesPerSec;   //每扇区字节数 offset:11
+            public ushort BPB_BytesPerSec;          //每扇区字节数 offset:11
             public byte BPB_SecPerClus;             //每簇扇区数 offset:13
             public ushort BPB_RsvdSecCnt;           //保留扇区数目 offset:14
             public byte BPB_NumFATs;                //此卷中FAT表数 offset:16
@@ -141,6 +141,9 @@ namespace Mosa.External.x86.FileSystem
             Console.WriteLine($"Root Directory Sector:{RootDirectorySector}");
 
             Console.WriteLine($"Sectors Per Cluster:{DBR->BPB_SecPerClus}");
+
+            Console.WriteLine($"FAT1:{ DBR->BPB_RsvdSecCnt * DBR->BPB_BytesPerSec}");
+            Console.WriteLine($"RSVD Count:{ DBR->BPB_RsvdSecCnt}");
 
             ReadList(RootDirectorySector, "/");
         }
@@ -294,8 +297,6 @@ namespace Mosa.External.x86.FileSystem
 
             item->LastAccessDate = item->CreateDate;
 
-            item->Reserved = 0x10;
-
             ASM.MEMFILL((uint)item, 11, 0x20);
             for (int i = 0; i < 8; i++)
             {
@@ -327,6 +328,30 @@ namespace Mosa.External.x86.FileSystem
                 bufferToWrite[i] = Data[i];
             }
             Disk.WriteBlock(GetSectorOffset(Cluster), SectorsWillUse, bufferToWrite);
+
+            #region Bugs Maybe
+            //WriteRsvdSec
+            byte[] rsvdsec = new byte[512];
+            Disk.ReadBlock(Partition.LBA + 1, 1, rsvdsec);
+            fixed (byte* rsvdp = rsvdsec) *(uint*)(rsvdp + (512 - 20)) = Cluster;
+            Disk.WriteBlock(Partition.LBA + 1, 1, rsvdsec);
+
+            byte[] fat1 = new byte[512];
+            //WriteFAT1
+            uint Pos = Partition.LBA + DBR->BPB_RsvdSecCnt + ((Cluster * 4) / DBR->BPB_BytesPerSec);
+            Console.WriteLine($"Pos:{Pos}");
+            Disk.ReadBlock(Pos, 1, fat1);
+            //?
+            fixed (byte* bp = fat1)
+            {
+                *(uint*)(bp + ((Cluster * 4) % 512)) = 0x0FFFFFFF;
+            }
+            Disk.WriteBlock(Pos, 1, fat1);
+
+            GC.Free(rsvdsec);
+            GC.Free(fat1);
+            #endregion
+
             //WriteItem
             uint Index = 0;
             byte[] buffer = new byte[SectorSize];
