@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -8,10 +9,10 @@ namespace Mosa.Runtime
     public unsafe static class GC
     {
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        private struct MEM_FREE_DESCRIPTOR
+        private struct FreeMemoryDescriptor
         {
-            public uint ADDR;
-            public uint SIZE;
+            public uint Address;
+            public uint Size;
         }
 
         // This method will be plugged by the platform specific implementation;
@@ -28,15 +29,15 @@ namespace Mosa.Runtime
         {
             if (READY)
             {
-                for (uint u = 0; u < FREE_DESCRIPTORS_SIZE; u += (2 * sizeof(uint)))
+                for (uint u = 0; u < DescriptorsSize; u += (2 * sizeof(uint)))
                 {
-                    if (((MEM_FREE_DESCRIPTOR*)(FREE_DESCRIPTORS_ADDR + u))->SIZE >= size)
+                    if (((FreeMemoryDescriptor*)(DescriptorsAddress + u))->Size >= size)
                     {
-                        Pointer RESULT = new Pointer(((MEM_FREE_DESCRIPTOR*)(FREE_DESCRIPTORS_ADDR + u))->ADDR);
+                        Pointer RESULT = new Pointer(((FreeMemoryDescriptor*)(DescriptorsAddress + u))->Address);
 
                         //Clear
-                        ((MEM_FREE_DESCRIPTOR*)(FREE_DESCRIPTORS_ADDR + u))->SIZE -= size;
-                        ((MEM_FREE_DESCRIPTOR*)(FREE_DESCRIPTORS_ADDR + u))->ADDR += size;
+                        ((FreeMemoryDescriptor*)(DescriptorsAddress + u))->Size -= size;
+                        ((FreeMemoryDescriptor*)(DescriptorsAddress + u))->Address += size;
 
                         return RESULT;
                     }
@@ -48,25 +49,26 @@ namespace Mosa.Runtime
             return AllocateMemory(size);
         }
 
-        private static uint FREE_DESCRIPTORS_ADDR;
-        private static uint FREE_DESCRIPTORS_SIZE;
-        private const uint FREE_DESCRIPTORS_NUMBER = 4096;
+        private static uint DescriptorsAddress;
+        private static uint DescriptorsSize;
+        private const uint DescriptorsNumber = 4096;
         private static bool READY = false;
 
         public static void Setup()
         {
-            FREE_DESCRIPTORS_SIZE = FREE_DESCRIPTORS_NUMBER * (2 * sizeof(uint));
-            FREE_DESCRIPTORS_ADDR = (uint)AllocateMemory(FREE_DESCRIPTORS_SIZE);
+            DescriptorsSize = DescriptorsNumber * (2 * sizeof(uint));
+            DescriptorsAddress = (uint)AllocateMemory(DescriptorsSize);
 
-            for (uint u = 0; u < FREE_DESCRIPTORS_SIZE; u += (2 * sizeof(uint)))
+            for (uint u = 0; u < DescriptorsSize; u += (2 * sizeof(uint)))
             {
-                ((MEM_FREE_DESCRIPTOR*)(FREE_DESCRIPTORS_ADDR + u))->ADDR = 0;
-                ((MEM_FREE_DESCRIPTOR*)(FREE_DESCRIPTORS_ADDR + u))->SIZE = 0;
+                ((FreeMemoryDescriptor*)(DescriptorsAddress + u))->Address = 0;
+                ((FreeMemoryDescriptor*)(DescriptorsAddress + u))->Size = 0;
             }
 
             READY = true;
         }
-
+        
+        [Obsolete("use GC.Free")]
         public static void DisposeObject(object obj)
         {
             // An object has the following memory layout:
@@ -74,35 +76,38 @@ namespace Mosa.Runtime
             //   - Pointer SyncBlock
             //   - 0 .. n object data fields
 
-            uint _ADDR = (uint)Intrinsic.GetObjectAddress(obj);
+            uint Address = (uint)Intrinsic.GetObjectAddress(obj);
             //                   ///                      Size Of Object Data                ///Size Of  TypeDef And SyncBlock///              
-            uint _SIZE = (uint)((*((uint*)(obj.GetType().TypeHandle.Value + (Pointer.Size * 3)))) + 2 * sizeof(Pointer));
-            Free(_ADDR, _SIZE);
+            uint Size = (uint)((*((uint*)(obj.GetType().TypeHandle.Value + (Pointer.Size * 3)))) + 2 * sizeof(Pointer));
+            Free(Address, Size);
         }
 
-        public static void Free(uint _ADDR, uint _SIZE)
+        public static void Free(uint Address, uint Size)
         {
-            for (uint u = 0; u < FREE_DESCRIPTORS_SIZE; u += (2 * sizeof(uint)))
+            for (uint u = 0; u < DescriptorsSize; u += (2 * sizeof(uint)))
             {
-                if (((MEM_FREE_DESCRIPTOR*)(FREE_DESCRIPTORS_ADDR + u))->SIZE == 0)
+                if (((FreeMemoryDescriptor*)(DescriptorsAddress + u))->Size == 0)
                 {
-                    ((MEM_FREE_DESCRIPTOR*)(FREE_DESCRIPTORS_ADDR + u))->ADDR = _ADDR;
-                    ((MEM_FREE_DESCRIPTOR*)(FREE_DESCRIPTORS_ADDR + u))->SIZE = _SIZE;
+                    Internal.MemoryClear((Pointer)Address, Size);
+                    ((FreeMemoryDescriptor*)(DescriptorsAddress + u))->Address = Address;
+                    ((FreeMemoryDescriptor*)(DescriptorsAddress + u))->Size = Size;
                     break;
                 }
             }
         }
 
-        public static uint GCFreeMemory()
+        public static void Free(object obj)
         {
-            uint FREESIZE = 0;
+            // An object has the following memory layout:
+            //   - Pointer TypeDef
+            //   - Pointer SyncBlock
+            //   - 0 .. n object data fields
+            if (obj == null) return;
 
-            for (uint u = 0; u < GC.FREE_DESCRIPTORS_SIZE; u += (2 * sizeof(uint)))
-            {
-                FREESIZE += ((GC.MEM_FREE_DESCRIPTOR*)(GC.FREE_DESCRIPTORS_ADDR + u))->SIZE;
-            }
-
-            return FREESIZE;
+            uint Address = (uint)Intrinsic.GetObjectAddress(obj);
+            //                   ///                      Size Of Object Data                ///Size Of  TypeDef And SyncBlock///              
+            uint Size = (uint)((*((uint*)(obj.GetType().TypeHandle.Value + (Pointer.Size * 3)))) + 2 * sizeof(Pointer));
+            Free(Address, Size);
         }
     }
 }
