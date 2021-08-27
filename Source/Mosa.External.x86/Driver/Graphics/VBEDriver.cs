@@ -2,7 +2,7 @@
 
 namespace Mosa.External.x86.Driver
 {
-    public class VBEDriver
+    public unsafe class VBEDriver
     {
 		public MemoryBlock VideoMemory;
 
@@ -10,20 +10,20 @@ namespace Mosa.External.x86.Driver
 		{
 			get
 			{
-				return VBE.ScreenWidth;
+				return VBE.VBEModeInfo->ScreenWidth;
 			}
 		}
 		public uint ScreenHeight
 		{
 			get
 			{
-				return VBE.ScreenHeight;
+				return VBE.VBEModeInfo->ScreenHeight;
 			}
 		}
 
 		public VBEDriver()
         {
-			VideoMemory = Memory.GetPhysicalMemory(VBE.MemoryPhysicalLocation, (uint)(VBE.ScreenWidth * VBE.ScreenHeight * (VBE.BitsPerPixel / 8)));
+			VideoMemory = Memory.GetPhysicalMemory((Runtime.Pointer)VBE.VBEModeInfo->PhysBase, (uint)(VBE.VBEModeInfo->ScreenWidth * VBE.VBEModeInfo->ScreenHeight * (VBE.VBEModeInfo->BitsPerPixel / 8)));
         }
 	}
 }

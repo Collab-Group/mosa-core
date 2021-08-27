@@ -5,7 +5,7 @@ using Mosa.Runtime.x86;
 
 namespace Mosa.External.x86.Drawing
 {
-    public class VBEGraphics : Graphics
+    public unsafe class VBEGraphics : Graphics
     {
         private readonly VBEDriver vBEDriver;
         private readonly MemoryBlock memoryBlock;
@@ -15,7 +15,7 @@ namespace Mosa.External.x86.Drawing
         {
             vBEDriver = new VBEDriver();
 
-            Bpp = VBE.BitsPerPixel / 8;
+            Bpp = VBE.VBEModeInfo->BitsPerPixel / 8;
 
             vbeDriverAddr = (uint)vBEDriver.VideoMemory.Address;
 
