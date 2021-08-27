@@ -19,13 +19,13 @@ namespace System
 		/// </summary>
 		internal int length;
 
-		public readonly char start_char;
+		private readonly char start_char;
 
 		public int Length { get { return length; } }
 
 		public static string Empty = "";
 
-		internal unsafe char* first_char
+		public unsafe char* first_char
 		{
 			get
 			{
