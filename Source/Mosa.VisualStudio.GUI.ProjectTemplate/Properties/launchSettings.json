@@ -2,8 +2,8 @@
   "profiles": {
     "Compile and Run": {
       "commandName": "Executable",
-      "executablePath": "cmd",
-      "commandLineArgs": "/c start \"\" ..\\Properties\\Run.bat $safeprojectname$.dll",
+      "executablePath": "..\\Properties\\Run.bat",
+      "commandLineArgs": "$safeprojectname$.dll",
       "workingDirectory": "bin"
     }
   }
