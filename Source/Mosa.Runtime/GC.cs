@@ -68,7 +68,7 @@ namespace Mosa.Runtime
             READY = true;
         }
         
-        [Obsolete("use GC.Free")]
+        [Obsolete("use GC.Free(object obj)")]
         public static void DisposeObject(object obj)
         {
             // An object has the following memory layout:
