@@ -77,8 +77,8 @@ namespace Mosa.External.x86
         public void Free()
         {
             if (IsManaged)
-                GC.Free((uint)address, size);
-            GC.DisposeObject(this);
+                GC.Dispose((uint)address, size);
+            GC.Dispose(this);
         }
 
         public int this[uint offset]

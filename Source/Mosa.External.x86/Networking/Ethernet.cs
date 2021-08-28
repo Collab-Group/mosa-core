@@ -98,7 +98,7 @@ namespace Mosa.External.x86.Networking
             MEMCPY((uint)(buffer + sizeof(EthernetHeader)), (uint)Payload, PayloadLength);
 
             EthernetController.Controller.Send(buffer, (ushort)(sizeof(EthernetHeader) + PayloadLength));
-            GC.Free((uint)buffer, ushort.MaxValue);
+            GC.Dispose((uint)buffer, ushort.MaxValue);
         }
     }
 }

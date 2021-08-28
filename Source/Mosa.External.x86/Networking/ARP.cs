@@ -158,7 +158,7 @@ namespace Mosa.External.x86.Networking
 
             Ethernet.SendPacket(Ethernet.BroadMAC, Ethernet.Type.ARP, Buffer, (ushort)sizeof(ARPHeader));
 
-            GC.Free((uint)Buffer, (uint)sizeof(ARPHeader));
+            GC.Dispose((uint)Buffer, (uint)sizeof(ARPHeader));
         }
     }
 }

@@ -68,21 +68,21 @@ namespace Mosa.Runtime
             READY = true;
         }
         
-        [Obsolete("use GC.Free(object obj)")]
-        public static void DisposeObject(object obj)
+        public static void Dispose(object obj)
         {
             // An object has the following memory layout:
             //   - Pointer TypeDef
             //   - Pointer SyncBlock
             //   - 0 .. n object data fields
+            if (obj == null) return;
 
             uint Address = (uint)Intrinsic.GetObjectAddress(obj);
             //                   ///                      Size Of Object Data                ///Size Of  TypeDef And SyncBlock///              
             uint Size = (uint)((*((uint*)(obj.GetType().TypeHandle.Value + (Pointer.Size * 3)))) + 2 * sizeof(Pointer));
-            Free(Address, Size);
+            Dispose(Address, Size);
         }
 
-        public static void Free(uint Address, uint Size)
+        public static void Dispose(uint Address, uint Size)
         {
             for (uint u = 0; u < DescriptorsSize; u += (2 * sizeof(uint)))
             {
@@ -94,20 +94,6 @@ namespace Mosa.Runtime
                     break;
                 }
             }
-        }
-
-        public static void Free(object obj)
-        {
-            // An object has the following memory layout:
-            //   - Pointer TypeDef
-            //   - Pointer SyncBlock
-            //   - 0 .. n object data fields
-            if (obj == null) return;
-
-            uint Address = (uint)Intrinsic.GetObjectAddress(obj);
-            //                   ///                      Size Of Object Data                ///Size Of  TypeDef And SyncBlock///              
-            uint Size = (uint)((*((uint*)(obj.GetType().TypeHandle.Value + (Pointer.Size * 3)))) + 2 * sizeof(Pointer));
-            Free(Address, Size);
         }
     }
 }

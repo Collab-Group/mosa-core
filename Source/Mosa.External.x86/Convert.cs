@@ -9,7 +9,7 @@ namespace Mosa.External.x86
         {
             Base64Decoder base64Decoder = new Base64Decoder(s);
             byte[] b = base64Decoder.GetDecoded();
-            GC.DisposeObject(base64Decoder);
+            GC.Dispose(base64Decoder);
             return b;
         }
     }

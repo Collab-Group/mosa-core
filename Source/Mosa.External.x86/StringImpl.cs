@@ -21,7 +21,7 @@ namespace Mosa.External.x86
                 ls.Add(str);
             }
             string[] result = ls.ToArray();
-            GC.DisposeObject(ls);
+            GC.Dispose(ls);
             return result;
         }
 
@@ -36,7 +36,7 @@ namespace Mosa.External.x86
             }
             result = result + str;
 
-            GC.DisposeObject(str);
+            GC.Dispose(str);
 
             return result;
         }
@@ -52,7 +52,7 @@ namespace Mosa.External.x86
             }
             result = str + result;
 
-            GC.DisposeObject(str);
+            GC.Dispose(str);
 
             return result;
         }

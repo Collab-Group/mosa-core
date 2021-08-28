@@ -12,7 +12,7 @@ namespace Mosa.External.x86
             for (int i = 0; i < n; i++)
                 array[n - 1 - i] = aux[i];
 
-            GC.DisposeObject(aux);
+            GC.Dispose(aux);
         }
 
         public static void Reverse<T>(T[] array, int index, int length)
@@ -22,7 +22,7 @@ namespace Mosa.External.x86
             for (int i = index; i < length; i++)
                 array[length - 1 - i] = aux[i];
 
-            GC.DisposeObject(aux);
+            GC.Dispose(aux);
         }
     }
 }

@@ -115,7 +115,7 @@ namespace Mosa.External.x86.Driver.Audio
 
             SetIndex(max);
 
-            GC.DisposeObject(Data);
+            GC.Dispose(Data);
 
             Play();
         }
