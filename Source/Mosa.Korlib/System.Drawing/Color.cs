@@ -2,7 +2,7 @@
 {
     public struct Color
     {
-        private byte A, R, G, B;
+        public byte A, R, G, B;
 
         public int ARGB { get; private set; }
 

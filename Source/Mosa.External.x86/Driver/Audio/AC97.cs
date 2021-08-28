@@ -29,7 +29,7 @@ namespace Mosa.External.x86.Driver.Audio
         public const ushort ListLength = 32;
         public const ushort BufferLength = 0xFFFE;
 
-        public static bool Exists = false;
+        public static bool Exsist = false;
 
         public static byte max = 0;
 
@@ -37,44 +37,45 @@ namespace Mosa.External.x86.Driver.Audio
 
         public static byte* Buffer;
 
-        public static byte IRQ;
-
-        public static unsafe void Initialize()
+        public static unsafe void Init()
         {
             foreach (var device in PCI.Devices)
+            {
                 if (device.ClassID == 0x04 && device.Subclass == 0x01)
                 {
-                    Console.WriteLine("AC97 device found!");
+                    Console.WriteLine("AC97 Device Found");
 
                     device.EnableDevice();
-                    IRQ = device.InterruptLine;
+                    Console.WriteLine($"INT:{device.InterruptLine}");
 
-                    Console.WriteLine($"IRQ: {IRQ}");
+                    NAM = device.BAR0 & ~(0xFU);
+                    NABM = device.BAR1 & ~(0xFU);
 
-                    NAM = device.BAR0;
-                    NABM = device.BAR1;
+                    IDT.INTs.Add(new IDT.INT(0x20u, OnInterrupt));
 
-                    Out8((ushort)(NABM + (ushort)Options.GlobalControlStat), 0x02);
-
-                    Out8((ushort)(NABM + (ushort)PCM.OutControlRegister), 0xF0);
+                    //Reset
+                    Out32((ushort)(NABM + 0x2C), 0x00000002);
+                    Out16((ushort)NAM, 54188);
 
                     BufferListAddr = GC.AllocateObject((uint)(ListLength * sizeof(BufferDescriptor)));
-
-                    Out32((ushort)(NAM + (ushort)Options.MasterVolume), 0x2020);
-
                     Buffer = (byte*)GC.AllocateObject(1024 * 1024);
 
-                    Console.WriteLine("Successfully initialized the AC97 device!");
-                    Exists = true;
+                    Out16((ushort)(NAM + 0x02), 0x0F0F);
+                    Out16((ushort)(NAM + 0x18), 0x0F0F);
+                    Out16((ushort)(NAM + 0x2C), 48000);
+
+                    Console.WriteLine("AC97 Initialized");
+                    Exsist = true;
                 }
+            }
         }
 
         private static int Status;
         public static bool Finished { get => Status == 7; }
 
-        public static void OnInterrupt()
+        private static void OnInterrupt()
         {
-            if (!Exists) return;
+            if (!Exsist) return;
 
             Status = In16((ushort)(NABM + PCM.OutStatusRegister));
             if (Status != 0) Out16((ushort)(NABM + PCM.OutStatusRegister), (ushort)(Status & 0x1E));
@@ -91,7 +92,7 @@ namespace Mosa.External.x86.Driver.Audio
         //48Khz DualChannel
         public static unsafe void Play(byte[] Data)
         {
-            if (!Exists) return;
+            if (!Exsist) return;
 
             int k = 0;
 
@@ -115,7 +116,7 @@ namespace Mosa.External.x86.Driver.Audio
 
             SetIndex(max);
 
-            GC.Dispose(Data);
+            Data.Dispose();
 
             Play();
         }
