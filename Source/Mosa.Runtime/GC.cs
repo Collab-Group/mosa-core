@@ -68,6 +68,7 @@ namespace Mosa.Runtime
             READY = true;
         }
         
+        [Obsolete("use object.Dispose()")]
         public static void Dispose(object obj)
         {
             // An object has the following memory layout:
