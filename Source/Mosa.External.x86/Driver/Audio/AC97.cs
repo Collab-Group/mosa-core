@@ -51,8 +51,8 @@ namespace Mosa.External.x86.Driver.Audio
 
                     Console.WriteLine($"IRQ: {IRQ}");
 
-                    NAM = device.BaseAddressBar[0].BaseAddress;
-                    NABM = device.BaseAddressBar[1].BaseAddress;
+                    NAM = device.BAR0;
+                    NABM = device.BAR1;
 
                     Out8((ushort)(NABM + (ushort)Options.GlobalControlStat), 0x02);
 

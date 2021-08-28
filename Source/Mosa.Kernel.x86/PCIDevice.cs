@@ -98,6 +98,11 @@ namespace Mosa.Kernel
 		public readonly uint function;
 
 		public readonly uint BAR0;
+		public readonly uint BAR1;
+		public readonly uint BAR2;
+		public readonly uint BAR3;
+		public readonly uint BAR4;
+		public readonly uint BAR5;
 
 		public readonly ushort VendorID;
 		public readonly ushort DeviceID;
@@ -118,8 +123,6 @@ namespace Mosa.Kernel
 
 		public const ushort ConfigAddressPort = 0xCF8;
 		public const ushort ConfigDataPort = 0xCFC;
-
-		public PCIBaseAddressBar[] BaseAddressBar;
 
 		public byte InterruptLine { get; private set; }
 		public PCICommand Command { get { return (PCICommand)ReadRegister16(0x04); } set { WriteRegister16(0x04, (ushort)value); } }
@@ -156,13 +159,12 @@ namespace Mosa.Kernel
 			}
 			if (HeaderType == PCIHeaderType.Normal)
 			{
-				BaseAddressBar = new PCIBaseAddressBar[6];
-				BaseAddressBar[0] = new PCIBaseAddressBar(ReadRegister32(0x10));
-				BaseAddressBar[1] = new PCIBaseAddressBar(ReadRegister32(0x14));
-				BaseAddressBar[2] = new PCIBaseAddressBar(ReadRegister32(0x18));
-				BaseAddressBar[3] = new PCIBaseAddressBar(ReadRegister32(0x1C));
-				BaseAddressBar[4] = new PCIBaseAddressBar(ReadRegister32(0x20));
-				BaseAddressBar[5] = new PCIBaseAddressBar(ReadRegister32(0x24));
+				//BAR0 = (ReadRegister32(0x10));
+				BAR1 = (ReadRegister32(0x14));
+				BAR2 = (ReadRegister32(0x18));
+				BAR3 = (ReadRegister32(0x1C));
+				BAR4 = (ReadRegister32(0x20));
+				BAR5 = (ReadRegister32(0x24));
 			}
 		}
 
@@ -304,41 +306,4 @@ namespace Mosa.Kernel
 			WriteRegister16(0x04, command);
 		}
 	}
-
-    public class PCIBaseAddressBar
-    {
-        private uint baseAddress = 0;
-        private ushort prefetchable = 0;
-        private ushort type = 0;
-        private bool isIO = false;
-
-        public PCIBaseAddressBar(uint raw)
-        {
-            isIO = (raw & 0x01) == 1;
-
-            if (isIO)
-            {
-                baseAddress = raw & 0xFFFFFFFC;
-            }
-            else
-            {
-                type = (ushort)((raw >> 1) & 0x03);
-                prefetchable = (ushort)((raw >> 3) & 0x01);
-                switch (type)
-                {
-                    case 0x00:
-                        baseAddress = raw & 0xFFFFFFF0;
-                        break;
-                    case 0x01:
-                        baseAddress = raw & 0xFFFFFFF0;
-                        break;
-                }
-            }
-        }
-
-        public uint BaseAddress
-        {
-            get { return baseAddress; }
-        }
-    }
 }

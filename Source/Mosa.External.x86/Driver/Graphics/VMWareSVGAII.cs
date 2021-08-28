@@ -62,7 +62,7 @@ namespace Mosa.External.x86.Driver
         {
             device = (PCI.GetDevice(VendorID.VMWare, DeviceID.SVGAIIAdapter));
             device.EnableMemory(true);
-            uint basePort = device.BaseAddressBar[0].BaseAddress;
+            uint basePort = device.BAR0;
             IndexPort = (ushort)(basePort + (uint)IOPortOffset.Index);
             ValuePort = (ushort)(basePort + (uint)IOPortOffset.Value);
             WriteRegister(Register.ID, (uint)ID.V2);
