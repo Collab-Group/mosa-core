@@ -57,7 +57,7 @@ namespace $safeprojectname$
 
                         case PS2Keyboard.KeyCode.Enter:
                             Console.WriteLine();
-                            Console.WriteLine("Input : " + Input);
+                            Console.WriteLine("Input:" + Input);
                             Input = "";
                             break;
 
