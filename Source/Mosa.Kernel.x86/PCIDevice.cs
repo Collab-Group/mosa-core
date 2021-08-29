@@ -159,7 +159,7 @@ namespace Mosa.Kernel
 			}
 			if (HeaderType == PCIHeaderType.Normal)
 			{
-				//BAR0 = (ReadRegister32(0x10));
+				BAR0 = (ReadRegister32(0x10));
 				BAR1 = (ReadRegister32(0x14));
 				BAR2 = (ReadRegister32(0x18));
 				BAR3 = (ReadRegister32(0x1C));
