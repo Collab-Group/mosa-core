@@ -101,7 +101,7 @@ namespace Mosa.External.x86.Driver
 
             if (Phase == 1)
             {
-                if ((D & 0xc8) == 0x08)
+                if ((D & (1 << 3)) == (1 << 3))
                 {
                     MData[0] = D;
                     Phase = 2;
