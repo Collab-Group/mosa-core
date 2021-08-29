@@ -26,6 +26,8 @@
                 a.GetBlue() == b.GetBlue();
         }
 
+        #region Colors
+
         public static readonly Color Empty = new Color();
 
         /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Transparent"]/*' />
@@ -1580,6 +1582,8 @@
                 return new Color(KnownColor.YellowGreen);
             }
         }
+
+        #endregion
 
         internal Color(KnownColor knownColor)
         {
