@@ -29,7 +29,7 @@ namespace Mosa.External.x86.Driver.Audio
         public const ushort ListLength = 32;
         public const ushort BufferLength = 0xFFFE;
 
-        public static bool Exsist = false;
+        public static bool Exist = false;
 
         public static byte max = 0;
 
@@ -65,7 +65,7 @@ namespace Mosa.External.x86.Driver.Audio
                     Out16((ushort)(NAM + 0x2C), 48000);
 
                     Console.WriteLine("AC97 Initialized");
-                    Exsist = true;
+                    Exist = true;
                 }
             }
         }
@@ -75,7 +75,7 @@ namespace Mosa.External.x86.Driver.Audio
 
         private static void OnInterrupt()
         {
-            if (!Exsist) return;
+            if (!Exist) return;
 
             Status = In16((ushort)(NABM + PCM.OutStatusRegister));
             if (Status != 0) Out16((ushort)(NABM + PCM.OutStatusRegister), (ushort)(Status & 0x1E));
@@ -92,7 +92,7 @@ namespace Mosa.External.x86.Driver.Audio
         //48Khz DualChannel
         public static unsafe void Play(byte[] Data)
         {
-            if (!Exsist) return;
+            if (!Exist) return;
 
             int k = 0;
 

@@ -160,7 +160,15 @@ namespace Mosa.Kernel.x64
 			Color = c;
 			GotoTop();
 		}
-
+		
+		public static void Setup()
+        	{
+			BackgroundColor = ScreenColor.Black;
+			Clear();
+			Goto(0, 0);
+			Color = ScreenColor.White;
+       		}
+		
 		/// <summary>
 		/// Goto the specified row and column.
 		/// </summary>
