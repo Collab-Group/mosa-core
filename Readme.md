@@ -4,7 +4,7 @@ MOSA is a powerful and relatively stable way of creating an operating system in 
 
 # Informations
 **Important**: Your project name **cannot** contain spaces (or SYSLINUX, the bootloader that we use, won't be able to load your OS)
-ARMv8 and x64 is currently **not** available in MOSA-Core for stability reasons. We will add them if those get more stable in MOSA.
+ARMv8 is currently **not** available in MOSA-Core for stability reasons. We will add them if those get more stable in MOSA.
 
 **Wiki: https://github.com/nifanfa/MOSA-Core/wiki<br/>**
 **Discord server: https://discord.gg/WrNEsmUmKa<br/>**
