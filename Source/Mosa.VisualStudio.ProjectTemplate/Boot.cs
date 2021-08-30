@@ -14,7 +14,7 @@ namespace $safeprojectname$
         {
             // Initialize the necessary stuff
             Kernel.Setup();
-            //ACPI.Initialize();
+            //ACPI.Init();
             IDT.SetInterruptHandler(ProcessInterrupt);
 
             // Note: threads can't be created dynamically (for now)
@@ -57,7 +57,7 @@ namespace $safeprojectname$
 
                         case PS2Keyboard.KeyCode.Enter:
                             Console.WriteLine();
-                            Console.WriteLine("Input:" + Input);
+                            Console.WriteLine("Input: " + Input);
                             Input = "";
                             break;
 
