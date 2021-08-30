@@ -9,6 +9,7 @@ namespace Mosa.Kernel.x64
 	{
 		public static void Setup()
 		{
+			Screen.Setup();
 		}
 	}
 }
