@@ -939,7 +939,7 @@ namespace System
 			return result;
 		}
 
-		public unsafe string Replace(string dest, string oldValue, string newValue)
+		public string Replace(string dest, string oldValue, string newValue)
 		{
 			while (dest.IndexOf(oldValue) != -1)
 			{
@@ -950,12 +950,12 @@ namespace System
 			return dest;
 		}
 
-		public unsafe string Insert(string dest, int aStartPos, string aValue)
+		public string Insert(string dest, int aStartPos, string aValue)
 		{
 			return dest.Substring(0, aStartPos) + aValue + dest.Substring(aStartPos);
 		}
 
-		public unsafe string Remove(string dest, int aStart, int aCount)
+		public string Remove(string dest, int aStart, int aCount)
 		{
 			return dest.Substring(0, aStart) + dest.Substring(aStart + aCount, dest.Length - (aStart + aCount));
 		}
