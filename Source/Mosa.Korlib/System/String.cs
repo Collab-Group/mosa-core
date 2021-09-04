@@ -939,7 +939,7 @@ namespace System
 			return result;
 		}
 
-		public static string Replace(this string dest, char oldValue, char newValue)
+		public string Replace(string dest, char oldValue, char newValue)
 		{
 			var cs = new char[dest.Length];
 
@@ -958,7 +958,7 @@ namespace System
 			return new string(cs);
 		}
 
-		public static string Replace(this string dest, string oldValue, string newValue)
+		public string Replace(string dest, string oldValue, string newValue)
 		{
 			while (dest.IndexOf(oldValue) != -1)
 			{
@@ -969,12 +969,12 @@ namespace System
 			return dest;
 		}
 
-		public static string Insert(this string dest, int aStartPos, string aValue)
+		public string Insert(string dest, int aStartPos, string aValue)
 		{
 			return dest.Substring(0, aStartPos) + aValue + dest.Substring(aStartPos);
 		}
 
-		public static string Remove(this string dest, int aStart, int aCount)
+		public string Remove(string dest, int aStart, int aCount)
 		{
 			return dest.Substring(0, aStart) + dest.Substring(aStart + aCount, dest.Length - (aStart + aCount));
 		}
