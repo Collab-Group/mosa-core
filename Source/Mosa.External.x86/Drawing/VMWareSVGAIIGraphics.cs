@@ -24,6 +24,11 @@ namespace Mosa.External.x86.Drawing
             ResetLimit();
         }
 
+        public void SetResolution(int width, int height)
+        {
+            vMWareSVGAII.SetMode((uint)width, (uint)height);
+        }
+
         public override void DrawPoint(uint Color, int X, int Y)
         {
             if (IsInBounds(X, Y))

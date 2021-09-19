@@ -92,7 +92,7 @@ namespace Mosa.Launcher.Console
             Arguments = new string[] { args[0], AppFolder + @"\output\main.exe", args[2] };
 
             System.Console.WriteLine($"VBE Status: {VBEEnable}");
-            System.Console.WriteLine($"Output ISO Path:{ISOFilePath}");
+            System.Console.WriteLine($"Output ISO Path: {ISOFilePath}");
 
             foreach (var v in args)
             {
@@ -234,7 +234,7 @@ namespace Mosa.Launcher.Console
 
             ConsoleColor color = System.Console.ForegroundColor;
             System.Console.ForegroundColor = ConsoleColor.Yellow;
-            System.Console.WriteLine("Warning: If this is your first time using this version(Last modify time: 5th Augest 2021 23:56). Make sure there's no virtual machine which is named \"MOSA\". If so please delete it");
+            System.Console.WriteLine("Warning: If this is your first time using this version (Last modify time: 5th August 2021 23:56). Make sure there's no virtual machine which is named \"MOSA\". If so please delete it");
             System.Console.WriteLine("If It Asks You Select Boot Disk");
             System.Console.WriteLine("Please Press Cancel");
             System.Console.ForegroundColor = color;
@@ -249,17 +249,17 @@ namespace Mosa.Launcher.Console
             {
                 case CompilerEvent.CompileStart:
                     StartTime = DateTime.Now;
-                    System.Console.WriteLine($"Compile Start");
+                    System.Console.WriteLine($"Starting to compile...");
                     break;
                 case CompilerEvent.CompilingMethods:
-                    System.Console.WriteLine($"Compiling Methods");
+                    System.Console.WriteLine($"Compiling methods...");
                     break;
                 case CompilerEvent.CompilingMethodsCompleted:
-                    System.Console.WriteLine($"Compiling Methods Completed");
+                    System.Console.WriteLine($"Finished compiling methods!");
                     break;
                 case CompilerEvent.CompileEnd:
                     TimeSpan timeSpan = DateTime.Now.Subtract(StartTime);
-                    System.Console.WriteLine($"Compile End {timeSpan}");
+                    System.Console.WriteLine($"Ended compilation {timeSpan}");
                     break;
                 case CompilerEvent.Exception:
                     System.Console.WriteLine("Exception Thrown:");

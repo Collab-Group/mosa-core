@@ -938,5 +938,26 @@ namespace System
 			}
 			return result;
 		}
+
+		public string Replace(string dest, string oldValue, string newValue)
+		{
+			while (dest.IndexOf(oldValue) != -1)
+			{
+				int xIndex = dest.IndexOf(oldValue);
+				dest = dest.Remove(dest, xIndex, oldValue.Length);
+				dest = dest.Insert(dest, xIndex, newValue);
+			}
+			return dest;
+		}
+
+		public string Insert(string dest, int aStartPos, string aValue)
+		{
+			return dest.Substring(0, aStartPos) + aValue + dest.Substring(aStartPos);
+		}
+
+		public string Remove(string dest, int aStart, int aCount)
+		{
+			return dest.Substring(0, aStart) + dest.Substring(aStart + aCount, dest.Length - (aStart + aCount));
+		}
 	}
 }

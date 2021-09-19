@@ -43,7 +43,7 @@ namespace Mosa.Kernel.x86
 
 			Console.Color = ConsoleColor.White;
 			Console.WriteLine("Kernel Panic!");
-			Console.WriteLine("Message:"+message);
+			Console.WriteLine("Message: "+message);
 
 			DumpStackTrace();
 
@@ -68,7 +68,7 @@ namespace Mosa.Kernel.x86
 
 				if (!entry.Skip)
 				{
-					Console.WriteLine("Stake Trace:"+entry.ToString());
+					Console.WriteLine("Stake Trace: "+entry.ToString());
 				}
 
 				depth++;
