@@ -6,9 +6,6 @@ MOSA is a powerful and relatively stable way of creating an operating system in 
 **Windows**<br/>
 Visual Studio 2019 (recommended version: 16.10.x )<br/>
 Inno Setup Compiler (recommended version: 6.2.x )<br/>
-
-**Cross-platform**<br/>
-JetBrains Rider (recommended IDE if you're on a Unix-based system)<br/>
 Oracle VM VirtualBox (recommended version: 6.1.x )<br/>
 
 # Informations
