@@ -21,7 +21,7 @@ namespace $safeprojectname$
         {
             // Initialize the necessary stuff
             Kernel.Setup();
-            //ACPI.Initialize();
+            //ACPI.Init();
             IDT.SetInterruptHandler(ProcessInterrupt);
 
             cursor = new int[]
