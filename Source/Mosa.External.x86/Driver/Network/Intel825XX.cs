@@ -50,7 +50,7 @@ namespace Mosa.External.x86.Driver
             device.EnableDevice();
 
             BAR0 = (uint)(device.BAR0 & (~3));
-            Map(BAR0, 0x10000);
+            //Map(BAR0, 0x10000);
             Console.WriteLine($"BAR0:{BAR0.ToString("x2")}");
 
             WriteRegister(0x14, 0x1);

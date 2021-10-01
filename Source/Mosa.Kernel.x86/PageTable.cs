@@ -34,7 +34,7 @@ namespace Mosa.Kernel.x86
 			Native.SetCR3(Address.PageDirectory);
 
 			// Set CR0 register on processor - turns on virtual memory
-			Native.SetCR0(Native.GetCR0() | 0x80000000);
+			//Native.SetCR0(Native.GetCR0() | 0x80000000);
 		}
 
 		/// <summary>

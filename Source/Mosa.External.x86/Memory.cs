@@ -7,7 +7,7 @@ namespace Mosa.External.x86
     {
         public static MemoryBlock GetPhysicalMemory(Pointer address, uint size)
         {
-            MMIO.Map((uint)address, size);
+            //MMIO.Map((uint)address, size);
             return new MemoryBlock(address, size);
         }
 

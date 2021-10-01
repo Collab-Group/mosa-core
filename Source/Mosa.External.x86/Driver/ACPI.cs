@@ -104,7 +104,7 @@ namespace Mosa.External.x86.Driver
         public static bool Init()
         {
             ACPI_RSDP* rsdp = GetRSDP();
-            MMIO.Map(rsdp->RsdtAddress, ushort.MaxValue);
+            //MMIO.Map(rsdp->RsdtAddress, ushort.MaxValue);
             ACPI_SDT* hdr = (ACPI_SDT*)rsdp->RsdtAddress;
             byte* rsdt = (byte*)rsdp->RsdtAddress;
 
@@ -123,7 +123,7 @@ namespace Mosa.External.x86.Driver
                         addr = (i == 0) ? addr : addr << 8;
                     }
 
-                    MMIO.Map(addr, ushort.MaxValue);
+                    //MMIO.Map(addr, ushort.MaxValue);
 
                     FADT = (ACPI_FADT*)addr;
 
