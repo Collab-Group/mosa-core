@@ -69,8 +69,6 @@ namespace Mosa.Launcher.Console
 
         public static bool RunAfterBuild = true;
 
-        public static bool x64 = false;
-
         static void Main(string[] args)
         {
             if (!Environment.Is64BitOperatingSystem)
@@ -86,7 +84,6 @@ namespace Mosa.Launcher.Console
             //Arguments 3: VBE Enable
 
             //Arguments: JustBuild
-            //Arguments: x64
 
             //If you want to change "main.exe" to other name you have to modify the syslinux.cfg
             Arguments = new string[] { args[0], AppFolder + @"\output\main.exe", args[2] };
@@ -99,10 +96,6 @@ namespace Mosa.Launcher.Console
                 if (v == "JustBuild")
                 {
                     RunAfterBuild = false;
-                }
-                if (v == "x64")
-                {
-                    x64 = false;
                 }
             }
 
@@ -286,12 +279,11 @@ namespace Mosa.Launcher.Console
         private static void RegisterPlatforms()
         {
             PlatformRegistry.Add(new Mosa.Platform.x86.Architecture());
-            PlatformRegistry.Add(new Mosa.Platform.x64.Architecture());
         }
 
         private static void DefaultSettings()
         {
-            Settings.SetValue("Compiler.Platform", x64 ? "x64" : "x86");
+            Settings.SetValue("Compiler.Platform", "x86");
             Settings.SetValue("Compiler.BaseAddress", 0x00400000);
             Settings.SetValue("Compiler.Binary", true);
             Settings.SetValue("Compiler.MethodScanner", false);
