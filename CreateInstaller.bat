@@ -28,6 +28,17 @@ popd
 
 "%msbuild%" Mosa.sln /t:Build /p:Configuration=Debug;Platform="Mixed Platforms" -m
 
+echo.
+if "%errorlevel%" == "1" (
+echo [31mCompilation Failed![0m
+echo.
+pause
+exit
+) else (
+echo [32mSuccessful Compilation![0m
+echo.
+)
+
 echo Creating installer
 cd Inno-Setup-Script
 create-installer.bat
