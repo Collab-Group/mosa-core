@@ -71,120 +71,126 @@ namespace Mosa.Launcher.Console
 
         static void Main(string[] args)
         {
-            if (!Environment.Is64BitOperatingSystem)
+            try
             {
-                System.Console.WriteLine("Fatal! 32-Bit Operating System Is Not Supported");
-                System.Console.WriteLine("Press Any Key To Continue...");
-                System.Console.ReadKey();
-                return;
-            }
-
-            //Arguments 1: Source Name
-            //Arguments 2: Output Name
-            //Arguments 3: VBE Enable
-
-            //Arguments: JustBuild
-
-            //If you want to change "main.exe" to other name you have to modify the syslinux.cfg
-            Arguments = new string[] { args[0], AppFolder + @"\output\main.exe", args[2] };
-
-            System.Console.WriteLine($"VBE Status: {VBEEnable}");
-            System.Console.WriteLine($"Output ISO Path: {ISOFilePath}");
-
-            foreach (var v in args)
-            {
-                if (v == "JustBuild")
+                if (!Environment.Is64BitOperatingSystem)
                 {
-                    RunAfterBuild = false;
+                    System.Console.WriteLine("Fatal! 32-Bit Operating System Is Not Supported");
+                    System.Console.WriteLine("Press Any Key To Continue...");
+                    System.Console.ReadKey();
+                    return;
                 }
+
+                //Arguments 1: Source Name
+                //Arguments 2: Output Name
+                //Arguments 3: VBE Enable
+
+                //Arguments: JustBuild
+
+                //If you want to change "main.exe" to other name you have to modify the syslinux.cfg
+                Arguments = new string[] { args[0], AppFolder + @"\output\main.exe", args[2] };
+
+                System.Console.WriteLine($"VBE Status: {VBEEnable}");
+                System.Console.WriteLine($"Output ISO Path: {ISOFilePath}");
+
+                foreach (var v in args)
+                {
+                    if (v == "JustBuild")
+                    {
+                        RunAfterBuild = false;
+                    }
+                }
+
+                DefaultSettings();
+                RegisterPlatforms();
+                SetFile();
+
+                CompilerHooks = new CompilerHooks();
+                CompilerHooks.NotifyEvent += NotifyEvent;
+
+                if (Directory.Exists(OutputFolder))
+                {
+                    Directory.Delete(OutputFolder, true);
+                }
+
+                Directory.CreateDirectory(OutputFolder);
+
+                Compile();
+
+                MakeISO();
+
+                if (RunAfterBuild)
+                {
+                    RunVirtualBox();
+                }
+
+                Environment.Exit(0);
             }
-
-            DefaultSettings();
-            RegisterPlatforms();
-            SetFile();
-
-            CompilerHooks = new CompilerHooks();
-            CompilerHooks.NotifyEvent += NotifyEvent;
-
-            if (Directory.Exists(OutputFolder))
+            catch (Exception E)
             {
-                Directory.Delete(OutputFolder, true);
+                System.Console.ForegroundColor = ConsoleColor.Red;
+                System.Console.WriteLine("Exception Thrown While Compiling");
+                System.Console.Write("  ");
+                System.Console.WriteLine(E.Message);
+                System.Console.Write("  ");
+                System.Console.WriteLine(E.StackTrace);
+                System.Console.Write("  ");
+                System.Console.WriteLine("Please Report This Problem");
+                System.Console.Write("  ");
+                System.Console.WriteLine("Press Any Key To Continue...");
+                System.Console.ResetColor();
+                System.Console.ReadKey();
+                Environment.Exit(0);
             }
-
-            Directory.CreateDirectory(OutputFolder);
-
-            Compile();
-
-            MakeISO();
-
-            if (RunAfterBuild)
-            {
-                RunVirtualBox();
-            }
-
-            Environment.Exit(0);
 
             return;
         }
 
         private static void Compile()
         {
-            try
+            if (Settings.GetValue("Launcher.HuntForCorLib", false))
             {
-                if (Settings.GetValue("Launcher.HuntForCorLib", false))
-                {
-                    var fileCorlib = Path.Combine(SourceFolder, "mscorlib.dll");
+                var fileCorlib = Path.Combine(SourceFolder, "mscorlib.dll");
 
-                    if (fileCorlib != null)
-                    {
-                        Settings.AddPropertyListValue("Compiler.SourceFiles", fileCorlib);
-                    }
+                if (fileCorlib != null)
+                {
+                    Settings.AddPropertyListValue("Compiler.SourceFiles", fileCorlib);
+                }
+            }
+
+            if (Settings.GetValue("Launcher.PlugKorlib", false))
+            {
+                var fileKorlib = Path.Combine(SourceFolder, "Mosa.Plug.Korlib.dll");
+
+                if (fileKorlib != null)
+                {
+                    Settings.AddPropertyListValue("Compiler.SourceFiles", fileKorlib);
                 }
 
-                if (Settings.GetValue("Launcher.PlugKorlib", false))
+                var platform = Settings.GetValue("Compiler.Platform", "x86");
+
+                if (platform == "armv8a32")
                 {
-                    var fileKorlib = Path.Combine(SourceFolder, "Mosa.Plug.Korlib.dll");
-
-                    if (fileKorlib != null)
-                    {
-                        Settings.AddPropertyListValue("Compiler.SourceFiles", fileKorlib);
-                    }
-
-                    var platform = Settings.GetValue("Compiler.Platform", "x86");
-
-                    if (platform == "armv8a32")
-                    {
-                        platform = "ARMv8A32";
-                    }
-
-                    var fileKorlibPlatform = Path.Combine(SourceFolder, $"Mosa.Plug.Korlib.{platform}.dll");
-
-                    if (fileKorlibPlatform != null)
-                    {
-                        Settings.AddPropertyListValue("Compiler.SourceFiles", fileKorlibPlatform);
-                    }
+                    platform = "ARMv8A32";
                 }
 
-                var compiler = new MosaCompiler(Settings, CompilerHooks);
+                var fileKorlibPlatform = Path.Combine(SourceFolder, $"Mosa.Plug.Korlib.{platform}.dll");
 
-                compiler.Load();
-                compiler.Compile();
-
-                Linker = compiler.Linker;
-                TypeSystem = compiler.TypeSystem;
-
-                GC.Collect();
+                if (fileKorlibPlatform != null)
+                {
+                    Settings.AddPropertyListValue("Compiler.SourceFiles", fileKorlibPlatform);
+                }
             }
-            catch (Exception E)
-            {
-                System.Console.WriteLine("Exception Thrown While Compiling");
-                System.Console.WriteLine(E.Message);
-                System.Console.WriteLine(E.StackTrace);
-                System.Console.WriteLine("Please Report This Problem");
-                System.Console.WriteLine("Press Any Key To Continue...");
-                System.Console.ReadKey();
-                Environment.Exit(0);
-            }
+
+            var compiler = new MosaCompiler(Settings, CompilerHooks);
+
+            compiler.Load();
+            compiler.Compile();
+
+            Linker = compiler.Linker;
+            TypeSystem = compiler.TypeSystem;
+
+            GC.Collect();
         }
 
         private static void MakeISO()
@@ -255,9 +261,11 @@ namespace Mosa.Launcher.Console
                     System.Console.WriteLine($"Ended compilation {timeSpan}");
                     break;
                 case CompilerEvent.Exception:
+                    System.Console.ForegroundColor = ConsoleColor.Red;
                     System.Console.WriteLine("Exception Thrown:");
                     System.Console.Write("  ");
                     System.Console.WriteLine(message);
+                    System.Console.ResetColor();
                     System.Console.ReadKey();
                     Environment.Exit(0);
                     break;
