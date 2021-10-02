@@ -43,7 +43,7 @@ namespace Mosa.External.x86.Driver
             WriteRegister(200);
 
             WriteRegister(0xF3);
-            WriteRegister(100);
+            WriteRegister(200);
 
             WriteRegister(0xF3);
             WriteRegister(80);
