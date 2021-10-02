@@ -256,13 +256,17 @@ namespace Mosa.Launcher.Console
                     break;
                 case CompilerEvent.Exception:
                     System.Console.WriteLine("Exception Thrown:");
+                    System.Console.Write("  ");
                     System.Console.WriteLine(message);
                     System.Console.ReadKey();
                     Environment.Exit(0);
                     break;
                 case CompilerEvent.Error:
+                    System.Console.ForegroundColor = ConsoleColor.Red;
                     System.Console.WriteLine("Compiler Error:");
+                    System.Console.Write("  ");
                     System.Console.WriteLine(message);
+                    System.Console.ResetColor();
                     System.Console.ReadKey();
                     Environment.Exit(0);
                     break;

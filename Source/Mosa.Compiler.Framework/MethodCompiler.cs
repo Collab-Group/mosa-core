@@ -5,6 +5,7 @@ using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using static Mosa.Compiler.Framework.CompilerHooks;
@@ -538,6 +539,7 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
+		//This is how DllImport work
 		private void ExternalMethod()
 		{
 			if (!Method.IsExternal)
@@ -562,6 +564,12 @@ namespace Mosa.Compiler.Framework
 			{
 				var bytes = Compiler.SearchPathsForFileAndLoad(filename);
 
+				Console.WriteLine($"Method Name: {Method.ShortName}, External Module: {filename}");
+				if(bytes == null) 
+				{
+					Compiler.PostEvent(CompilerEvent.Error, "Cannot Find The External Module");
+				}
+				//Console.ReadKey();
 				// TODO: Generate an error if the file is not found
 				// CompilerException.FileNotFound
 
