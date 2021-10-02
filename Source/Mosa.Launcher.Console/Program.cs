@@ -315,8 +315,8 @@ namespace Mosa.Launcher.Console
             Settings.SetValue("Image.ImageFile", "%DEFAULT%");
             Settings.SetValue("Multiboot.Version", "v1");
             Settings.SetValue("Multiboot.Video", VBEEnable);
-            Settings.SetValue("Multiboot.Video.Width", 640);
-            Settings.SetValue("Multiboot.Video.Height", 480);
+            Settings.SetValue("Multiboot.Video.Width", 1024);
+            Settings.SetValue("Multiboot.Video.Height", 768);
             Settings.SetValue("Multiboot.Video.Depth", 32);
             Settings.SetValue("Emulator", "VirtualBox");
             Settings.SetValue("Emulator.Memory", 128);
