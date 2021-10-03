@@ -31,6 +31,8 @@ namespace Mosa.External.x86.Drawing.Fonts
                 RegisteredBitFont = new List<BitFontDescriptor>();
 
             RegisteredBitFont.Add(bitFontDescriptor);
+
+            bitFontDescriptor.Dispose();
         }
 
         public static int DrawBitFontChar(Graphics graphics, byte[] Raw, int Size, int Size8, uint Color, int Index, int X, int Y, bool Calculate = false)
@@ -57,7 +59,6 @@ namespace Mosa.External.x86.Drawing.Fonts
                             if (max > MaxX)
                                 MaxX = max;
                         }
-
             return MaxX;
         }
 

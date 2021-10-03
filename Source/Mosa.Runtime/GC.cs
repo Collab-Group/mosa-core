@@ -22,7 +22,8 @@ namespace Mosa.Runtime
             return Pointer.Zero;
         }
 
-        public static ulong ObjectsUsedMemory = 0;
+        public static ulong TotalAlloc = 0;
+        public static ulong TotalReuse = 0;
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static Pointer AllocateObject(uint size)
@@ -35,6 +36,8 @@ namespace Mosa.Runtime
                     {
                         Pointer RESULT = new Pointer(((FreeMemoryDescriptor*)(DescriptorsAddress + u))->Address);
 
+                        TotalReuse++;
+
                         //Clear
                         ((FreeMemoryDescriptor*)(DescriptorsAddress + u))->Size -= size;
                         ((FreeMemoryDescriptor*)(DescriptorsAddress + u))->Address += size;
@@ -44,7 +47,7 @@ namespace Mosa.Runtime
                 }
             }
 
-            ObjectsUsedMemory += size;
+            TotalAlloc++;
 
             return AllocateMemory(size);
         }
@@ -67,7 +70,7 @@ namespace Mosa.Runtime
 
             READY = true;
         }
-        
+
         [Obsolete("use object.Dispose()")]
         public static void Dispose(object obj)
         {

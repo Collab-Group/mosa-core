@@ -1,4 +1,5 @@
 ﻿using Mosa.External.x86.Drawing.Fonts;
+using Mosa.Runtime;
 using Mosa.Runtime.x86;
 using System;
 using System.Drawing;
@@ -30,9 +31,11 @@ namespace Mosa.External.x86.Drawing
         {
             BitFontDescriptor bitFontDescriptor = new BitFontDescriptor();
 
-            foreach (var v in BitFont.RegisteredBitFont)
-                if (v.Name == FontName)
-                    bitFontDescriptor = v;
+            for (int i1 = 0; i1 < BitFont.RegisteredBitFont.Count; i1++)
+            {
+                if (BitFont.RegisteredBitFont[i1].Name == FontName)
+                    bitFontDescriptor = BitFont.RegisteredBitFont[i1];
+            }
 
             int Size = bitFontDescriptor.Size;
             int Size8 = Size / 8;
@@ -50,6 +53,8 @@ namespace Mosa.External.x86.Drawing
                 }
                 TotalX += UsedX;
             }
+
+            bitFontDescriptor.Dispose();
 
             return TotalX;
         }
