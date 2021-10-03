@@ -34,7 +34,7 @@ namespace Mosa.Kernel.x86
 			PageFrameAllocator.Setup();
 			PageTable.Setup();
 			VirtualPageAllocator.Setup();
-			PAE.Setup();
+			//PAE.Setup();
 			GC.Setup();
 
 			IDT.INTs = new List<IDT.INT>();
