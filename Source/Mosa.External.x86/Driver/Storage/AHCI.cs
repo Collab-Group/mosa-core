@@ -4,7 +4,7 @@ using Mosa.Kernel.x86;
 
 namespace Mosa.External.x86.Driver
 {
-    class AHCI
+    public class AHCI
     {
         const byte MaxBus = 0xFF;
         const byte MaxSlot = 0x1F;
