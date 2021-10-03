@@ -1,6 +1,5 @@
 
 using System.Runtime.InteropServices;
-using Mosa.Kernel.x86;
 
 namespace Mosa.External.x86.Driver
 {
@@ -47,40 +46,40 @@ namespace Mosa.External.x86.Driver
 
         public class tagHBA_PORT
         {
-            uint clb;        // 0x00, command list base address, 1K-byte aligned
-            uint clbu;       // 0x04, command list base address upper 32 bits
-            uint fb;         // 0x08, FIS base address, 256-byte aligned
-            uint fbu;        // 0x0C, FIS base address upper 32 bits
-            uint Is;         // 0x10, interrupt status
-            uint ie;         // 0x14, interrupt enable
-            uint cmd;        // 0x18, command and status
-            uint rsv0;       // 0x1C, Reserved
-            uint tfd;        // 0x20, task file data
-            uint sig;        // 0x24, signature
-            uint ssts;       // 0x28, SATA status (SCR0:SStatus)
-            uint sctl;       // 0x2C, SATA control (SCR2:SControl)
-            uint serr;       // 0x30, SATA error (SCR1:SError)
-            uint sact;       // 0x34, SATA active (SCR3:SActive)
-            uint ci;         // 0x38, command issue
-            uint sntf;       // 0x3C, SATA notification (SCR4:SNotification)
-            uint fbs;        // 0x40, FIS-based switch control
-            uint[] rsv1 = new uint[11];   // 0x44 ~ 0x6F, Reserved
-            uint[] vendor = new uint[4];  // 0x70 ~ 0x7F, vendor specific
+            public uint clb;        // 0x00, command list base address, 1K-byte aligned
+            public uint clbu;       // 0x04, command list base address upper 32 bits
+            public uint fb;         // 0x08, FIS base address, 256-byte aligned
+            public uint fbu;        // 0x0C, FIS base address upper 32 bits
+            public uint Is;         // 0x10, interrupt status
+            public uint ie;         // 0x14, interrupt enable
+            public uint cmd;        // 0x18, command and status
+            public uint rsv0;       // 0x1C, Reserved
+            public uint tfd;        // 0x20, task file data
+            public uint sig;        // 0x24, signature
+            public uint ssts;       // 0x28, SATA status (SCR0:SStatus)
+            public uint sctl;       // 0x2C, SATA control (SCR2:SControl)
+            public uint serr;       // 0x30, SATA error (SCR1:SError)
+            public uint sact;       // 0x34, SATA active (SCR3:SActive)
+            public uint ci;         // 0x38, command issue
+            public uint sntf;       // 0x3C, SATA notification (SCR4:SNotification)
+            public uint fbs;        // 0x40, FIS-based switch control
+            public uint[] rsv1 = new uint[11];   // 0x44 ~ 0x6F, Reserved
+            public uint[] vendor = new uint[4];  // 0x70 ~ 0x7F, vendor specific
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public unsafe struct tagHBA_CMD_HEADER
         {
-            byte cflawp;
+            public byte cflawp;
 
-            byte rbcrsv0pmp;
+            public byte rbcrsv0pmp;
 
-            uint prdtl;   // Physical region descriptor table length in entries
+            public uint prdtl;   // Physical region descriptor table length in entries
 
-            uint prdbc;   // Physical region descriptor byte count transferred
+            public uint prdbc;   // Physical region descriptor byte count transferred
 
-            uint ctba;    // Command table descriptor base address
-            uint ctbau;   // Command table descriptor base address upper 32 bits
+            public uint ctba;    // Command table descriptor base address
+            public uint ctbau;   // Command table descriptor base address upper 32 bits
 
             fixed uint rsv1[4];
         }
@@ -88,27 +87,27 @@ namespace Mosa.External.x86.Driver
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public unsafe struct tagFIS_REG_H2D
         {
-            byte fis_type;  // FIS_TYPE_REG_H2D
+            public byte fis_type;  // FIS_TYPE_REG_H2D
 
-            byte pmportrsv0c;
+            public byte pmportrsv0c;
 
-            byte command;   // Command register
-            byte featurel;  // Feature register, 7:0
+            public byte command;   // Command register
+            public byte featurel;  // Feature register, 7:0
 
-            byte lba0;      // LBA low register, 7:0
-            byte lba1;      // LBA mid register, 15:8
-            byte lba2;      // LBA high register, 23:16
-            byte device;    // Device register
+            public byte lba0;      // LBA low register, 7:0
+            public byte lba1;      // LBA mid register, 15:8
+            public byte lba2;      // LBA high register, 23:16
+            public byte device;    // Device register
 
-            byte lba3;     // LBA register, 31:24
-            byte lba4;     // LBA register, 39:32
-            byte lba5;     // LBA register, 47:40
-            byte featureh; // Feature register, 15:8
+            public byte lba3;     // LBA register, 31:24
+            public byte lba4;     // LBA register, 39:32
+            public byte lba5;     // LBA register, 47:40
+            public byte featureh; // Feature register, 15:8
 
-            byte countl;   // Count register, 7:0
-            byte counth;   // Count register, 15:8
-            byte icc;      // Isochronous command completion
-            byte control;  // Control register
+            public byte countl;   // Count register, 7:0
+            public byte counth;   // Count register, 15:8
+            public byte icc;      // Isochronous command completion
+            public byte control;  // Control register
 
             fixed byte rsv1[4];
         }
@@ -126,26 +125,27 @@ namespace Mosa.External.x86.Driver
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public unsafe struct tagHBA_MEM
         {
-            uint cap;     // 0x00, Host capability
-            uint ghc;     // 0x04, Global host control
-            uint Is;		// 0x08, Interrupt status
-	        uint pi;      // 0x0C, Port implemented
-            uint vs;      // 0x10, Version
-            uint ccc_ctl; // 0x14, Command completion coalescing control
-            uint ccc_pts; // 0x18, Command completion coalescing ports
-            uint em_loc;      // 0x1C, Enclosure management location
-            uint em_ctl;      // 0x20, Enclosure management control
-            uint cap2;        // 0x24, Host capabilities extended
-            uint bohc;        // 0x28, BIOS/OS handoff control and status
+            public uint cap;     // 0x00, Host capability
+            public uint ghc;     // 0x04, Global host control
+            public uint Is;     // 0x08, Interrupt status
+            public uint pi;      // 0x0C, Port implemented
+            public uint vs;      // 0x10, Version
+            public uint ccc_ctl; // 0x14, Command completion coalescing control
+            public uint ccc_pts; // 0x18, Command completion coalescing ports
+            public uint em_loc;      // 0x1C, Enclosure management location
+            public uint em_ctl;      // 0x20, Enclosure management control
+            public uint cap2;        // 0x24, Host capabilities extended
+            public uint bohc;        // 0x28, BIOS/OS handoff control and status
 
             // 0x2C - 0x9F, Reserved
-            fixed byte rsv[0xA0 - 0x2C];
+            public fixed byte rsv[0xA0 - 0x2C];
 
             // 0xA0 - 0xFF, Vendor specific registers
-            fixed byte vendor[0x100 - 0xA0];
+            public fixed byte vendor[0x100 - 0xA0];
 
             // 0x100 - 0x10FF, Port control registers
             //tagHBA_PORT	ports[1];	// 1 ~ 32
+            public fixed byte ports[0x10FF - 0x100];
         }
     }
 }
