@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using Mosa.Kernel.x86;
 
-namespace Mosa.External.x86.Driver.Storage
+namespace Mosa.External.x86.Driver
 {
     class AHCI
     {
