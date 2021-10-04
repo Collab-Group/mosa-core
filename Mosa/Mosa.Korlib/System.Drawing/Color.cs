@@ -4,7 +4,7 @@
     {
         public byte A, R, G, B;
 
-        #region Colors
+        #region Colors Memory Leak Risk
         public static Color AliceBlue { get { return FromArgb(240, 248, 255); } }
         public static Color LightSalmon { get { return FromArgb(255, 160, 122); } }
         public static Color AntiqueWhite { get { return FromArgb(250, 235, 215); } }
