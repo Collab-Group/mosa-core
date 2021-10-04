@@ -8,8 +8,14 @@ Visual Studio 2019 (recommended version: 16.10.x )<br/>
 Inno Setup Compiler (recommended version: 6.2.x )<br/>
 Oracle VM VirtualBox (recommended version: 6.1.x )<br/>
 
+# Installation
+Install all required dependencies, then double click ``CreateInstaller.bat`` if you're on Windows
+
 # Informations
 **Important**: Your project name **cannot** contain spaces (or SYSLINUX, the bootloader that we use, won't be able to load your OS)
+
+# Demo
+A GUI-based demo of MOSA-Core is available [here](https://github.com/nifanfa/MOSA-GUI-Sample).
 
 **Wiki: https://github.com/nifanfa/MOSA-Core/wiki<br/>**
 **Discord server: https://discord.gg/WrNEsmUmKa<br/>**
@@ -21,9 +27,3 @@ MOSA's official Gitter chat:<br/>
 [gitter-image]: https://img.shields.io/badge/gitter-join%20chat%20-blue.svg
 [gitter2-image]: https://badges.gitter.im/Join%20Chat.svg
 [gitter-chat]: https://gitter.im/mosa/MOSA-Project
-
-# Usage
-Install all required dependencies, then double click ``CreateInstaller.bat`` if you're on Windows
-
-# Demo
-A GUI-based demo of MOSA-Core is available [here](https://github.com/nifanfa/MOSA-GUI-Sample).
