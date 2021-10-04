@@ -1,7 +1,5 @@
 [BITS 32]
-    MOV EAX,CR4
-    OR EAX,1<<5
-    MOV CR4,EAX
-    MOV ECX,[ESP+4]
-    MOV CR3,ECX
+    MOV EAX, CR4
+    OR EAX, 1 << 5
+    MOV CR4, EAX
     RET

@@ -11,7 +11,7 @@ namespace Mosa.Kernel.x86
     public static class PAE
     {
         [DllImport("PAE.o")]
-        public static extern void EnablePAE(uint PageDirectoryEntries);
+        public static extern void EnablePAE();
 
         public static void Setup() 
         {
