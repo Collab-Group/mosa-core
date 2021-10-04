@@ -1,6 +1,6 @@
 # MOSA-Core
-A fork of the MOSA (Managed Operating System Alliance) project, whose goals are to add useful features into MOSA, while keeping it organized and easy to use.<br/>
-MOSA is a powerful and relatively stable way of creating an operating system in C# **(.NET Core 5.0)**.
+A fork of the MOSA (Managed Operating System Alliance) project, whose goals are to add **useful** features into MOSA, while keeping it **organized** and **easy** to use.<br/>
+MOSA is a powerful and relatively **stable** way of creating an operating system in C# **(.NET Core 5.0)**.
 
 # Dependencies
 **Windows:**
@@ -12,12 +12,12 @@ Oracle VM VirtualBox (recommended version: 6.1.x )<br/>
 # Installation
 Install all required dependencies, then double click ``CreateInstaller.bat`` if you're on Windows
 
-# Informations
-**Important**: Your project name **cannot** contain spaces (or SYSLINUX, the bootloader that we use, won't be able to load your OS)
-
 # Demo
 A GUI-based demo of MOSA-Core is available [here](https://github.com/nifanfa/MOSA-GUI-Sample).
 
+# Informations
+**Important**: Your project name **cannot** contain spaces (or SYSLINUX, the bootloader that we use, won't be able to load your OS)  
+<br/>
 **Wiki: https://github.com/nifanfa/MOSA-Core/wiki<br/>**
 **Discord server: https://discord.gg/WrNEsmUmKa<br/>**
 [IntelliSense completion for unimported types and extension methods](https://docs.microsoft.com/en-us/visualstudio/ide/reference/intellisense-completion-unimported-types-extension-methods?view=vs-2019)<br/>
