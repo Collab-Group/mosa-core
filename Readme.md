@@ -3,7 +3,8 @@ A fork of the MOSA (Managed Operating System Alliance) project, whose goals are 
 MOSA is a powerful and relatively stable way of creating an operating system in C# **(.NET Core 5.0)**.
 
 # Dependencies
-**Windows**<br/>
+**Windows:**
+<br/>
 Visual Studio 2019 (recommended version: 16.10.x )<br/>
 Inno Setup Compiler (recommended version: 6.2.x )<br/>
 Oracle VM VirtualBox (recommended version: 6.1.x )<br/>
