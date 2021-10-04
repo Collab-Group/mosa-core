@@ -18,41 +18,23 @@ namespace Mosa.Launcher.Console
         private static MosaLinker Linker;
         private static TypeSystem TypeSystem;
 
-        private static string OutputName
-        {
-            get
-            {
-                return Arguments[1];
-            }
-        }
-        private static string SourceName
-        {
-            get
-            {
-                return Arguments[0];
-            }
-        }
+        private static string OutputName;
+        private static string SourceName;
         private static string OutputFolder
         {
             get
             {
-                return Path.GetDirectoryName(Arguments[1]);
+                return Path.GetDirectoryName(OutputName);
             }
         }
         private static string SourceFolder
         {
             get
             {
-                return Path.GetDirectoryName(Arguments[0]);
+                return Path.GetDirectoryName(SourceName);
             }
         }
-        private static bool VBEEnable
-        {
-            get
-            {
-                return Convert.ToBoolean(Arguments[2]);
-            }
-        }
+        private static bool VBEEnable;
 
         public static string AppFolder = @"C:\Program Files (x86)\MOSA-Project";
         public static string VirtualBoxPath = @"C:\Program Files\Oracle\VirtualBox\VBoxManage.exe";
@@ -69,6 +51,10 @@ namespace Mosa.Launcher.Console
 
         public static bool RunAfterBuild = true;
 
+        //Arguments:
+        //Arguments 1 Is The Input File
+        //- VBE(Enable VBE)
+        //- JUSTBUILD(Tell Compiler Do Not Launch VirtualBox After Compiling)
         static void Main(string[] args)
         {
             try
@@ -81,25 +67,26 @@ namespace Mosa.Launcher.Console
                     return;
                 }
 
-                //Arguments 1: Source Name
-                //Arguments 2: Output Name
-                //Arguments 3: VBE Enable
-
-                //Arguments: JustBuild
-
                 //If you want to change "main.exe" to other name you have to modify the syslinux.cfg
-                Arguments = new string[] { args[0], AppFolder + @"\output\main.exe", args[2] };
 
-                System.Console.WriteLine($"VBE Status: {VBEEnable}");
-                System.Console.WriteLine($"Output ISO Path: {ISOFilePath}");
+                SourceName = args[0];
+                OutputName = AppFolder + @"\output\main.exe";
 
                 foreach (var v in args)
                 {
-                    if (v == "JustBuild")
+                    switch (v.ToUpper())
                     {
-                        RunAfterBuild = false;
+                        case "-VBE":
+                            VBEEnable = true;
+                            break;
+                        case "-JUSTBUILD":
+                            RunAfterBuild = false;
+                            break;
                     }
                 }
+
+                System.Console.WriteLine($"VBE Status: {VBEEnable}");
+                System.Console.WriteLine($"Output ISO Path: {ISOFilePath}");
 
                 DefaultSettings();
                 RegisterPlatforms();
