@@ -4,9 +4,148 @@
     {
         public byte A, R, G, B;
 
-        public int ARGB { get; private set; }
-
-        public bool IsBlack { get; private set; }
+        #region Colors
+        public static Color AliceBlue { get { return FromArgb(240, 248, 255); } }
+        public static Color LightSalmon { get { return FromArgb(255, 160, 122); } }
+        public static Color AntiqueWhite { get { return FromArgb(250, 235, 215); } }
+        public static Color LightSeaGreen { get { return FromArgb(32, 178, 170); } }
+        public static Color Aqua { get { return FromArgb(0, 255, 255); } }
+        public static Color LightSkyBlue { get { return FromArgb(135, 206, 250); } }
+        public static Color Aquamarine { get { return FromArgb(127, 255, 212); } }
+        public static Color LightSlateGray { get { return FromArgb(119, 136, 153); } }
+        public static Color Azure { get { return FromArgb(240, 255, 255); } }
+        public static Color LightSteelBlue { get { return FromArgb(176, 196, 222); } }
+        public static Color Beige { get { return FromArgb(245, 245, 220); } }
+        public static Color LightYellow { get { return FromArgb(255, 255, 224); } }
+        public static Color Bisque { get { return FromArgb(255, 228, 196); } }
+        public static Color Lime { get { return FromArgb(0, 255, 0); } }
+        public static Color Black { get { return FromArgb(0, 0, 0); } }
+        public static Color LimeGreen { get { return FromArgb(50, 205, 50); } }
+        public static Color BlanchedAlmond { get { return FromArgb(255, 255, 205); } }
+        public static Color Linen { get { return FromArgb(250, 240, 230); } }
+        public static Color Blue { get { return FromArgb(0, 0, 255); } }
+        public static Color Magenta { get { return FromArgb(255, 0, 255); } }
+        public static Color BlueViolet { get { return FromArgb(138, 43, 226); } }
+        public static Color Maroon { get { return FromArgb(128, 0, 0); } }
+        public static Color Brown { get { return FromArgb(165, 42, 42); } }
+        public static Color MediumAquamarine { get { return FromArgb(102, 205, 170); } }
+        public static Color BurlyWood { get { return FromArgb(222, 184, 135); } }
+        public static Color MediumBlue { get { return FromArgb(0, 0, 205); } }
+        public static Color CadetBlue { get { return FromArgb(95, 158, 160); } }
+        public static Color MediumOrchid { get { return FromArgb(186, 85, 211); } }
+        public static Color Chartreuse { get { return FromArgb(127, 255, 0); } }
+        public static Color MediumPurple { get { return FromArgb(147, 112, 219); } }
+        public static Color Chocolate { get { return FromArgb(210, 105, 30); } }
+        public static Color MediumSeaGreen { get { return FromArgb(60, 179, 113); } }
+        public static Color Coral { get { return FromArgb(255, 127, 80); } }
+        public static Color MediumSlateBlue { get { return FromArgb(123, 104, 238); } }
+        public static Color CornflowerBlue { get { return FromArgb(100, 149, 237); } }
+        public static Color MediumSpringGreen { get { return FromArgb(0, 250, 154); } }
+        public static Color Cornsilk { get { return FromArgb(255, 248, 220); } }
+        public static Color MediumTurquoise { get { return FromArgb(72, 209, 204); } }
+        public static Color Crimson { get { return FromArgb(220, 20, 60); } }
+        public static Color MediumVioletRed { get { return FromArgb(199, 21, 112); } }
+        public static Color Cyan { get { return FromArgb(0, 255, 255); } }
+        public static Color MidnightBlue { get { return FromArgb(25, 25, 112); } }
+        public static Color DarkBlue { get { return FromArgb(0, 0, 139); } }
+        public static Color MintCream { get { return FromArgb(245, 255, 250); } }
+        public static Color DarkCyan { get { return FromArgb(0, 139, 139); } }
+        public static Color MistyRose { get { return FromArgb(255, 228, 225); } }
+        public static Color DarkGoldenrod { get { return FromArgb(184, 134, 11); } }
+        public static Color Moccasin { get { return FromArgb(255, 228, 181); } }
+        public static Color DarkGray { get { return FromArgb(169, 169, 169); } }
+        public static Color NavajoWhite { get { return FromArgb(255, 222, 173); } }
+        public static Color DarkGreen { get { return FromArgb(0, 100, 0); } }
+        public static Color Navy { get { return FromArgb(0, 0, 128); } }
+        public static Color DarkKhaki { get { return FromArgb(189, 183, 107); } }
+        public static Color OldLace { get { return FromArgb(253, 245, 230); } }
+        public static Color DarkMagena { get { return FromArgb(139, 0, 139); } }
+        public static Color Olive { get { return FromArgb(128, 128, 0); } }
+        public static Color DarkOliveGreen { get { return FromArgb(85, 107, 47); } }
+        public static Color OliveDrab { get { return FromArgb(107, 142, 45); } }
+        public static Color DarkOrange { get { return FromArgb(255, 140, 0); } }
+        public static Color Orange { get { return FromArgb(255, 165, 0); } }
+        public static Color DarkOrchid { get { return FromArgb(153, 50, 204); } }
+        public static Color OrangeRed { get { return FromArgb(255, 69, 0); } }
+        public static Color DarkRed { get { return FromArgb(139, 0, 0); } }
+        public static Color Orchid { get { return FromArgb(218, 112, 214); } }
+        public static Color DarkSalmon { get { return FromArgb(233, 150, 122); } }
+        public static Color PaleGoldenrod { get { return FromArgb(238, 232, 170); } }
+        public static Color DarkSeaGreen { get { return FromArgb(143, 188, 143); } }
+        public static Color PaleGreen { get { return FromArgb(152, 251, 152); } }
+        public static Color DarkSlateBlue { get { return FromArgb(72, 61, 139); } }
+        public static Color PaleTurquoise { get { return FromArgb(175, 238, 238); } }
+        public static Color DarkSlateGray { get { return FromArgb(40, 79, 79); } }
+        public static Color PaleVioletRed { get { return FromArgb(219, 112, 147); } }
+        public static Color DarkTurquoise { get { return FromArgb(0, 206, 209); } }
+        public static Color PapayaWhip { get { return FromArgb(255, 239, 213); } }
+        public static Color DarkViolet { get { return FromArgb(148, 0, 211); } }
+        public static Color PeachPuff { get { return FromArgb(255, 218, 155); } }
+        public static Color DeepPink { get { return FromArgb(255, 20, 147); } }
+        public static Color Peru { get { return FromArgb(205, 133, 63); } }
+        public static Color DeepSkyBlue { get { return FromArgb(0, 191, 255); } }
+        public static Color Pink { get { return FromArgb(255, 192, 203); } }
+        public static Color DimGray { get { return FromArgb(105, 105, 105); } }
+        public static Color Plum { get { return FromArgb(221, 160, 221); } }
+        public static Color DodgerBlue { get { return FromArgb(30, 144, 255); } }
+        public static Color PowderBlue { get { return FromArgb(176, 224, 230); } }
+        public static Color Firebrick { get { return FromArgb(178, 34, 34); } }
+        public static Color Purple { get { return FromArgb(128, 0, 128); } }
+        public static Color FloralWhite { get { return FromArgb(255, 250, 240); } }
+        public static Color Red { get { return FromArgb(255, 0, 0); } }
+        public static Color ForestGreen { get { return FromArgb(34, 139, 34); } }
+        public static Color RosyBrown { get { return FromArgb(188, 143, 143); } }
+        public static Color Fuschia { get { return FromArgb(255, 0, 255); } }
+        public static Color RoyalBlue { get { return FromArgb(65, 105, 225); } }
+        public static Color Gainsboro { get { return FromArgb(220, 220, 220); } }
+        public static Color SaddleBrown { get { return FromArgb(139, 69, 19); } }
+        public static Color GhostWhite { get { return FromArgb(248, 248, 255); } }
+        public static Color Salmon { get { return FromArgb(250, 128, 114); } }
+        public static Color Gold { get { return FromArgb(255, 215, 0); } }
+        public static Color SandyBrown { get { return FromArgb(244, 164, 96); } }
+        public static Color Goldenrod { get { return FromArgb(218, 165, 32); } }
+        public static Color SeaGreen { get { return FromArgb(46, 139, 87); } }
+        public static Color Gray { get { return FromArgb(128, 128, 128); } }
+        public static Color Seashell { get { return FromArgb(255, 245, 238); } }
+        public static Color Green { get { return FromArgb(0, 128, 0); } }
+        public static Color Sienna { get { return FromArgb(160, 82, 45); } }
+        public static Color GreenYellow { get { return FromArgb(173, 255, 47); } }
+        public static Color Silver { get { return FromArgb(192, 192, 192); } }
+        public static Color Honeydew { get { return FromArgb(240, 255, 240); } }
+        public static Color SkyBlue { get { return FromArgb(135, 206, 235); } }
+        public static Color HotPink { get { return FromArgb(255, 105, 180); } }
+        public static Color SlateBlue { get { return FromArgb(106, 90, 205); } }
+        public static Color IndianRed { get { return FromArgb(205, 92, 92); } }
+        public static Color SlateGray { get { return FromArgb(112, 128, 144); } }
+        public static Color Indigo { get { return FromArgb(75, 0, 130); } }
+        public static Color Snow { get { return FromArgb(255, 250, 250); } }
+        public static Color Ivory { get { return FromArgb(255, 240, 240); } }
+        public static Color SpringGreen { get { return FromArgb(0, 255, 127); } }
+        public static Color Khaki { get { return FromArgb(240, 230, 140); } }
+        public static Color SteelBlue { get { return FromArgb(70, 130, 180); } }
+        public static Color Lavender { get { return FromArgb(230, 230, 250); } }
+        public static Color Tan { get { return FromArgb(210, 180, 140); } }
+        public static Color LavenderBlush { get { return FromArgb(255, 240, 245); } }
+        public static Color Teal { get { return FromArgb(0, 128, 128); } }
+        public static Color LawnGreen { get { return FromArgb(124, 252, 0); } }
+        public static Color Thistle { get { return FromArgb(216, 191, 216); } }
+        public static Color LemonChiffon { get { return FromArgb(255, 250, 205); } }
+        public static Color Tomato { get { return FromArgb(253, 99, 71); } }
+        public static Color LightBlue { get { return FromArgb(173, 216, 230); } }
+        public static Color Turquoise { get { return FromArgb(64, 224, 208); } }
+        public static Color LightCoral { get { return FromArgb(240, 128, 128); } }
+        public static Color Violet { get { return FromArgb(238, 130, 238); } }
+        public static Color LightCyan { get { return FromArgb(224, 255, 255); } }
+        public static Color Wheat { get { return FromArgb(245, 222, 179); } }
+        public static Color LightGoldenrodYellow { get { return FromArgb(250, 250, 210); } }
+        public static Color White { get { return FromArgb(255, 255, 255); } }
+        public static Color LightGreen { get { return FromArgb(144, 238, 144); } }
+        public static Color WhiteSmoke { get { return FromArgb(245, 245, 245); } }
+        public static Color LightGray { get { return FromArgb(211, 211, 211); } }
+        public static Color Yellow { get { return FromArgb(255, 255, 0); } }
+        public static Color LightPink { get { return FromArgb(255, 182, 193); } }
+        public static Color YellowGreen { get { return FromArgb(154, 205, 50); } }
+        #endregion
 
         public static bool operator ==(Color a, Color b)
         {
@@ -20,1626 +159,36 @@
 
         public static bool Equals(Color a, Color b)
         {
-            return a.GetAlpha() == b.GetAlpha() &&
-                a.GetRed() == b.GetRed() &&
-                a.GetGreen() == b.GetGreen() &&
-                a.GetBlue() == b.GetBlue();
+            return
+                a.A == b.A &&
+                a.R == b.R &&
+                a.G == b.G &&
+                a.B == b.B;
         }
 
-        #region Colors
-
-        public static readonly Color Empty = new Color();
-
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Transparent"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Transparent
+        public uint ToArgb()
         {
-            get
-            {
-                return new Color(KnownColor.Transparent);
-            }
+            return ToArgb(this.A, this.R, this.G, this.B);
         }
 
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.AliceBlue"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color AliceBlue
+        public static uint ToArgb(byte r, byte g, byte b)
         {
-            get
-            {
-                return new Color(KnownColor.AliceBlue);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.AntiqueWhite"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color AntiqueWhite
-        {
-            get
-            {
-                return new Color(KnownColor.AntiqueWhite);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Aqua"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Aqua
-        {
-            get
-            {
-                return new Color(KnownColor.Aqua);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Aquamarine"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Aquamarine
-        {
-            get
-            {
-                return new Color(KnownColor.Aquamarine);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Azure"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Azure
-        {
-            get
-            {
-                return new Color(KnownColor.Azure);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Beige"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Beige
-        {
-            get
-            {
-                return new Color(KnownColor.Beige);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Bisque"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Bisque
-        {
-            get
-            {
-                return new Color(KnownColor.Bisque);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Black"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Black
-        {
-            get
-            {
-                return new Color(KnownColor.Black);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.BlanchedAlmond"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color BlanchedAlmond
-        {
-            get
-            {
-                return new Color(KnownColor.BlanchedAlmond);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Blue"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Blue
-        {
-            get
-            {
-                return new Color(KnownColor.Blue);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.BlueViolet"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color BlueViolet
-        {
-            get
-            {
-                return new Color(KnownColor.BlueViolet);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Brown"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Brown
-        {
-            get
-            {
-                return new Color(KnownColor.Brown);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.BurlyWood"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color BurlyWood
-        {
-            get
-            {
-                return new Color(KnownColor.BurlyWood);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.CadetBlue"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color CadetBlue
-        {
-            get
-            {
-                return new Color(KnownColor.CadetBlue);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Chartreuse"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Chartreuse
-        {
-            get
-            {
-                return new Color(KnownColor.Chartreuse);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Chocolate"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Chocolate
-        {
-            get
-            {
-                return new Color(KnownColor.Chocolate);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Coral"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Coral
-        {
-            get
-            {
-                return new Color(KnownColor.Coral);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.CornflowerBlue"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color CornflowerBlue
-        {
-            get
-            {
-                return new Color(KnownColor.CornflowerBlue);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Cornsilk"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Cornsilk
-        {
-            get
-            {
-                return new Color(KnownColor.Cornsilk);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Crimson"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Crimson
-        {
-            get
-            {
-                return new Color(KnownColor.Crimson);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Cyan"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Cyan
-        {
-            get
-            {
-                return new Color(KnownColor.Cyan);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.DarkBlue"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color DarkBlue
-        {
-            get
-            {
-                return new Color(KnownColor.DarkBlue);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.DarkCyan"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color DarkCyan
-        {
-            get
-            {
-                return new Color(KnownColor.DarkCyan);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.DarkGoldenrod"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color DarkGoldenrod
-        {
-            get
-            {
-                return new Color(KnownColor.DarkGoldenrod);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.DarkGray"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color DarkGray
-        {
-            get
-            {
-                return new Color(KnownColor.DarkGray);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.DarkGreen"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color DarkGreen
-        {
-            get
-            {
-                return new Color(KnownColor.DarkGreen);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.DarkKhaki"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color DarkKhaki
-        {
-            get
-            {
-                return new Color(KnownColor.DarkKhaki);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.DarkMagenta"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color DarkMagenta
-        {
-            get
-            {
-                return new Color(KnownColor.DarkMagenta);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.DarkOliveGreen"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color DarkOliveGreen
-        {
-            get
-            {
-                return new Color(KnownColor.DarkOliveGreen);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.DarkOrange"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color DarkOrange
-        {
-            get
-            {
-                return new Color(KnownColor.DarkOrange);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.DarkOrchid"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color DarkOrchid
-        {
-            get
-            {
-                return new Color(KnownColor.DarkOrchid);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.DarkRed"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color DarkRed
-        {
-            get
-            {
-                return new Color(KnownColor.DarkRed);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.DarkSalmon"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color DarkSalmon
-        {
-            get
-            {
-                return new Color(KnownColor.DarkSalmon);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.DarkSeaGreen"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color DarkSeaGreen
-        {
-            get
-            {
-                return new Color(KnownColor.DarkSeaGreen);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.DarkSlateBlue"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color DarkSlateBlue
-        {
-            get
-            {
-                return new Color(KnownColor.DarkSlateBlue);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.DarkSlateGray"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color DarkSlateGray
-        {
-            get
-            {
-                return new Color(KnownColor.DarkSlateGray);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.DarkTurquoise"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color DarkTurquoise
-        {
-            get
-            {
-                return new Color(KnownColor.DarkTurquoise);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.DarkViolet"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color DarkViolet
-        {
-            get
-            {
-                return new Color(KnownColor.DarkViolet);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.DeepPink"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color DeepPink
-        {
-            get
-            {
-                return new Color(KnownColor.DeepPink);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.DeepSkyBlue"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color DeepSkyBlue
-        {
-            get
-            {
-                return new Color(KnownColor.DeepSkyBlue);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.DimGray"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color DimGray
-        {
-            get
-            {
-                return new Color(KnownColor.DimGray);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.DodgerBlue"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color DodgerBlue
-        {
-            get
-            {
-                return new Color(KnownColor.DodgerBlue);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Firebrick"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Firebrick
-        {
-            get
-            {
-                return new Color(KnownColor.Firebrick);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.FloralWhite"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color FloralWhite
-        {
-            get
-            {
-                return new Color(KnownColor.FloralWhite);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.ForestGreen"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color ForestGreen
-        {
-            get
-            {
-                return new Color(KnownColor.ForestGreen);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Fuchsia"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Fuchsia
-        {
-            get
-            {
-                return new Color(KnownColor.Fuchsia);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Gainsboro"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Gainsboro
-        {
-            get
-            {
-                return new Color(KnownColor.Gainsboro);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.GhostWhite"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color GhostWhite
-        {
-            get
-            {
-                return new Color(KnownColor.GhostWhite);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Gold"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Gold
-        {
-            get
-            {
-                return new Color(KnownColor.Gold);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Goldenrod"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Goldenrod
-        {
-            get
-            {
-                return new Color(KnownColor.Goldenrod);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Gray"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Gray
-        {
-            get
-            {
-                return new Color(KnownColor.Gray);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Green"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Green
-        {
-            get
-            {
-                return new Color(KnownColor.Green);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.GreenYellow"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color GreenYellow
-        {
-            get
-            {
-                return new Color(KnownColor.GreenYellow);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Honeydew"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Honeydew
-        {
-            get
-            {
-                return new Color(KnownColor.Honeydew);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.HotPink"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color HotPink
-        {
-            get
-            {
-                return new Color(KnownColor.HotPink);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.IndianRed"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color IndianRed
-        {
-            get
-            {
-                return new Color(KnownColor.IndianRed);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Indigo"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Indigo
-        {
-            get
-            {
-                return new Color(KnownColor.Indigo);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Ivory"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Ivory
-        {
-            get
-            {
-                return new Color(KnownColor.Ivory);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Khaki"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Khaki
-        {
-            get
-            {
-                return new Color(KnownColor.Khaki);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Lavender"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Lavender
-        {
-            get
-            {
-                return new Color(KnownColor.Lavender);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.LavenderBlush"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color LavenderBlush
-        {
-            get
-            {
-                return new Color(KnownColor.LavenderBlush);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.LawnGreen"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color LawnGreen
-        {
-            get
-            {
-                return new Color(KnownColor.LawnGreen);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.LemonChiffon"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color LemonChiffon
-        {
-            get
-            {
-                return new Color(KnownColor.LemonChiffon);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.LightBlue"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color LightBlue
-        {
-            get
-            {
-                return new Color(KnownColor.LightBlue);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.LightCoral"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color LightCoral
-        {
-            get
-            {
-                return new Color(KnownColor.LightCoral);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.LightCyan"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color LightCyan
-        {
-            get
-            {
-                return new Color(KnownColor.LightCyan);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.LightGoldenrodYellow"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color LightGoldenrodYellow
-        {
-            get
-            {
-                return new Color(KnownColor.LightGoldenrodYellow);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.LightGreen"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color LightGreen
-        {
-            get
-            {
-                return new Color(KnownColor.LightGreen);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.LightGray"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color LightGray
-        {
-            get
-            {
-                return new Color(KnownColor.LightGray);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.LightPink"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color LightPink
-        {
-            get
-            {
-                return new Color(KnownColor.LightPink);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.LightSalmon"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color LightSalmon
-        {
-            get
-            {
-                return new Color(KnownColor.LightSalmon);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.LightSeaGreen"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color LightSeaGreen
-        {
-            get
-            {
-                return new Color(KnownColor.LightSeaGreen);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.LightSkyBlue"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color LightSkyBlue
-        {
-            get
-            {
-                return new Color(KnownColor.LightSkyBlue);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.LightSlateGray"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color LightSlateGray
-        {
-            get
-            {
-                return new Color(KnownColor.LightSlateGray);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.LightSteelBlue"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color LightSteelBlue
-        {
-            get
-            {
-                return new Color(KnownColor.LightSteelBlue);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.LightYellow"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color LightYellow
-        {
-            get
-            {
-                return new Color(KnownColor.LightYellow);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Lime"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Lime
-        {
-            get
-            {
-                return new Color(KnownColor.Lime);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.LimeGreen"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color LimeGreen
-        {
-            get
-            {
-                return new Color(KnownColor.LimeGreen);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Linen"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Linen
-        {
-            get
-            {
-                return new Color(KnownColor.Linen);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Magenta"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Magenta
-        {
-            get
-            {
-                return new Color(KnownColor.Magenta);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Maroon"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Maroon
-        {
-            get
-            {
-                return new Color(KnownColor.Maroon);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.MediumAquamarine"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color MediumAquamarine
-        {
-            get
-            {
-                return new Color(KnownColor.MediumAquamarine);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.MediumBlue"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color MediumBlue
-        {
-            get
-            {
-                return new Color(KnownColor.MediumBlue);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.MediumOrchid"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color MediumOrchid
-        {
-            get
-            {
-                return new Color(KnownColor.MediumOrchid);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.MediumPurple"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color MediumPurple
-        {
-            get
-            {
-                return new Color(KnownColor.MediumPurple);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.MediumSeaGreen"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color MediumSeaGreen
-        {
-            get
-            {
-                return new Color(KnownColor.MediumSeaGreen);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.MediumSlateBlue"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color MediumSlateBlue
-        {
-            get
-            {
-                return new Color(KnownColor.MediumSlateBlue);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.MediumSpringGreen"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color MediumSpringGreen
-        {
-            get
-            {
-                return new Color(KnownColor.MediumSpringGreen);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.MediumTurquoise"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color MediumTurquoise
-        {
-            get
-            {
-                return new Color(KnownColor.MediumTurquoise);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.MediumVioletRed"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color MediumVioletRed
-        {
-            get
-            {
-                return new Color(KnownColor.MediumVioletRed);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.MidnightBlue"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color MidnightBlue
-        {
-            get
-            {
-                return new Color(KnownColor.MidnightBlue);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.MintCream"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color MintCream
-        {
-            get
-            {
-                return new Color(KnownColor.MintCream);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.MistyRose"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color MistyRose
-        {
-            get
-            {
-                return new Color(KnownColor.MistyRose);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Moccasin"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Moccasin
-        {
-            get
-            {
-                return new Color(KnownColor.Moccasin);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.NavajoWhite"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color NavajoWhite
-        {
-            get
-            {
-                return new Color(KnownColor.NavajoWhite);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Navy"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Navy
-        {
-            get
-            {
-                return new Color(KnownColor.Navy);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.OldLace"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color OldLace
-        {
-            get
-            {
-                return new Color(KnownColor.OldLace);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Olive"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Olive
-        {
-            get
-            {
-                return new Color(KnownColor.Olive);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.OliveDrab"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color OliveDrab
-        {
-            get
-            {
-                return new Color(KnownColor.OliveDrab);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Orange"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Orange
-        {
-            get
-            {
-                return new Color(KnownColor.Orange);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.OrangeRed"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color OrangeRed
-        {
-            get
-            {
-                return new Color(KnownColor.OrangeRed);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Orchid"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Orchid
-        {
-            get
-            {
-                return new Color(KnownColor.Orchid);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.PaleGoldenrod"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color PaleGoldenrod
-        {
-            get
-            {
-                return new Color(KnownColor.PaleGoldenrod);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.PaleGreen"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color PaleGreen
-        {
-            get
-            {
-                return new Color(KnownColor.PaleGreen);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.PaleTurquoise"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color PaleTurquoise
-        {
-            get
-            {
-                return new Color(KnownColor.PaleTurquoise);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.PaleVioletRed"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color PaleVioletRed
-        {
-            get
-            {
-                return new Color(KnownColor.PaleVioletRed);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.PapayaWhip"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color PapayaWhip
-        {
-            get
-            {
-                return new Color(KnownColor.PapayaWhip);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.PeachPuff"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color PeachPuff
-        {
-            get
-            {
-                return new Color(KnownColor.PeachPuff);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Peru"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Peru
-        {
-            get
-            {
-                return new Color(KnownColor.Peru);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Pink"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Pink
-        {
-            get
-            {
-                return new Color(KnownColor.Pink);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Plum"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Plum
-        {
-            get
-            {
-                return new Color(KnownColor.Plum);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.PowderBlue"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color PowderBlue
-        {
-            get
-            {
-                return new Color(KnownColor.PowderBlue);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Purple"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Purple
-        {
-            get
-            {
-                return new Color(KnownColor.Purple);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Red"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Red
-        {
-            get
-            {
-                return new Color(KnownColor.Red);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.RosyBrown"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color RosyBrown
-        {
-            get
-            {
-                return new Color(KnownColor.RosyBrown);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.RoyalBlue"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color RoyalBlue
-        {
-            get
-            {
-                return new Color(KnownColor.RoyalBlue);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.SaddleBrown"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color SaddleBrown
-        {
-            get
-            {
-                return new Color(KnownColor.SaddleBrown);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Salmon"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Salmon
-        {
-            get
-            {
-                return new Color(KnownColor.Salmon);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.SandyBrown"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color SandyBrown
-        {
-            get
-            {
-                return new Color(KnownColor.SandyBrown);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.SeaGreen"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color SeaGreen
-        {
-            get
-            {
-                return new Color(KnownColor.SeaGreen);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.SeaShell"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color SeaShell
-        {
-            get
-            {
-                return new Color(KnownColor.SeaShell);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Sienna"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Sienna
-        {
-            get
-            {
-                return new Color(KnownColor.Sienna);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Silver"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Silver
-        {
-            get
-            {
-                return new Color(KnownColor.Silver);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.SkyBlue"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color SkyBlue
-        {
-            get
-            {
-                return new Color(KnownColor.SkyBlue);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.SlateBlue"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color SlateBlue
-        {
-            get
-            {
-                return new Color(KnownColor.SlateBlue);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.SlateGray"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color SlateGray
-        {
-            get
-            {
-                return new Color(KnownColor.SlateGray);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Snow"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Snow
-        {
-            get
-            {
-                return new Color(KnownColor.Snow);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.SpringGreen"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color SpringGreen
-        {
-            get
-            {
-                return new Color(KnownColor.SpringGreen);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.SteelBlue"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color SteelBlue
-        {
-            get
-            {
-                return new Color(KnownColor.SteelBlue);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Tan"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Tan
-        {
-            get
-            {
-                return new Color(KnownColor.Tan);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Teal"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Teal
-        {
-            get
-            {
-                return new Color(KnownColor.Teal);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Thistle"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Thistle
-        {
-            get
-            {
-                return new Color(KnownColor.Thistle);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Tomato"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Tomato
-        {
-            get
-            {
-                return new Color(KnownColor.Tomato);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Turquoise"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Turquoise
-        {
-            get
-            {
-                return new Color(KnownColor.Turquoise);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Violet"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Violet
-        {
-            get
-            {
-                return new Color(KnownColor.Violet);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Wheat"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Wheat
-        {
-            get
-            {
-                return new Color(KnownColor.Wheat);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.White"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color White
-        {
-            get
-            {
-                return new Color(KnownColor.White);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.WhiteSmoke"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color WhiteSmoke
-        {
-            get
-            {
-                return new Color(KnownColor.WhiteSmoke);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.Yellow"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color Yellow
-        {
-            get
-            {
-                return new Color(KnownColor.Yellow);
-            }
-        }
-        /// <include file='doc\Color.uex' path='docs/doc[@for="Color.YellowGreen"]/*' />
-        /// <devdoc>
-        ///    <para>[To be supplied.]</para>
-        /// </devdoc>
-        public static Color YellowGreen
-        {
-            get
-            {
-                return new Color(KnownColor.YellowGreen);
-            }
+            return (uint)(255 << 24 | r << 16 | g << 8 | b);
         }
 
-        #endregion
-
-        internal Color(KnownColor knownColor)
+        public static uint ToArgb(byte a, byte r, byte g, byte b)
         {
-            A = 255;
-            R = 0;
-            G = 0;
-            B = 0;
-
-            IsBlack = knownColor == KnownColor.Black;
-            ARGB = KnownColorTable.KnownColorToArgb(knownColor);
-        }
-
-        public byte GetAlpha()
-        {
-            return A == 0 && !IsBlack ? ((byte)((ARGB >> 24) & 0xFF)) : A;
-        }
-
-        public byte GetRed()
-        {
-            return R == 0 && !IsBlack ? ((byte)((ARGB >> 16) & 0xFF)) : R;
-        }
-
-        public byte GetGreen()
-        {
-            return G == 0 && !IsBlack ? ((byte)((ARGB >> 8) & 0xFF)) : G;
-        }
-
-        public byte GetBlue()
-        {
-            return B == 0 && !IsBlack ? ((byte)((ARGB) & 0xFF)) : B;
-        }
-
-        public int ToArgb()
-        {
-            // TODO: Optimize function when ARGB is 0
-            return ARGB == 0 && !IsBlack ? (GetAlpha() << 24 | GetRed() << 16 | GetGreen() << 8 | GetBlue()) : ARGB;
-        }
-
-        public static int ToArgb(byte r, byte g, byte b)
-        {
-            return 255 << 24 | r << 16 | g << 8 | b;
-        }
-
-        public static int ToArgb(byte a, byte r, byte g, byte b)
-        {
-            return a << 24 | r << 16 | g << 8 | b;
+            return (uint)(a << 24 | r << 16 | g << 8 | b);
         }
 
         public static Color FromArgb(byte red, byte green, byte blue)
         {
-            return new Color() { A = 255, R = red, G = green, B = blue, ARGB = ToArgb(red, green, blue) };
+            return new Color() { A = 255, R = red, G = green, B = blue };
         }
 
         public static Color FromArgb(byte alpha, byte red, byte green, byte blue)
         {
-            return new Color() { A = alpha, R = red, G = green, B = blue, ARGB = ToArgb(alpha, red, green, blue) };
+            return new Color() { A = alpha, R = red, G = green, B = blue };
         }
 
         public static Color FromArgb(int argb)
@@ -1647,6 +196,7 @@
             return new Color() { A = (byte)((argb >> 24) & 0xFF), R = (byte)((argb >> 16) & 0xFF), G = (byte)((argb >> 8) & 0xFF), B = (byte)((argb) & 0xFF) };
         }
 
+        /*
         public static ushort Convert8888RGBto565RGB(uint argb)
         {
             byte r = (byte)((byte)((argb >> 16) & 0xFF) >> 3);
@@ -1664,10 +214,11 @@
 
             return (uint)FromArgb(R8, G8, B8).ToArgb();
         }
+        */
 
         public override string ToString()
         {
-            return "A:" + GetAlpha() + " R:" + GetRed() + " G:" + GetGreen() + " B:" + GetBlue();
+            return "A:" + A + " R:" + R + " G:" + G + " B:" + B;
         }
     }
 }

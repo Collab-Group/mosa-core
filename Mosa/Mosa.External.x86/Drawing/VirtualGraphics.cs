@@ -20,7 +20,9 @@ namespace Mosa.External.x86.Drawing
 
             VideoMemoryCacheAddr = (uint)bitmap.RawData.Address;
 
-            ResetLimit();
+            //Clean
+            Clear(0x0);
+            Update();
         }
 
         public override void Disable() { }
@@ -29,16 +31,12 @@ namespace Mosa.External.x86.Drawing
 
         public override void DrawPoint(uint Color, int X, int Y)
         {
-            if (IsInBounds(X, Y))
-                bitmap.RawData.Write32((uint)((Width * Y + X) * Bpp), Color);
+            bitmap.RawData.Write32((uint)((Width * Y + X) * Bpp), Color);
         }
 
         public override uint GetPoint(int X, int Y)
         {
-            if (IsInBounds(X, Y))
-                return bitmap.RawData.Read32((uint)((Width * Y + X) * Bpp));
-
-            return 0;
+            return bitmap.RawData.Read32((uint)((Width * Y + X) * Bpp));
         }
 
         public override void Update()

@@ -15,6 +15,12 @@ namespace Mosa.External.x86.Drawing
         {
             vBEDriver = new VBEDriver();
 
+            if(VBE.VBEModeInfo->BitsPerPixel != 32) 
+            {
+                //TODO
+                for (; ; ) Native.Hlt();
+            }
+
             Bpp = VBE.VBEModeInfo->BitsPerPixel / 8;
 
             vbeDriverAddr = (uint)vBEDriver.VideoMemory.Address;
@@ -27,7 +33,9 @@ namespace Mosa.External.x86.Drawing
 			memoryBlock = new MemoryBlock((uint)FrameSize);
             VideoMemoryCacheAddr = (uint)memoryBlock.Address;
 
-            ResetLimit();
+            //Clean
+            Clear(0x0);
+            Update();
         }
 
         public override void Disable() { }
@@ -36,35 +44,14 @@ namespace Mosa.External.x86.Drawing
 
         public override void DrawPoint(uint Color, int X, int Y)
         {
-            if (IsInBounds(X,Y))
-                switch (Bpp)
-                {
-                    case 2:
-                        memoryBlock.Write16((uint)((Width * Y + X) * Bpp), System.Drawing.Color.Convert8888RGBto565RGB(Color));
-                        break;
-                    case 3:
-                        memoryBlock.Write24((uint)((Width * Y + X) * Bpp), Color & 0x00FFFFFF);
-                        break;
-                    case 4:
-                        memoryBlock.Write32((uint)((Width * Y + X) * Bpp), Color);
-                        break;
-                }
+            memoryBlock.Write32((uint)((Width * Y + X) * Bpp), Color);
         }
 
 		public override uint GetPoint(int X, int Y)
         {
-            if (IsInBounds(X,Y))
-                switch (Bpp) 
-                {
-                    case 2:
-                        return System.Drawing.Color.Convert565RGBto8888RGB(memoryBlock.Read16((uint)((Width * Y + X) * Bpp)));
-                    case 3:
-                        return memoryBlock.Read24((uint)((Width * Y + X) * Bpp)) | 0x00FFFFFF;
-                    case 4:
-                        return memoryBlock.Read32((uint)((Width * Y + X) * Bpp));
-                }
+            memoryBlock.Read32((uint)((Width * Y + X) * Bpp));
 
-			return 0;
+            return 0;
 		}
 
         public override void Update()

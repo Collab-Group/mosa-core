@@ -21,7 +21,9 @@ namespace Mosa.External.x86.Drawing
             svgaAddress = (uint)vMWareSVGAII.Video_Memory.Address;
             VideoMemoryCacheAddr = (uint)(svgaAddress + FrameSize);
 
-            ResetLimit();
+            //Clean
+            Clear(0x0);
+            Update();
         }
 
         public void SetResolution(int width, int height)
@@ -31,16 +33,12 @@ namespace Mosa.External.x86.Drawing
 
         public override void DrawPoint(uint Color, int X, int Y)
         {
-            if (IsInBounds(X, Y))
-                vMWareSVGAII.Video_Memory.Write32((uint)(FrameSize + ((Width * Y + X) * Bpp)), Color);
+            vMWareSVGAII.Video_Memory.Write32((uint)(FrameSize + ((Width * Y + X) * Bpp)), Color);
         }
 
         public override uint GetPoint(int X, int Y)
         {
-            if (IsInBounds(X, Y))
-                return vMWareSVGAII.Video_Memory.Read32((uint)(FrameSize + ((Width * Y + X) * Bpp)));
-
-            return 0;
+            return vMWareSVGAII.Video_Memory.Read32((uint)(FrameSize + ((Width * Y + X) * Bpp)));
         }
 
         public override void Update()

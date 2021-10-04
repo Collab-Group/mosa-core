@@ -4,6 +4,7 @@ using Mosa.Kernel.x86.Smbios;
 using Mosa.Runtime;
 using Mosa.Runtime.Plug;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
 
 namespace Mosa.Kernel.x86

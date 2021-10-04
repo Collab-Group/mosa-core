@@ -105,7 +105,10 @@ namespace Mosa.External.x86
 
         public void Write8(uint offset, byte value)
         {
-            address.Store8(offset, value);
+            if (offset < size)
+            {
+                address.Store8(offset, value);
+            }
         }
 
         public ushort Read16(uint offset)
@@ -115,7 +118,10 @@ namespace Mosa.External.x86
 
         public void Write16(uint offset, ushort value)
         {
-            address.Store16(offset, value);
+            if (offset < size)
+            {
+                address.Store16(offset, value);
+            }
         }
 
         public uint Read24(uint offset)
@@ -125,8 +131,11 @@ namespace Mosa.External.x86
 
         public void Write24(uint offset, uint value)
         {
-            address.Store16(offset, (ushort)(value & 0xFFFF));
-            address.Store8(offset + 2, (byte)((value >> 16) & 0xFF));
+            if (offset < size)
+            {
+                address.Store16(offset, (ushort)(value & 0xFFFF));
+                address.Store8(offset + 2, (byte)((value >> 16) & 0xFF));
+            }
         }
 
         public uint Read32(uint offset)
@@ -136,7 +145,10 @@ namespace Mosa.External.x86
 
         public void Write32(uint offset, uint value)
         {
-            address.Store32(offset, value);
+            if (offset < size)
+            {
+                address.Store32(offset, value);
+            }
         }
     }
 }

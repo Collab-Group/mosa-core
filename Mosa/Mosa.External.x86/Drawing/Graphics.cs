@@ -19,11 +19,6 @@ namespace Mosa.External.x86.Drawing
             get { return Width * Height * Bpp; }
         }
 
-        public int LimitX;
-        public int LimitY;
-        public int LimitWidth;
-        public int LimitHeight;
-
         public string CurrentDriver;
 
         //TotalX will be the last line of it used.
@@ -118,17 +113,6 @@ namespace Mosa.External.x86.Drawing
                         DrawPoint(color, w + x, h + y);
         }
 
-
-        public virtual bool IsInBounds(int X, int X2, int Y, int Y2, int W, int H)
-        {
-            return X >= X2 && X <= X2 + W && Y >= Y2 && Y <= Y2 + H;
-        }
-
-        public virtual bool IsInBounds(int X, int Y)
-        {
-            return X >= LimitX && X <= LimitX + LimitWidth && Y >= LimitY && Y <= LimitY + LimitHeight;
-        }
-
         public virtual void DrawRectangle(uint Color, int X, int Y, int Width, int Height, int Weight)
         {
             DrawFilledRectangle(Color, X, Y, Width, Weight);
@@ -195,32 +179,16 @@ namespace Mosa.External.x86.Drawing
                         Color foreground = Color.FromArgb(image.RawData[(uint)(image.Width * h + w)]);
                         Color background = Color.FromArgb((int)GetPoint(X + w, Y + h));
 
-                        int alpha = foreground.GetAlpha();
+                        int alpha = foreground.A;
                         int inv_alpha = 255 - alpha;
 
-                        byte newR = (byte)(((foreground.GetRed() * alpha + inv_alpha * background.GetRed()) >> 8) & 0xFF);
-                        byte newG = (byte)(((foreground.GetGreen() * alpha + inv_alpha * background.GetGreen()) >> 8) & 0xFF);
-                        byte newB = (byte)(((foreground.GetBlue() * alpha + inv_alpha * background.GetBlue()) >> 8) & 0xFF);
+                        byte newR = (byte)(((foreground.R * alpha + inv_alpha * background.R) >> 8) & 0xFF);
+                        byte newG = (byte)(((foreground.G * alpha + inv_alpha * background.G) >> 8) & 0xFF);
+                        byte newB = (byte)(((foreground.B * alpha + inv_alpha * background.B) >> 8) & 0xFF);
 
                         DrawPoint((uint)Color.ToArgb(newR, newG, newB), X + w, Y + h);
                     }
                     else DrawPoint((uint)image.RawData[(uint)(image.Width * h + w)], X + w, Y + h);
-        }
-
-        public void SetLimit(int X, int Y, int Width, int Height)
-        {
-            LimitX = X;
-            LimitY = Y;
-            LimitWidth = Width;
-            LimitHeight = Height;
-        }
-
-        public void ResetLimit()
-        {
-            LimitX = 0;
-            LimitY = 0;
-            LimitWidth = Width - 1;
-            LimitHeight = Height - 1;
         }
 
         /* Functions from Cosmos */
