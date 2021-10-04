@@ -44,10 +44,7 @@ namespace Mosa.External.x86.Drawing
 
         public override void DrawPoint(uint Color, int X, int Y)
         {
-            if (X < Width)
-            {
-                memoryBlock.Write32((uint)((Width * Y + X) * Bpp), Color);
-            }
+            memoryBlock.Write32((uint)((Width * Y + X) * Bpp), Color);
         }
 
 		public override uint GetPoint(int X, int Y)

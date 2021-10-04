@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using Mosa.Runtime.x86;
+using System.Drawing;
 
 namespace Mosa.External.x86.Drawing
 {
@@ -30,10 +31,7 @@ namespace Mosa.External.x86.Drawing
 
         public override void DrawPoint(uint Color, int X, int Y)
         {
-            if (X < Width)
-            {
-                bitmap.RawData.Write32((uint)((Width * Y + X) * Bpp), Color);
-            }
+            bitmap.RawData.Write32((uint)((Width * Y + X) * Bpp), Color);
         }
 
         public override uint GetPoint(int X, int Y)

@@ -33,10 +33,7 @@ namespace Mosa.External.x86.Drawing
 
         public override void DrawPoint(uint Color, int X, int Y)
         {
-            if (X < Width)
-            {
-                vMWareSVGAII.Video_Memory.Write32((uint)(FrameSize + ((Width * Y + X) * Bpp)), Color);
-            }
+            vMWareSVGAII.Video_Memory.Write32((uint)(FrameSize + ((Width * Y + X) * Bpp)), Color);
         }
 
         public override uint GetPoint(int X, int Y)
