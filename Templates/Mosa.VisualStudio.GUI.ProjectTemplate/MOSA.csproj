@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>net5.0</TargetFramework>
 		<OutputType>Exe</OutputType>
-		<StartupObject>$safeprojectname$.Boot</StartupObject>
+		<StartupObject>$safeprojectname$.Program</StartupObject>
 		<DebugType>full</DebugType>
 		<LangVersion>8.0</LangVersion>
 		<OutputPath>bin\</OutputPath>

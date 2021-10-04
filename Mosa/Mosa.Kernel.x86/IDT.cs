@@ -2252,18 +2252,18 @@ namespace Mosa.Kernel.x86
 							PIT.OnInterrupt();
 							//Must Be Here. So It Can Switch The Threads
 							PIC.SendEndOfInterrupt(stack->Interrupt);
-							Native.Int(Scheduler.ClockIRQ);
+							Native.Int(ThreadPool.ClockIRQ);
 							return;
 						}
 
-						if (stack->Interrupt == Scheduler.ClockIRQ)
+						if (stack->Interrupt == ThreadPool.ClockIRQ)
 						{
-							Scheduler.ClockInterrupt((Pointer)stackStatePointer);
+							ThreadPool.ClockInterrupt((Pointer)stackStatePointer);
 						}
 
-						if (stack->Interrupt == Scheduler.ThreadTerminationSignalIRQ)
+						if (stack->Interrupt == ThreadPool.ThreadTerminationSignalIRQ)
 						{
-							Scheduler.TerminateCurrentThread();
+							ThreadPool.TerminateCurrentThread();
 						}
 						break;
 					}

@@ -13,7 +13,7 @@ exit
 echo Removing bin folder
 rd /s /q bin
 
-cd Source
+cd Mosa
 
 echo Restoring packages
 dotnet restore
@@ -28,6 +28,10 @@ popd
 
 "%msbuild%" Mosa.sln /t:Build /p:Configuration=Debug;Platform="Mixed Platforms" -m
 
+cd..
+cd Compiler
+"%msbuild%" Compiler.sln /t:Build /p:Configuration=Debug;Platform="Mixed Platforms" -m
+
 echo.
 if "%errorlevel%" == "1" (
 echo [31mCompilation Failed![0m
@@ -40,5 +44,6 @@ echo.
 )
 
 echo Creating installer
+cd..
 cd Inno-Setup-Script
 create-installer.bat

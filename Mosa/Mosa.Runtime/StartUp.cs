@@ -28,6 +28,10 @@ namespace Mosa.Runtime
 		{
 		}
 
+		public static void KMain()
+		{
+		}
+
 		public static void KernelEntryPoint()
 		{
 		}

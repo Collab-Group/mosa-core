@@ -1,34 +1,42 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.External.x86.Driver;
-using Mosa.External.x86.FileSystem;
 using Mosa.Kernel.x86;
+using Mosa.Runtime.Plug;
+using System.Threading;
 
 namespace $safeprojectname$
 {
-    public static class Boot
+    public static class Program
     {
         public static string Input = "";
 
-        public static void Main()
-        {
-            // Initialize the necessary stuff
-            Kernel.Setup();
-            //ACPI.Init();
-            IDT.SetInterruptHandler(ProcessInterrupt);
+        public static void Main() { }
 
-            // Note: threads can't be created dynamically (for now)
-            Scheduler.CreateThread(MainThread, PageFrameAllocator.PageSize);
-            Scheduler.Start();
+        [Plug("Mosa.Runtime.StartUp::KMain")]
+        public static void KMain()
+        {
+            IDT.OnInterrupt += IDT_OnInterrupt;
+            new Thread(MainThread).Start();
+            for (; ; );
+        }
+
+        private static void IDT_OnInterrupt(uint irq, uint error)
+        {
+            switch (irq)
+            {
+                case 0x21:
+                    PS2Keyboard.OnInterrupt();
+                    break;
+            }
         }
 
         public static void MainThread()
         {
-            // Initialize the PS/2 keyboard
             PS2Keyboard.Initialize();
 
             // Initialize the IDE hard drive
-            // MOSA currently only supports FAT12 and FAT32 (but FAT32 doesn't work correctly in VirtualBox for now)
+            // MOSA currently only supports FAT12 and FAT32
             //IDisk disk = new IDEDisk();
             //MBR mBR = new MBR();
             //mBR.Initialize(disk);
@@ -38,7 +46,6 @@ namespace $safeprojectname$
 
             Console.WriteLine("MOSA booted successfully! Type anything and get an echo of what you've typed.");
 
-            // Type anything and get an echo of what you've typed
             PS2Keyboard.KeyCode keyCode;
             for (; ; )
             {
@@ -75,17 +82,6 @@ namespace $safeprojectname$
                             break;
                     }
                 }
-            }
-        }
-
-        public static void ProcessInterrupt(uint interrupt, uint errorCode)
-        {
-            switch (interrupt)
-            {
-                case 0x21:
-                    // PS/2 keyboard interrupt is 0x21 IRQ 1
-                    PS2Keyboard.OnInterrupt();
-                    break;
             }
         }
     }

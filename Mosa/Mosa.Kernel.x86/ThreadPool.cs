@@ -1,17 +1,19 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Runtime;
+using Mosa.Runtime.Plug;
 using Mosa.Runtime.x86;
 using System.Runtime.CompilerServices;
 using System.Threading;
 
 namespace Mosa.Kernel.x86
 {
-	public static class Scheduler
+	//Use System.Threading.Thread To Create Threads
+	public static class ThreadPool
 	{
-		public const int MaxThreads = 256;
-		public const int ClockIRQ = 253;
-		public const int ThreadTerminationSignalIRQ = 254;
+		internal const int MaxThreads = 256;
+		internal const int ClockIRQ = 253;
+		internal const int ThreadTerminationSignalIRQ = 254;
 
 		private static bool Enabled;
 		private static Pointer SignalThreadTerminationMethodAddress;
@@ -22,9 +24,9 @@ namespace Mosa.Kernel.x86
 
 		private static int clockTicks = 0;
 
-		public static uint ClockTicks { get { return (uint)clockTicks; } }
+		internal static uint ClockTicks { get { return (uint)clockTicks; } }
 
-		public static void Setup()
+		internal static void Setup()
 		{
 			Enabled = false;
 			Threads = new Thread[MaxThreads];
@@ -43,7 +45,7 @@ namespace Mosa.Kernel.x86
 			CreateThread(address, PageFrameAllocator.PageSize, 0);
 		}
 
-		public static void Start()
+		internal static void Start()
 		{
 			SetThreadID(0);
 			Enabled = true;
@@ -61,7 +63,7 @@ namespace Mosa.Kernel.x86
 			}
 		}
 
-		public static void ClockInterrupt(Pointer stackSate)
+		internal static void ClockInterrupt(Pointer stackSate)
 		{
 			Interlocked.Increment(ref clockTicks);
 
@@ -82,12 +84,12 @@ namespace Mosa.Kernel.x86
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static void SignalThreadTerminationMethod()
+		internal static void SignalThreadTerminationMethod()
 		{
 			Native.Int(ThreadTerminationSignalIRQ);
 		}
 
-		public static void TerminateCurrentThread()
+		internal static void TerminateCurrentThread()
 		{
 			var threadID = GetCurrentThreadID();
 
@@ -145,14 +147,15 @@ namespace Mosa.Kernel.x86
 			return Intrinsic.GetDelegateTargetAddress(d);
 		}
 
-		public static uint CreateThread(ThreadStart thread, uint stackSize)
+		[Plug("System.Threading.Thread::CreateThread")]
+		internal static uint CreateThread(ThreadStart thread, uint stackSize)
 		{
 			var address = GetAddress(thread);
 
 			return CreateThread(address, stackSize);
 		}
 
-		public static uint CreateThread(Pointer methodAddress, uint stackSize)
+		internal static uint CreateThread(Pointer methodAddress, uint stackSize)
 		{
 			//Assert.True(stackSize != 0, "CreateThread(): invalid stack size = " + stackSize.ToString());
 			//Assert.True(stackSize % PageFrameAllocator.PageSize == 0, "CreateThread(): invalid stack size % PageSize, stack size = " + stackSize.ToString());

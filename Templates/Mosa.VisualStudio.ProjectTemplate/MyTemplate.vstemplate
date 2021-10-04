@@ -23,7 +23,7 @@
       <Folder Name="Properties" TargetFolderName="obj\Debug">
         <ProjectItem ReplaceParameters="true" TargetFileName="apphost.exe">apphost.exe</ProjectItem>
       </Folder>
-      <ProjectItem ReplaceParameters="true" TargetFileName="Boot.cs">Boot.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Program.cs">Program.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="README.txt">README.txt</ProjectItem>
     </Project>
   </TemplateContent>
