@@ -47,8 +47,7 @@ namespace Mosa.Kernel.x86
 
             // Setup PCI
             PCI.Setup();
-
-
+            
             // Setup Encoding static variables
             Encoding.Setup();
 
