@@ -1,4 +1,6 @@
-﻿using Mosa.Kernel.x86;
+using Mosa.External.x86;
+using Mosa.Kernel.x86;
+using Mosa.Runtime.x86;
 
 namespace Mosa.External.x86.Driver
 {
@@ -16,8 +18,16 @@ namespace Mosa.External.x86.Driver
         private static ushort attributeControllerWritePort = 0x3c0;
         private static ushort attributeControllerResetPort = 0x3da;
 
+        private static MemoryBlock memoryBlock;
+        private static uint VideoMemoryCacheAddr;
+
         private static unsafe void WriteRegisters(byte* registers)
         {
+
+            // Memory
+            memoryBlock = new MemoryBlock((uint)320 * 200);
+            VideoMemoryCacheAddr = (uint)memoryBlock.Address;
+
             // Misc
             IOPort.Out8(miscPort, *registers++);
 
@@ -72,7 +82,6 @@ namespace Mosa.External.x86.Driver
             if (!SupportsMode(width, height, colordepth))
                 return false;
 
-            // TODO: Add more resolutions
             byte[] g_320x200x256 =
             {
                 /* MISC */
@@ -119,23 +128,13 @@ namespace Mosa.External.x86.Driver
             }
         }
 
-        // TODO: Optimize
-        private unsafe void DrawPixel(uint x, uint y, byte colorIndex)
-        {
-            if (x < 0 || 320 <= x || y < 0 || 200 <= y)
-                return;
-            byte* pixelAddress = GetFrameBufferSegment() + 320 * y + x;
-            *pixelAddress = colorIndex;
-        }
-
         byte GetColorIndex(byte r, byte g, byte b)
         {
-            // TODO: Add more colors
-            if (r == 0x00 && g == 0x00 && b == 0x00) return 0x00; // Black
-            if (r == 0x00 && g == 0x00 && b == 0xA8) return 0x01; // Blue
-            if (r == 0x00 && g == 0xA8 && b == 0x00) return 0x02; // Green
-            if (r == 0xA8 && g == 0x00 && b == 0x00) return 0x04; // Red
-            if (r == 0xFF && g == 0xFF && b == 0xFF) return 0x3F; // White
+            if (r == 0x00 && g == 0x00 && b == 0x00) return 0x00; // black
+            if (r == 0x00 && g == 0x00 && b == 0xA8) return 0x01; // blue
+            if (r == 0x00 && g == 0xA8 && b == 0x00) return 0x02; // green
+            if (r == 0xA8 && g == 0x00 && b == 0x00) return 0x04; // red
+            if (r == 0xFF && g == 0xFF && b == 0xFF) return 0x3F; // white
             return 0x00;
         }
 
@@ -144,12 +143,23 @@ namespace Mosa.External.x86.Driver
             DrawPixel(x, y, GetColorIndex(r, g, b));
         }
 
-        // TODO: Optimize
+        private unsafe void DrawPixel(uint x, uint y, byte colorIndex)
+        {
+            if (x < 0 || 320 <= x || y < 0 || 200 <= y)
+                return;
+            memoryBlock.Write8(320 * y + x, colorIndex);
+        }
+
         public void DrawFilledRectangle(uint x, uint y, uint w, uint h, byte r, byte g, byte b)
         {
             for (uint Y = y; Y < y + h; Y++)
                 for (uint X = x; X < x + w; X++)
                     DrawPixel(X, Y, r, g, b);
+        }
+
+        public unsafe void Update()
+        {
+            ASM.MEMCPY((uint)(GetFrameBufferSegment() + 320), VideoMemoryCacheAddr, 64000);
         }
 
         public void Clear(byte r, byte g, byte b)
