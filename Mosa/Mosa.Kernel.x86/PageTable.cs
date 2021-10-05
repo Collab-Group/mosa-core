@@ -33,6 +33,7 @@ namespace Mosa.Kernel.x86
 			// Set CR3 register on processor - sets page directory
 			Native.SetCR3(Address.PageDirectory);
 
+			//Remember if you turn on this. every memory access need to be mapped
 			// Set CR0 register on processor - turns on virtual memory
 			//Native.SetCR0(Native.GetCR0() | 0x80000000);
 		}
