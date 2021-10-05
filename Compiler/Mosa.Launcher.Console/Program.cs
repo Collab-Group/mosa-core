@@ -220,7 +220,7 @@ namespace Mosa.Launcher.Console
 
             ConsoleColor color = System.Console.ForegroundColor;
             System.Console.ForegroundColor = ConsoleColor.Yellow;
-            System.Console.WriteLine("Warning: If this is your first time using this version (Last modify time: 5th August 2021 23:56). Make sure there's no virtual machine which is named \"MOSA\". If so please delete it");
+            System.Console.WriteLine(@"Warning: If this is your first time using this version (Last modify time: 6th October 2021). Please Delete C:\Users\Your Use Name\VirtualBox VMs\MOSA !!!");
             System.Console.WriteLine("If It Asks You Select Boot Disk");
             System.Console.WriteLine("Please Press Cancel");
             System.Console.ForegroundColor = color;
