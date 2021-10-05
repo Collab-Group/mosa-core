@@ -44,7 +44,7 @@ namespace Mosa.External.x86.Driver
             }
         }
 
-        public static void Init(PCIDevice device)
+        public static void Initialize(PCIDevice device)
         {
             Console.WriteLine("Intel 825XX Series Ethernet Controller Exist");
             device.EnableDevice();
@@ -96,8 +96,8 @@ namespace Mosa.External.x86.Driver
 
             Console.WriteLine($"IRQ:{device.InterruptLine}");
 
-            RXInit();
-            TXInit();
+            RXInitialize();
+            TXInitialize();
 
             PIC.ClearMask((byte)(0x20 + device.InterruptLine));
             IDT.INTs.Add(new IDT.INT(0x20u + device.InterruptLine, OnInterrupt));
@@ -116,7 +116,7 @@ namespace Mosa.External.x86.Driver
             Console.WriteLine("Configuration Done");
         }
 
-        private static void TXInit()
+        private static void TXInitialize()
         {
             TXDescs = (uint)GC.AllocateObject(8 * 16);
 
@@ -139,7 +139,7 @@ namespace Mosa.External.x86.Driver
         public static uint RXCurr = 0;
         public static uint TXCurr = 0;
 
-        private static void RXInit()
+        private static void RXInitialize()
         {
             RXDescs = (uint)GC.AllocateObject(32 * 16);
 
@@ -249,7 +249,7 @@ namespace Mosa.External.x86.Driver
 
         public Intel825XX(PCIDevice device)
         {
-            Init(device);
+            Initialize(device);
         }
 
         public override void Send(byte* Buffer, ushort Length)

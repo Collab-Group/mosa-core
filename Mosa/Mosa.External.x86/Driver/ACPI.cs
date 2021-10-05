@@ -1,5 +1,7 @@
 ﻿using Mosa.Kernel.x86;
+using Mosa.Runtime.Plug;
 using Mosa.Runtime.x86;
+using System;
 using System.Runtime.InteropServices;
 
 namespace Mosa.External.x86.Driver
@@ -101,7 +103,8 @@ namespace Mosa.External.x86.Driver
             Panic.Error("ACPI Shutdown Failed");
         }
 
-        public static bool Init()
+        [Plug("Mosa.Kernel.x86.Kernel::ACPI")]
+        private static bool Initialize()
         {
             ACPI_RSDP* rsdp = GetRSDP();
             //MMIO.Map(rsdp->RsdtAddress, ushort.MaxValue);

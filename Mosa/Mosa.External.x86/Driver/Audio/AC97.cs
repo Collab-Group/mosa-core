@@ -37,7 +37,7 @@ namespace Mosa.External.x86.Driver.Audio
 
         public static byte* Buffer;
 
-        public static unsafe void Init()
+        public static unsafe void Initialize()
         {
             foreach (var device in PCI.Devices)
             {

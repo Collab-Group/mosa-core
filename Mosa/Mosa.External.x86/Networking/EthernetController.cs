@@ -8,7 +8,7 @@ namespace Mosa.External.x86.Networking
     {
         public static EthernetController Controller;
 
-        public static void Init()
+        public static void Initialize()
         {
             foreach (var dev in PCI.Devices)
             {

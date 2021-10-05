@@ -23,7 +23,7 @@ namespace Mosa.External.x86.Networking
             public fixed byte DestIP[4];
         }
 
-        public static void Init()
+        public static void Initialize()
         {
             ARPEntries = new List<ARPEntry>();
             Lookup(Ethernet.Gateway);

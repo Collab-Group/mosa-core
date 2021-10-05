@@ -14,6 +14,8 @@ namespace Mosa.Kernel.x86
     /// </summary>
     public static class Kernel
     {
+        private static extern void ACPI();
+
         [Plug("Mosa.Runtime.StartUp::KernelEntryPoint")]
         public static void Setup()
         {
@@ -50,6 +52,9 @@ namespace Mosa.Kernel.x86
             
             // Setup Encoding static variables
             Encoding.Setup();
+
+            //ACPI
+            ACPI();
 
             ThreadPool.Setup();
             ThreadPool.CreateThread((() =>

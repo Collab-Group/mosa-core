@@ -36,7 +36,7 @@ namespace Mosa.External.x86.Networking
             public const ushort ARP = 0x0806;
         }
 
-        public static void Init(byte[] aIPAddress,byte[] aGateway,byte[] aMask)
+        public static void Initialize(byte[] aIPAddress,byte[] aGateway,byte[] aMask)
         {
             Mask = aMask;
             Gateway = aGateway;
