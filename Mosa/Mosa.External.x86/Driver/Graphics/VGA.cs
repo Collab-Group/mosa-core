@@ -148,7 +148,8 @@ namespace Mosa.External.x86.Driver
                     DrawPixel(X, Y, r, g, b);
         }
 
-        public void ClearScreen()
+        // TODO: Optimize Clear method
+        public void Clear()
         {
             DrawFilledRectangle(0, 0, 320, 200, 0x00, 0x00, 0x00);
         }
