@@ -143,7 +143,7 @@ namespace Mosa.External.x86.Driver
             DrawPixel(x, y, GetColorIndex(r, g, b));
         }
 
-        private unsafe void DrawPixel(uint x, uint y, byte colorIndex)
+        public unsafe void DrawPixel(uint x, uint y, byte colorIndex)
         {
             if (x < 0 || 320 <= x || y < 0 || 200 <= y)
                 return;
