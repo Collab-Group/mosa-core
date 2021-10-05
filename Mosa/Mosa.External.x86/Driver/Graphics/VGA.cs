@@ -2,7 +2,7 @@ using Mosa.External.x86;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.x86;
 
-namespace MOSA1
+namespace Mosa.External.x86.Driver
 {
     public class VGA
     {
