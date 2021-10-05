@@ -12,7 +12,7 @@ namespace Mosa.External.x86.Driver
         private static short SLP_TYPb;
         private static short SLP_EN;
 
-        public static ACPI_FADT* FADT;
+        private static ACPI_FADT* FADT;
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         private struct ACPI_RSDP
@@ -39,7 +39,7 @@ namespace Mosa.External.x86.Driver
         };
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        public struct ACPI_FADT
+        private struct ACPI_FADT
         {
             public fixed byte Signature[4];
             public uint Length;
