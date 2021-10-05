@@ -103,7 +103,7 @@ namespace Mosa.External.x86.Driver
             Panic.Error("ACPI Shutdown Failed");
         }
 
-        [Plug("Mosa.Kernel.x86.Kernel::ACPI")]
+        [Plug("Mosa.Kernel.x86.Kernel::InitializeACPI")]
         private static bool Initialize()
         {
             ACPI_RSDP* rsdp = GetRSDP();
