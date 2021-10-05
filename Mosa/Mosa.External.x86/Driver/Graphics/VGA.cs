@@ -118,6 +118,7 @@ namespace Mosa.External.x86.Driver
             }
         }
 
+        // Optimize
         private unsafe void DrawPixel(uint x, uint y, byte colorIndex)
         {
             if (x < 0 || 320 <= x || y < 0 || 200 <= y)
@@ -141,6 +142,7 @@ namespace Mosa.External.x86.Driver
             DrawPixel(x, y, GetColorIndex(r, g, b));
         }
 
+        // Optimize
         public void DrawFilledRectangle(uint x, uint y, uint w, uint h, byte r, byte g, byte b)
         {
             for (uint Y = y; Y < y + h; Y++)
@@ -148,10 +150,9 @@ namespace Mosa.External.x86.Driver
                     DrawPixel(X, Y, r, g, b);
         }
 
-        // TODO: Optimize Clear method
-        public void Clear()
+        public void Clear(byte r, byte g, byte b)
         {
-            DrawFilledRectangle(0, 0, 320, 200, 0x00, 0x00, 0x00);
+            DrawFilledRectangle(0, 0, 320, 200, r, g, b);
         }
     }
 }
