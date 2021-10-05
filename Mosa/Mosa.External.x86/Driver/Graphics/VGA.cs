@@ -72,6 +72,7 @@ namespace Mosa.External.x86.Driver
             if (!SupportsMode(width, height, colordepth))
                 return false;
 
+            // TODO: Add more resolutions
             byte[] g_320x200x256 =
             {
                 /* MISC */
@@ -118,7 +119,7 @@ namespace Mosa.External.x86.Driver
             }
         }
 
-        // Optimize
+        // TODO: Optimize
         private unsafe void DrawPixel(uint x, uint y, byte colorIndex)
         {
             if (x < 0 || 320 <= x || y < 0 || 200 <= y)
@@ -129,11 +130,12 @@ namespace Mosa.External.x86.Driver
 
         byte GetColorIndex(byte r, byte g, byte b)
         {
-            if (r == 0x00 && g == 0x00 && b == 0x00) return 0x00; // black
-            if (r == 0x00 && g == 0x00 && b == 0xA8) return 0x01; // blue
-            if (r == 0x00 && g == 0xA8 && b == 0x00) return 0x02; // green
-            if (r == 0xA8 && g == 0x00 && b == 0x00) return 0x04; // red
-            if (r == 0xFF && g == 0xFF && b == 0xFF) return 0x3F; // white
+            // TODO: Add more colors
+            if (r == 0x00 && g == 0x00 && b == 0x00) return 0x00; // Black
+            if (r == 0x00 && g == 0x00 && b == 0xA8) return 0x01; // Blue
+            if (r == 0x00 && g == 0xA8 && b == 0x00) return 0x02; // Green
+            if (r == 0xA8 && g == 0x00 && b == 0x00) return 0x04; // Red
+            if (r == 0xFF && g == 0xFF && b == 0xFF) return 0x3F; // White
             return 0x00;
         }
 
@@ -142,7 +144,7 @@ namespace Mosa.External.x86.Driver
             DrawPixel(x, y, GetColorIndex(r, g, b));
         }
 
-        // Optimize
+        // TODO: Optimize
         public void DrawFilledRectangle(uint x, uint y, uint w, uint h, byte r, byte g, byte b)
         {
             for (uint Y = y; Y < y + h; Y++)
