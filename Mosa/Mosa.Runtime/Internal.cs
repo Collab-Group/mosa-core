@@ -11,6 +11,7 @@ namespace Mosa.Runtime
 	{
 		#region Allocation
 
+		//Mosa.Compiler.Framework.Stages.NewObjectStage
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static Pointer AllocateObject(RuntimeTypeHandle handle, uint classSize)
 		{
