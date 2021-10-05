@@ -3,7 +3,7 @@ using Mosa.Runtime.x86;
 
 namespace Mosa.External.x86
 {
-    public class Power
+    public static class Power
     {
         public static void Reboot() 
         {
