@@ -1,14 +1,14 @@
-﻿using Mosa.External.x86;
-using Mosa.External.x86.Driver;
-using Mosa.External.x86.FileSystem;
+﻿using Mosa.External.x86.Driver;
 using Mosa.Kernel.x86;
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Mosa.External.x86.FileSystem
 {
+    [Obsolete("Use FAT32", true)]
     public unsafe class FAT12
     {
         struct FAT12Header
