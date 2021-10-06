@@ -30,6 +30,10 @@ popd
 
 cd..
 cd Compiler
+
+echo Restoring packages
+dotnet restore
+
 "%msbuild%" Compiler.sln /t:Build /p:Configuration=Debug;Platform="Mixed Platforms" -m
 
 echo.
