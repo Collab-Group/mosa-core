@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>net5.0</TargetFramework>
-		<OutputType>Exe</OutputType>
+		<OutputType>WinExe</OutputType>
 		<StartupObject>$safeprojectname$.Program</StartupObject>
 		<DebugType>full</DebugType>
 		<LangVersion>8.0</LangVersion>
@@ -12,6 +12,7 @@
 		<DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<NoStdLib>true</NoStdLib>
+		<ApplicationIcon />
 	</PropertyGroup>
 	<ItemGroup>
 		<Reference Include="mscorlib">
