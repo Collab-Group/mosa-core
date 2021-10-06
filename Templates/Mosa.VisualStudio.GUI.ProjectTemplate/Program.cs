@@ -86,8 +86,7 @@ namespace $safeprojectname$
 
             Width = graphics.Width;
             Height = graphics.Height;
-
-            PS2Keyboard.Initialize();
+            
             PS2Mouse.Initialize(Width, Height);
 
             // BitFont generator : https://github.com/nifanfa/BitFont
