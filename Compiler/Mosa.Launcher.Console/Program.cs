@@ -204,7 +204,7 @@ namespace Mosa.Launcher.Console
         {
             if (!File.Exists(VirtualBoxPath))
             {
-                throw new FileNotFoundException("VirtualBox not found!");
+                throw new FileNotFoundException("VirtualBox not found! Here to get VirtualBox: https://www.virtualbox.org/");
 
                 return;
             }
