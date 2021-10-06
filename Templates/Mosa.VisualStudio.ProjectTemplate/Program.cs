@@ -33,8 +33,6 @@ namespace $safeprojectname$
 
         public static void MainThread()
         {
-            PS2Keyboard.Initialize();
-
             // Initialize the IDE hard drive
             // MOSA currently only supports FAT12 and FAT32
             //IDisk disk = new IDEDisk();
@@ -49,38 +47,35 @@ namespace $safeprojectname$
             PS2Keyboard.KeyCode keyCode;
             for (; ; )
             {
-                if (PS2Keyboard.KeyAvailable)
+                keyCode = PS2Keyboard.GetKeyPressed();
+                switch (keyCode)
                 {
-                    keyCode = PS2Keyboard.GetKeyPressed();
-                    switch (keyCode)
-                    {
-                        case PS2Keyboard.KeyCode.Delete:
-                            if (Input.Length != 0)
-                            {
-                                Console.RemovePreviousOne();
-                                Input = Input.Substring(0, Input.Length - 1);
-                            }
-                            break;
+                    case PS2Keyboard.KeyCode.Delete:
+                        if (Input.Length != 0)
+                        {
+                            Console.RemovePreviousOne();
+                            Input = Input.Substring(0, Input.Length - 1);
+                        }
+                        break;
 
-                        case PS2Keyboard.KeyCode.Enter:
-                            Console.WriteLine();
-                            Console.WriteLine("Input: " + Input);
-                            Input = "";
-                            break;
+                    case PS2Keyboard.KeyCode.Enter:
+                        Console.WriteLine();
+                        Console.WriteLine("Input: " + Input);
+                        Input = "";
+                        break;
 
-                        default:
-                            if (PS2Keyboard.IsCapsLock)
-                            {
-                                Console.Write(PS2Keyboard.KeyCodeToString(keyCode));
-                                Input += PS2Keyboard.KeyCodeToString(keyCode);
-                            }
-                            else
-                            {
-                                Console.Write(PS2Keyboard.KeyCodeToString(keyCode).ToLower());
-                                Input += PS2Keyboard.KeyCodeToString(keyCode).ToLower();
-                            }
-                            break;
-                    }
+                    default:
+                        if (PS2Keyboard.IsCapsLock)
+                        {
+                            Console.Write(PS2Keyboard.KeyCodeToString(keyCode));
+                            Input += PS2Keyboard.KeyCodeToString(keyCode);
+                        }
+                        else
+                        {
+                            Console.Write(PS2Keyboard.KeyCodeToString(keyCode).ToLower());
+                            Input += PS2Keyboard.KeyCodeToString(keyCode).ToLower();
+                        }
+                        break;
                 }
             }
         }
