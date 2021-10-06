@@ -10,8 +10,6 @@ namespace Mosa.External.x86.Driver
         public static void OnInterrupt()
         {
             KData = IOPort.In8(0x60);
-            if (KeyCodeToString((KeyCode)KData) == string.Empty) return;
-
             if (KData == (byte)KeyCode.CapsLock) IsCapsLock = !IsCapsLock;
         }
 
