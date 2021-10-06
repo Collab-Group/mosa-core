@@ -4,31 +4,24 @@ namespace Mosa.External.x86.Driver
 {
     public static class PS2Keyboard
     {
-        private const byte Port_KeyData = 0x0060;
+        public static KeyCode Code;
         public static byte KData = 0x00;
-
-        public static void Initialize()
-        {
-            KData = 0x00;
-        }
 
         public static void OnInterrupt()
         {
-            KData = IOPort.In8(Port_KeyData);
-            if (KeyCodeToString((KeyCode)KData) == "null") return;
-
-            KeyAvailable = true;
+            KData = IOPort.In8(0x60);
+            if (KeyCodeToString((KeyCode)KData) == string.Empty) return;
 
             if (KData == (byte)KeyCode.CapsLock) IsCapsLock = !IsCapsLock;
         }
 
-        public static bool KeyAvailable = false;
         public static bool IsCapsLock = false;
 
         public static KeyCode GetKeyPressed()
         {
-            KeyAvailable = false;
-            return (KeyCode)KData;
+            Code = (KeyCode)KData;
+            KData = 0;
+            return Code;
         }
 
         public static string KeyCodeToString(this KeyCode keyCode)
@@ -62,16 +55,16 @@ namespace Mosa.External.x86.Driver
                 KeyCode.Y => "Y",
                 KeyCode.Z => "Z",
                 KeyCode.Space => " ",
-                KeyCode._1 => "1",
-                KeyCode._2 => "2",
-                KeyCode._3 => "3",
-                KeyCode._4 => "4",
-                KeyCode._5 => "5",
-                KeyCode._6 => "6",
-                KeyCode._7 => "7",
-                KeyCode._8 => "8",
-                KeyCode._9 => "9",
-                KeyCode._0 => "0",
+                KeyCode.Num1 => "1",
+                KeyCode.Num2 => "2",
+                KeyCode.Num3 => "3",
+                KeyCode.Num4 => "4",
+                KeyCode.Num5 => "5",
+                KeyCode.Num6 => "6",
+                KeyCode.Num7 => "7",
+                KeyCode.Num8 => "8",
+                KeyCode.Num9 => "9",
+                KeyCode.Num0 => "0",
                 KeyCode.Dash => "-",
                 KeyCode.Equals => "=",
                 KeyCode.Tab => "    ",
@@ -85,41 +78,19 @@ namespace Mosa.External.x86.Driver
                 KeyCode.Period => ".",
                 KeyCode.ForwardSlash => "/",
                 KeyCode.Star => "*",
-                KeyCode.KeypadPeriod => ".",
-                KeyCode.Keypad0 => "0",
-                KeyCode.Keypad1 => "1",
-                KeyCode.Keypad2 => "2",
-                KeyCode.Keypad3 => "3",
-                KeyCode.Keypad4 => "4",
-                KeyCode.Keypad5 => "5",
-                KeyCode.Keypad6 => "6",
-                KeyCode.Keypad7 => "7",
-                KeyCode.Keypad8 => "8",
-                KeyCode.Keypad9 => "9",
-                KeyCode.KeypadMinus => "-",
-                KeyCode.KeypadPlus => "+",
-                KeyCode.F1 => "",
-                KeyCode.F2 => "",
-                KeyCode.F3 => "",
-                KeyCode.F4 => "",
-                KeyCode.F5 => "",
-                KeyCode.F6 => "",
-                KeyCode.F7 => "",
-                KeyCode.F8 => "",
-                KeyCode.F9 => "",
-                KeyCode.F10 => "",
-                KeyCode.F11 => "",
-                KeyCode.F12 => "",
-                KeyCode.LeftCTRL => "",
-                KeyCode.LeftShift => "",
-                KeyCode.RightShift => "",
-                KeyCode.LeftAlt => "",
-                KeyCode.NumLock => "",
-                KeyCode.ScrollLock => "",
-                KeyCode.CapsLock => "",
-                KeyCode.Delete => "",
-                KeyCode.Enter => "",
-                KeyCode.ESC => "",
+                KeyCode.NumPadPeriod => ".",
+                KeyCode.NumPad0 => "0",
+                KeyCode.NumPad1 => "1",
+                KeyCode.NumPad2 => "2",
+                KeyCode.NumPad3 => "3",
+                KeyCode.NumPad4 => "4",
+                KeyCode.NumPad5 => "5",
+                KeyCode.NumPad6 => "6",
+                KeyCode.NumPad7 => "7",
+                KeyCode.NumPad8 => "8",
+                KeyCode.NumPad9 => "9",
+                KeyCode.NumPadMinus => "-",
+                KeyCode.NumPadPlus => "+",
                 _ => string.Empty
             };
         }
@@ -152,16 +123,16 @@ namespace Mosa.External.x86.Driver
             X = 0x2D,
             Y = 0x15,
             Z = 0x2C,
-            _1 = 0x02,
-            _2 = 0x03,
-            _3 = 0x04,
-            _4 = 0x05,
-            _5 = 0x06,
-            _6 = 0x07,
-            _7 = 0x08,
-            _8 = 0x09,
-            _9 = 0x0A,
-            _0 = 0x0B,
+            Num1 = 0x02,
+            Num2 = 0x03,
+            Num3 = 0x04,
+            Num4 = 0x05,
+            Num5 = 0x06,
+            Num6 = 0x07,
+            Num7 = 0x08,
+            Num8 = 0x09,
+            Num9 = 0x0A,
+            Num0 = 0x0B,
             F1 = 0x3B,
             F2 = 0x3C,
             F3 = 0x3D,
@@ -193,19 +164,19 @@ namespace Mosa.External.x86.Driver
             LeftAlt = 0x38,
             NumLock = 0x45,
             ScrollLock = 0x46,
-            KeypadPeriod = 0x53,
-            Keypad0 = 0x52,
-            Keypad3 = 0x51,
-            Keypad2 = 0x50,
-            Keypad1 = 0x4F,
-            KeypadPlus = 0x4E,
-            Keypad6 = 0x4D,
-            Keypad5 = 0x4C,
-            Keypad4 = 0x4B,
-            KeypadMinus = 0x4A,
-            Keypad9 = 0x49,
-            Keypad8 = 0x48,
-            Keypad7 = 0x47,
+            NumPadPeriod = 0x53,
+            NumPad0 = 0x52,
+            NumPad3 = 0x51,
+            NumPad2 = 0x50,
+            NumPad1 = 0x4F,
+            NumPadPlus = 0x4E,
+            NumPad6 = 0x4D,
+            NumPad5 = 0x4C,
+            NumPad4 = 0x4B,
+            NumPadMinus = 0x4A,
+            NumPad9 = 0x49,
+            NumPad8 = 0x48,
+            NumPad7 = 0x47,
             CapsLock = 0x3A,
             Delete = 0x0E,
             Space = 0x39,

@@ -31,7 +31,13 @@ namespace Mosa.Launcher.Console
         {
             get
             {
-                return Path.GetDirectoryName(SourceName);
+                if(SourceName.IndexOf("\\") == -1) 
+                {
+                    return Environment.CurrentDirectory;
+                }else
+                {
+                    return Path.GetDirectoryName(SourceName);
+                }
             }
         }
         private static bool VBEEnable;
