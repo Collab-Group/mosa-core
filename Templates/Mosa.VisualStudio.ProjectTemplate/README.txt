@@ -1,2 +1,5 @@
-Check out /Properties/Run.bat
-And the compiler requires UAC don't miss it on the taskbar
+Double Click Properties Folder
+Arguments:
+Arguments 1 Is The Input File
+-VBE (Enable VBE)
+-JUSTBUILD (Tell Compiler Do Not Launch VirtualBox After Compiling)
