@@ -204,7 +204,8 @@ namespace Mosa.Launcher.Console
         {
             if (!File.Exists(VirtualBoxPath))
             {
-                System.Console.WriteLine("VirtualBox not found!");
+                throw new FileNotFoundException("VirtualBox not found!");
+
                 return;
             }
 
