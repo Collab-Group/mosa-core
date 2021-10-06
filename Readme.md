@@ -5,7 +5,7 @@ MOSA is a powerful and relatively **stable** way of creating an operating system
 # Dependencies
 **Windows:**
 <br/>
-Visual Studio 2019 (recommended version: 16.10.x )<br/>
+Visual Studio 2019 (recommended version: 16.10.x )(Please Keep Visual Studio Up To Date!)<br/>
 Inno Setup Compiler (recommended version: 6.2.x )<br/>
 Oracle VM VirtualBox (recommended version: 6.1.x )<br/>
 
