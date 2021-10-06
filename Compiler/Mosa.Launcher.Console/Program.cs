@@ -67,6 +67,14 @@ namespace Mosa.Launcher.Console
                     return;
                 }
 
+                if (args.Length == 0)
+                {
+                    args = new string[]
+                    {
+                        @"C:\Users\nifan\Desktop\MOSA1\MOSA1\bin\MOSA1.dll"
+                    };
+                }
+
                 //If you want to change "main.exe" to other name you have to modify the syslinux.cfg
 
                 SourceName = args[0];
@@ -307,30 +315,14 @@ namespace Mosa.Launcher.Console
             Settings.SetValue("Optimizations.SSA", true);
             Settings.SetValue("Optimizations.TwoPass", true);
             Settings.SetValue("Optimizations.ValueNumbering", true);
-            Settings.SetValue("Image.BootLoader", "Syslinux3.72");
-            //Settings.SetValue("Image.Folder", Path.Combine(Environment.CurrentDirectory, "MOSA"));
-            Settings.SetValue("Image.Format", "ISO");
-            Settings.SetValue("Image.FileSystem", "FAT16");
-            Settings.SetValue("Image.ImageFile", "%DEFAULT%");
             Settings.SetValue("Multiboot.Version", "v1");
             Settings.SetValue("Multiboot.Video", VBEEnable);
             Settings.SetValue("Multiboot.Video.Width", 1024);
             Settings.SetValue("Multiboot.Video.Height", 768);
             Settings.SetValue("Multiboot.Video.Depth", 32);
-            Settings.SetValue("Emulator", "VirtualBox");
-            Settings.SetValue("Emulator.Memory", 128);
-            Settings.SetValue("Emulator.Serial", "none");
-            Settings.SetValue("Emulator.Serial.Host", "127.0.0.1");
-            Settings.SetValue("Emulator.Serial.Port", new Random().Next(11111, 22222));
-            Settings.SetValue("Emulator.Serial.Pipe", "MOSA");
-            Settings.SetValue("Emulator.Display", true);
-            Settings.SetValue("Launcher.Start", true);
-            Settings.SetValue("Launcher.Launch", true);
-            Settings.SetValue("Launcher.Exit", true);
             Settings.SetValue("Launcher.PlugKorlib", true);
             Settings.SetValue("Launcher.HuntForCorLib", true);
             Settings.SetValue("Linker.Drawf", false);
-            Settings.SetValue("OS.Name", "MOSA");
             Settings.SetValue("Compiler.OutputFile", OutputName);
         }
     }
