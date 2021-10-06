@@ -120,7 +120,7 @@ namespace Mosa.External.x86.Driver
                 KeyCode.Delete => "",
                 KeyCode.Enter => "",
                 KeyCode.ESC => "",
-                _ => "null"
+                _ => string.Empty
             };
         }
 
