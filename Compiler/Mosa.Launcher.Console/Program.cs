@@ -12,7 +12,6 @@ namespace Mosa.Launcher.Console
     class Program
     {
         private static Settings Settings = new Settings();
-        private static string[] Arguments;
 
         private static CompilerHooks CompilerHooks;
         private static MosaLinker Linker;
@@ -31,18 +30,18 @@ namespace Mosa.Launcher.Console
         {
             get
             {
-                if(SourceName.IndexOf("\\") == -1) 
+                if (SourceName.IndexOf("\\") == -1)
                 {
                     return Environment.CurrentDirectory;
-                }else
+                }
+                else
                 {
                     return Path.GetDirectoryName(SourceName);
                 }
             }
         }
-        private static bool VBEEnable;
 
-        public static string AppFolder = @"C:\Program Files (x86)\MOSA-Project";
+        public static string AppFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "MOSA-Core");
         public static string VirtualBoxPath = @"C:\Program Files\Oracle\VirtualBox\VBoxManage.exe";
 
         public static string ISOFilePath
@@ -55,29 +54,37 @@ namespace Mosa.Launcher.Console
 
         private static DateTime StartTime;
 
-        public static bool RunAfterBuild = true;
+        public static bool JustBuild = false;
+        private static bool VBEEnable = false;
+        private static bool GrubEnable = false;
 
         //Arguments:
         //Arguments 1 Is The Input File
-        //- VBE(Enable VBE)
-        //- JUSTBUILD(Tell Compiler Do Not Launch VirtualBox After Compiling)
+        //-VBE (Enable VBE)
+        //-JUSTBUILD (Tell Compiler Do Not Launch VirtualBox After Compiling)
+        //-GRUB (Use GRUB2 As Bootloader Instead Of Syslinux)
+
+        //!Install before use!
+
         static void Main(string[] args)
         {
             try
             {
                 if (!Environment.Is64BitOperatingSystem)
                 {
-                    System.Console.WriteLine("Fatal! 32-Bit Operating System Is Not Supported");
-                    System.Console.WriteLine("Press Any Key To Continue...");
-                    System.Console.ReadKey();
+                    WriteLine("Fatal! 32-Bit Operating System Is Not Supported");
+                    WriteLine("Press Any Key To Continue...");
                     return;
                 }
 
+                //For me to debug
                 if (args.Length == 0)
                 {
                     args = new string[]
                     {
-                        @"C:\Users\nifan\Desktop\MOSA1\MOSA1\bin\MOSA1.dll"
+                        @"C:\Users\nifan\Documents\GitHub\MOSA-GUI-Sample\MOSA1\bin\MOSA1.dll",
+                        "-VBE",
+                        "-GRUB"
                     };
                 }
 
@@ -94,13 +101,16 @@ namespace Mosa.Launcher.Console
                             VBEEnable = true;
                             break;
                         case "-JUSTBUILD":
-                            RunAfterBuild = false;
+                            JustBuild = true;
+                            break;
+                        case "-GRUB":
+                            GrubEnable = true;
                             break;
                     }
                 }
 
-                System.Console.WriteLine($"VBE Status: {VBEEnable}");
-                System.Console.WriteLine($"Output ISO Path: {ISOFilePath}");
+                WriteLine($"VBE Status: {VBEEnable}");
+                WriteLine($"Output ISO Path: {ISOFilePath}");
 
                 DefaultSettings();
                 RegisterPlatforms();
@@ -118,9 +128,16 @@ namespace Mosa.Launcher.Console
 
                 Compile();
 
-                MakeISO();
+                if (GrubEnable)
+                {
+                    MakeISO_Grub2();
+                }
+                else 
+                {
+                    MakeISO_Syslinux();
+                }
 
-                if (RunAfterBuild)
+                if (!JustBuild)
                 {
                     RunVirtualBox();
                 }
@@ -129,22 +146,20 @@ namespace Mosa.Launcher.Console
             }
             catch (Exception E)
             {
-                System.Console.ForegroundColor = ConsoleColor.Red;
-                System.Console.WriteLine("Exception Thrown While Compiling");
-                System.Console.Write("  ");
-                System.Console.WriteLine(E.Message);
-                System.Console.Write("  ");
-                System.Console.WriteLine(E.StackTrace);
-                System.Console.Write("  ");
-                System.Console.WriteLine("Please Report This Problem");
-                System.Console.Write("  ");
-                System.Console.WriteLine("Press Any Key To Continue...");
-                System.Console.ResetColor();
-                System.Console.ReadKey();
+                WriteLine("Exception Thrown While Compiling");
+                WriteLine(E.Message);
+                WriteLine(E.StackTrace);
+                WriteLine("Please Report This Problem");
+                WriteLine("Press Any Key To Continue...");
                 Environment.Exit(0);
             }
 
             return;
+        }
+
+        public static void WriteLine(string s) 
+        {
+            Debug.WriteLine($"\n\t{s}\n");
         }
 
         private static void Compile()
@@ -194,16 +209,48 @@ namespace Mosa.Launcher.Console
             GC.Collect();
         }
 
-        private static void MakeISO()
+        private static void MakeISO_Syslinux()
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(AppFolder + @"\Tools\syslinux");
             foreach (var v in directoryInfo.GetFiles())
                 v.CopyTo(Path.Combine(OutputFolder, v.Name), true);
 
             var args = $"-relaxed-filenames -J -R -o \"{ISOFilePath}\" -b isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table \"{OutputFolder}\"";
-            Process process = Process.Start(AppFolder + @"\Tools\mkisofs\mkisofs.exe", args);
 
-            while (!process.HasExited) ;
+            Process proc = new Process();
+            proc.StartInfo.FileName = AppFolder + @"\Tools\mkisofs\mkisofs.exe";
+            proc.StartInfo.Arguments = args;
+            proc.StartInfo.UseShellExecute = false;
+            proc.StartInfo.CreateNoWindow = true;
+            proc.Start();
+            while (!proc.HasExited) ;
+        }
+
+        private static void MakeISO_Grub2()
+        {
+            Directory.CreateDirectory(Path.Combine(OutputFolder, @"boot\grub\i386-pc"));
+
+            DirectoryInfo directoryInfo = new DirectoryInfo(AppFolder + @"\Tools\grub2\boot\grub\i386-pc");
+            foreach (var v in directoryInfo.GetFiles())
+                v.CopyTo(Path.Combine(Path.Combine(OutputFolder, @"boot\grub\i386-pc"), v.Name), true);
+
+            directoryInfo = new DirectoryInfo(AppFolder + @"\Tools\grub2\boot\grub");
+            foreach (var v in directoryInfo.GetFiles())
+                v.CopyTo(Path.Combine(Path.Combine(OutputFolder, @"boot\grub"), v.Name), true);
+
+            File.Copy(Path.Combine(AppFolder, @"output\main.exe"), Path.Combine(AppFolder, @"output\boot\main.exe"), true);
+            File.Delete(Path.Combine(AppFolder, @"output\main.exe"));
+
+            //var args = $"-relaxed-filenames -J -R -o \"{ISOFilePath}\" -b isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table \"{OutputFolder}\"";
+            var args = $"-relaxed-filenames -J -R -o \"{ISOFilePath}\" -b \"{@"boot/grub/i386-pc/eltorito.img"}\" -no-emul-boot -boot-load-size 4 -boot-info-table \"{OutputFolder}\"";
+
+            Process proc = new Process();
+            proc.StartInfo.FileName = AppFolder + @"\Tools\mkisofs\mkisofs.exe";
+            proc.StartInfo.Arguments = args;
+            proc.StartInfo.UseShellExecute = false;
+            proc.StartInfo.CreateNoWindow = true;
+            proc.Start();
+            while (!proc.HasExited) ;
         }
 
         private static void RunVirtualBox()
@@ -217,6 +264,7 @@ namespace Mosa.Launcher.Console
 
             ProcessStartInfo processStartInfo = new ProcessStartInfo();
             processStartInfo.UseShellExecute = false;
+            processStartInfo.CreateNoWindow = true;
             processStartInfo.FileName = VirtualBoxPath;
 
             string path = @"C:\Users\" + Environment.UserName + @"\VirtualBox VMs";
@@ -226,19 +274,16 @@ namespace Mosa.Launcher.Console
                 processStartInfo.Arguments = $"import \"{AppFolder + @"\Tools\virtualbox\MOSA.ova"}\"";
                 Process p1 = Process.Start(processStartInfo);
                 p1.WaitForExit();
-
-                // Attach output ISO
-                processStartInfo.Arguments = $"storageattach \"MOSA\" --storagectl IDE --port 1 --device 0 --type dvddrive --medium \"{ISOFilePath}\"";
-                Process p2 = Process.Start(processStartInfo);
-                p2.WaitForExit();
             }
 
-            ConsoleColor color = System.Console.ForegroundColor;
-            System.Console.ForegroundColor = ConsoleColor.Yellow;
-            System.Console.WriteLine(@"Warning: If this is your first time using this version (Last modify time: 6th October 2021). Please Delete C:\Users\Your Use Name\VirtualBox VMs\MOSA !!!");
-            System.Console.WriteLine("If It Asks You Select Boot Disk");
-            System.Console.WriteLine("Please Press Cancel");
-            System.Console.ForegroundColor = color;
+            // Attach output ISO
+            processStartInfo.Arguments = $"storageattach \"MOSA\" --storagectl IDE --port 1 --device 0 --type dvddrive --medium \"{ISOFilePath}\"";
+            Process p2 = Process.Start(processStartInfo);
+            p2.WaitForExit();
+
+            WriteLine(@"Warning: If this is your first time using this version (Last modify time: 6th October 2021). Please Delete C:\Users\Your Use Name\VirtualBox VMs\MOSA !!!");
+            WriteLine("If It Asks You Select Boot Disk");
+            WriteLine("Please Press Cancel");
             // Launch VM
             processStartInfo.Arguments = "startvm MOSA";
             Process.Start(processStartInfo);
@@ -250,34 +295,26 @@ namespace Mosa.Launcher.Console
             {
                 case CompilerEvent.CompileStart:
                     StartTime = DateTime.Now;
-                    System.Console.WriteLine($"Starting to compile...");
+                    WriteLine($"Starting to compile...");
                     break;
                 case CompilerEvent.CompilingMethods:
-                    System.Console.WriteLine($"Compiling methods...");
+                    WriteLine($"Compiling methods...");
                     break;
                 case CompilerEvent.CompilingMethodsCompleted:
-                    System.Console.WriteLine($"Finished compiling methods!");
+                    WriteLine($"Finished compiling methods!");
                     break;
                 case CompilerEvent.CompileEnd:
                     TimeSpan timeSpan = DateTime.Now.Subtract(StartTime);
-                    System.Console.WriteLine($"Ended compilation {timeSpan}");
+                    WriteLine($"Ended compilation {timeSpan}");
                     break;
                 case CompilerEvent.Exception:
-                    System.Console.ForegroundColor = ConsoleColor.Red;
-                    System.Console.WriteLine("Exception Thrown:");
-                    System.Console.Write("  ");
-                    System.Console.WriteLine(message);
-                    System.Console.ResetColor();
-                    System.Console.ReadKey();
+                    WriteLine("Exception Thrown:");
+                    WriteLine(message);
                     Environment.Exit(0);
                     break;
                 case CompilerEvent.Error:
-                    System.Console.ForegroundColor = ConsoleColor.Red;
-                    System.Console.WriteLine("Compiler Error:");
-                    System.Console.Write("  ");
-                    System.Console.WriteLine(message);
-                    System.Console.ResetColor();
-                    System.Console.ReadKey();
+                    WriteLine("Compiler Error:");
+                    WriteLine(message);
                     Environment.Exit(0);
                     break;
             }
@@ -324,8 +361,8 @@ namespace Mosa.Launcher.Console
             Settings.SetValue("Optimizations.ValueNumbering", true);
             Settings.SetValue("Multiboot.Version", "v1");
             Settings.SetValue("Multiboot.Video", VBEEnable);
-            Settings.SetValue("Multiboot.Video.Width", 1024);
-            Settings.SetValue("Multiboot.Video.Height", 768);
+            Settings.SetValue("Multiboot.Video.Width", 1920);
+            Settings.SetValue("Multiboot.Video.Height", 1080);
             Settings.SetValue("Multiboot.Video.Depth", 32);
             Settings.SetValue("Launcher.PlugKorlib", true);
             Settings.SetValue("Launcher.HuntForCorLib", true);
