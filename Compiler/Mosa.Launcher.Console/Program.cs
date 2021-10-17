@@ -70,12 +70,14 @@ namespace Mosa.Launcher.Console
         {
             try
             {
+                /*
                 if (!Environment.Is64BitOperatingSystem)
                 {
                     WriteLine("Fatal! 32-Bit Operating System Is Not Supported");
                     WriteLine("Press Any Key To Continue...");
                     return;
                 }
+                */
 
                 //For me to debug
                 if (args.Length == 0)

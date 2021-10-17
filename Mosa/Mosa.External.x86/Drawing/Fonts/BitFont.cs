@@ -64,18 +64,24 @@ namespace Mosa.External.x86.Drawing.Fonts
 
         public static int Calculate(string FontName, string s)
         {
-            foreach (var v in RegisteredBitFont)
+            for (int i = 0; i < RegisteredBitFont.Count; i++)
             {
+                BitFontDescriptor v = RegisteredBitFont[i];
                 int Size8 = v.Size / 8;
 
                 if (v.Name == FontName)
                 {
                     int r = 0;
-                    foreach (var j in s)
+                    for (int i1 = 0; i1 < s.Length; i1++)
+                    {
+                        char j = s[i1];
                         r += DrawBitFontChar(null, v.Raw, v.Size, Size8, 0, v.Charset.IndexOf(j), 0, 0, true);
+                    }
 
                     return r;
                 }
+
+                v.Dispose();
             }
             return 0;
         }

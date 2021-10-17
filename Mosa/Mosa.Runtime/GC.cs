@@ -24,10 +24,14 @@ namespace Mosa.Runtime
 
         public static ulong TotalAlloc = 0;
         public static ulong TotalReuse = 0;
+        public static ulong TotalAllocSize = 0;
+        public static Pointer TotalAllocPtr;
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static Pointer AllocateObject(uint size)
         {
+            TotalAllocSize = size;
+
             if (READY)
             {
                 for (uint u = 0; u < DescriptorsSize; u += (2 * sizeof(uint)))
@@ -49,7 +53,9 @@ namespace Mosa.Runtime
 
             TotalAlloc++;
 
-            return AllocateMemory(size);
+            TotalAllocPtr = AllocateMemory(size);
+
+            return TotalAllocPtr;
         }
 
         private static uint DescriptorsAddress;
