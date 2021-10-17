@@ -1,6 +1,9 @@
-using Mosa.External.x86;
+
+using Mosa.External.x86.Drawing.Fonts;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.x86;
+using System.Drawing;
+using System;
 
 namespace Mosa.External.x86.Driver
 {
@@ -19,13 +22,16 @@ namespace Mosa.External.x86.Driver
         private static ushort attributeControllerResetPort = 0x3da;
 
         private static MemoryBlock memoryBlock;
-        private static uint VideoMemoryCacheAddr;
+        public static uint VideoMemoryCacheAddr;
+
+        public static int Width = 320;
+        public static int Height = 200;
 
         private static unsafe void WriteRegisters(byte* registers)
         {
 
             // Memory
-            memoryBlock = new MemoryBlock((uint)320 * 200);
+            memoryBlock = new MemoryBlock((uint)320 * 201);
             VideoMemoryCacheAddr = (uint)memoryBlock.Address;
 
             // Misc
@@ -114,7 +120,7 @@ namespace Mosa.External.x86.Driver
             SetMode(320, 200, 8);
         }
 
-        private unsafe byte* GetFrameBufferSegment()
+        public unsafe byte* GetFrameBufferSegment()
         {
             IOPort.Out8(graphicsControllerIndexPort, 0x06);
             byte segmentNumber = (byte)(IOPort.In8(graphicsControllerDataPort) & (3 << 2));
@@ -138,12 +144,12 @@ namespace Mosa.External.x86.Driver
             return 0x00;
         }
 
-        public void DrawPixel(uint x, uint y, byte r, byte g, byte b)
+        public void DrawPoint(uint x, uint y, byte r, byte g, byte b)
         {
-            DrawPixel(x, y, GetColorIndex(r, g, b));
+            DrawPoint(x, y, GetColorIndex(r, g, b));
         }
 
-        public unsafe void DrawPixel(uint x, uint y, byte colorIndex)
+        public unsafe void DrawPoint(uint x, uint y, byte colorIndex)
         {
             if (x < 0 || 320 <= x || y < 0 || 200 <= y)
                 return;
@@ -154,7 +160,14 @@ namespace Mosa.External.x86.Driver
         {
             for (uint Y = y; Y < y + h; Y++)
                 for (uint X = x; X < x + w; X++)
-                    DrawPixel(X, Y, r, g, b);
+                    DrawPoint(X, Y, r, g, b);
+        }
+
+        public void DrawFilledRectangle(uint x, uint y, uint w, uint h, byte colorIndex)
+        {
+            for (uint Y = y; Y < y + h; Y++)
+                for (uint X = x; X < x + w; X++)
+                    DrawPoint(X, Y, colorIndex);
         }
 
         public unsafe void Update()
@@ -165,6 +178,11 @@ namespace Mosa.External.x86.Driver
         public void Clear(byte r, byte g, byte b)
         {
             DrawFilledRectangle(0, 0, 320, 200, r, g, b);
+        }
+
+        public void Clear(byte colorIndex)
+        {
+            DrawFilledRectangle(0, 0, 320, 200, colorIndex);
         }
     }
 }
