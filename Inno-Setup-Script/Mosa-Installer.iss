@@ -51,7 +51,7 @@ Source: "..\Templates\Mosa.VisualStudio.GUI.ProjectTemplate\Properties\*.*"; Des
 Source: "..\bin\*.*"; DestDir: "{app}\bin"; Flags: ignoreversion 
 
 ;ASM
-Source: "..\ASM\*.o"; DestDir: "{app}\asm"; Flags: ignoreversion
+Source: "..\ASM\*.o"; DestDir: "{app}\ASM"; Flags: ignoreversion
 
 ;Tools
 Source: "..\Tools\nasm\*.*"; DestDir: "{app}\Tools\nasm"; Flags: ignoreversion

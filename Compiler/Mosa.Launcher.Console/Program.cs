@@ -84,9 +84,7 @@ namespace Mosa.Launcher.Console
                 {
                     args = new string[]
                     {
-                        @"C:\Users\nifan\Documents\GitHub\MOSA-GUI-Sample\MOSA1\bin\MOSA1.dll",
-                        "-VBE",
-                        "-GRUB"
+                        @"C:\Users\nifan\source\repos\MOSA1\MOSA1\bin\MOSA1.dll"
                     };
                 }
 
@@ -161,7 +159,7 @@ namespace Mosa.Launcher.Console
 
         public static void WriteLine(string s) 
         {
-            Debug.WriteLine($"\n\t{s}\n");
+            Debug.WriteLine($"\t{s}");
         }
 
         private static void Compile()
