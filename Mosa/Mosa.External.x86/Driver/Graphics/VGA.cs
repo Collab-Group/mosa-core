@@ -1,6 +1,9 @@
-using Mosa.External.x86;
+
+using Mosa.External.x86.Drawing.Fonts;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.x86;
+using System.Drawing;
+using System;
 
 namespace Mosa.External.x86.Driver
 {
@@ -19,26 +22,24 @@ namespace Mosa.External.x86.Driver
         private static ushort attributeControllerResetPort = 0x3da;
 
         private static MemoryBlock memoryBlock;
-        private static uint VideoMemoryCacheAddr;
+        public static uint VideoMemoryCacheAddr;
+
+        public static int Width = 320;
+        public static int Height = 200;
 
         private static unsafe void WriteRegisters(byte* registers)
         {
-
-            // Memory
-            memoryBlock = new MemoryBlock((uint)320 * 200);
+            memoryBlock = new MemoryBlock((uint)320 * 201);
             VideoMemoryCacheAddr = (uint)memoryBlock.Address;
 
-            // Misc
             IOPort.Out8(miscPort, *registers++);
 
-            // Sequencer
             for (byte i = 0; i < 5; i++)
             {
                 IOPort.Out8(sequencerIndexPort, i);
                 IOPort.Out8(sequencerDataPort, *registers++);
             }
 
-            // Cathode Ray Tube Controller
             IOPort.Out8(crtcIndexPort, 0x03);
             IOPort.Out8(crtcDataPort, (byte)(IOPort.In8(crtcDataPort) | 0x80));
             IOPort.Out8(crtcIndexPort, 0x11);
@@ -53,14 +54,12 @@ namespace Mosa.External.x86.Driver
                 IOPort.Out8(crtcDataPort, *registers++);
             }
 
-            // Graphics Controller
             for (byte i = 0; i < 9; i++)
             {
                 IOPort.Out8(graphicsControllerIndexPort, i);
                 IOPort.Out8(graphicsControllerDataPort, *registers++);
             }
 
-            // Attribute Controller
             for (byte i = 0; i < 21; i++)
             {
                 IOPort.In8(attributeControllerResetPort);
@@ -114,7 +113,7 @@ namespace Mosa.External.x86.Driver
             SetMode(320, 200, 8);
         }
 
-        private unsafe byte* GetFrameBufferSegment()
+        public unsafe byte* GetFrameBufferSegment()
         {
             IOPort.Out8(graphicsControllerIndexPort, 0x06);
             byte segmentNumber = (byte)(IOPort.In8(graphicsControllerDataPort) & (3 << 2));
@@ -128,33 +127,18 @@ namespace Mosa.External.x86.Driver
             }
         }
 
-        byte GetColorIndex(byte r, byte g, byte b)
-        {
-            if (r == 0x00 && g == 0x00 && b == 0x00) return 0x00; // black
-            if (r == 0x00 && g == 0x00 && b == 0xA8) return 0x01; // blue
-            if (r == 0x00 && g == 0xA8 && b == 0x00) return 0x02; // green
-            if (r == 0xA8 && g == 0x00 && b == 0x00) return 0x04; // red
-            if (r == 0xFF && g == 0xFF && b == 0xFF) return 0x3F; // white
-            return 0x00;
-        }
-
-        public void DrawPixel(uint x, uint y, byte r, byte g, byte b)
-        {
-            DrawPixel(x, y, GetColorIndex(r, g, b));
-        }
-
-        public unsafe void DrawPixel(uint x, uint y, byte colorIndex)
+        public unsafe void DrawPoint(uint x, uint y, byte colorIndex)
         {
             if (x < 0 || 320 <= x || y < 0 || 200 <= y)
                 return;
             memoryBlock.Write8(320 * y + x, colorIndex);
         }
 
-        public void DrawFilledRectangle(uint x, uint y, uint w, uint h, byte r, byte g, byte b)
+        public void DrawFilledRectangle(uint x, uint y, uint w, uint h, byte colorIndex)
         {
             for (uint Y = y; Y < y + h; Y++)
                 for (uint X = x; X < x + w; X++)
-                    DrawPixel(X, Y, r, g, b);
+                    DrawPoint(X, Y, colorIndex);
         }
 
         public unsafe void Update()
@@ -162,9 +146,9 @@ namespace Mosa.External.x86.Driver
             ASM.MEMCPY((uint)(GetFrameBufferSegment() + 320), VideoMemoryCacheAddr, 64000);
         }
 
-        public void Clear(byte r, byte g, byte b)
+        public void Clear(byte colorIndex)
         {
-            DrawFilledRectangle(0, 0, 320, 200, r, g, b);
+            DrawFilledRectangle(0, 0, 320, 200, colorIndex);
         }
     }
 }

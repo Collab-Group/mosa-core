@@ -1,4 +1,4 @@
-﻿using Mosa.External.x86.Drawing.Fonts;
+using Mosa.External.x86.Drawing.Fonts;
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
 using System;
@@ -97,12 +97,21 @@ namespace Mosa.External.x86.Drawing
                 Y = 0;
             }
 
-            for (int h = 0; h < aHeight; h++)
-                ASM.MEMFILL(
-                    (uint)(VideoMemoryCacheAddr + ((Width * (Y + h) + X) * Bpp)),
-                    (uint)(aWidth * Bpp),
-                    Color
-                    );
+            if (!CurrentDriver.Equals("VGA"))
+            {
+                for (int h = 0; h < aHeight; h++)
+                    ASM.MEMFILL(
+                        (uint)(VideoMemoryCacheAddr + ((Width * (Y + h) + X) * Bpp)),
+                        (uint)(aWidth * Bpp),
+                        Color
+                        );
+            }
+            else
+            {
+                for (int w = 0; w < aWidth; w++)
+                    for (int h = 0; h < aHeight; h++)
+                        DrawPoint(Color, w, h);
+            }
         }
 
         public virtual void DrawArray(int x, int y, int width, int height, int[] array, uint color)
@@ -143,7 +152,14 @@ namespace Mosa.External.x86.Drawing
 
         public virtual void Clear(uint Color)
         {
-            ASM.MEMFILL(VideoMemoryCacheAddr, (uint)FrameSize, Color);
+            if (!CurrentDriver.Equals("VGA"))
+            {
+                ASM.MEMFILL(VideoMemoryCacheAddr, (uint)FrameSize, Color);
+            }
+            else
+            {
+                DrawFilledRectangle(Color, 0, 0, Width, Height);
+            }
         }
 
         public abstract void Disable();
