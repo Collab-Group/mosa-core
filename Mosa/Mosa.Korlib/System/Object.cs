@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Runtime.CompilerServices;
+using System.Runtime.Metadata;
 using System.Runtime.Versioning;
 
 namespace System
@@ -11,9 +12,9 @@ namespace System
 	/// in the .NET Framework; it is the root of the type hierarchy.
 	/// </summary>
 	[Serializable]
-	public class Object
+	public unsafe class Object
 	{
-		private readonly IntPtr typeDefinitionPtr;
+		public readonly TypeDefinitionNew* typeDefinitionPtr;
 
 		private readonly IntPtr syncBlock;
 
