@@ -1,6 +1,5 @@
 ﻿using Mosa.External.x86.Driver;
 using Mosa.Kernel.x86;
-using Mosa.Runtime;
 using Mosa.Runtime.x86;
 
 namespace Mosa.External.x86.Drawing
@@ -15,13 +14,7 @@ namespace Mosa.External.x86.Drawing
         {
             vBEDriver = new VBEDriver();
 
-            if(VBE.VBEModeInfo->BitsPerPixel != 32) 
-            {
-                //TODO
-                for (; ; ) Native.Hlt();
-            }
-
-            Bpp = VBE.VBEModeInfo->BitsPerPixel / 8;
+            Bpp = 4;
 
             vbeDriverAddr = (uint)vBEDriver.VideoMemory.Address;
 
@@ -30,7 +23,7 @@ namespace Mosa.External.x86.Drawing
 
             CurrentDriver = "VBE";
 
-			memoryBlock = new MemoryBlock((uint)FrameSize);
+            memoryBlock = new MemoryBlock((uint)FrameSize);
             VideoMemoryCacheAddr = (uint)memoryBlock.Address;
 
             //Clean
@@ -50,16 +43,28 @@ namespace Mosa.External.x86.Drawing
             }
         }
 
-		public override uint GetPoint(int X, int Y)
+        public override uint GetPoint(int X, int Y)
         {
             memoryBlock.Read32((uint)((Width * Y + X) * Bpp));
 
             return 0;
-		}
+        }
 
         public override void Update()
         {
-            ASM.MEMCPY(vbeDriverAddr, VideoMemoryCacheAddr, (uint)FrameSize);
+            if (VBE.VBEModeInfo->BitsPerPixel == 32)
+            {
+                ASM.MEMCPY(vbeDriverAddr, VideoMemoryCacheAddr, (uint)FrameSize);
+            }
+            else if (VBE.VBEModeInfo->BitsPerPixel == 24)
+            {
+            }
+            else if (VBE.VBEModeInfo->BitsPerPixel == 16)
+            {
+            }
+            else if (VBE.VBEModeInfo->BitsPerPixel == 8)
+            {
+            }
         }
     }
 }
