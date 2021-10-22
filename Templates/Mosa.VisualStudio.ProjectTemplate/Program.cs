@@ -14,6 +14,7 @@ namespace $safeprojectname$
         public static void Main() { }
 
         [Plug("Mosa.Runtime.StartUp::KMain")]
+        [UnmanagedCallersOnly(EntryPoint = "KMain", CallingConvention = CallingConvention.StdCall)]
         public static void KMain()
         {
             IDT.OnInterrupt += IDT_OnInterrupt;
