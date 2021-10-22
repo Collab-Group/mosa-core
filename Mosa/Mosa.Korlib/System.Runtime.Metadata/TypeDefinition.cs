@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 namespace System.Runtime.Metadata
 {
 	[StructLayout(LayoutKind.Sequential,Pack = 1)]
-	public unsafe struct TypeDefinitionNew
+	public unsafe struct TypeDefinition
 	{
 		public void* Name;
 		public void* CustomAttributes;

@@ -14,9 +14,9 @@ namespace System
 	[Serializable]
 	public unsafe class Object
 	{
-		public readonly TypeDefinitionNew* typeDefinitionPtr;
+		public TypeDefinition* TypeDefinition { get; }
 
-		private readonly IntPtr syncBlock;
+		private readonly void* Pad;
 
 		/// <summary>
 		/// Initializes a new instance of the System.Object class.
