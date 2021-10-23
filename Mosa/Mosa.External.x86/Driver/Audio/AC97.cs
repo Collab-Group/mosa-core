@@ -6,7 +6,7 @@ using System;
 using System.Runtime.InteropServices;
 using static Mosa.Runtime.x86.Native;
 
-namespace Mosa.External.x86.Driver.Audio
+namespace Mosa.External.x86.Driver
 {
     struct Options
     {
@@ -73,7 +73,7 @@ namespace Mosa.External.x86.Driver.Audio
         private static int Status;
         public static bool Finished { get => Status == 7; }
 
-        private static void OnInterrupt()
+        public static void OnInterrupt()
         {
             if (!Exist) return;
 
@@ -121,12 +121,12 @@ namespace Mosa.External.x86.Driver.Audio
             Play();
         }
 
-        private static void SetIndex(byte index)
+        public static void SetIndex(byte index)
         {
             Out8((ushort)(NABM + (ushort)PCM.OutLastValidIndex), index);
         }
 
-        private static void Play()
+        public static void Play()
         {
             Out8((ushort)(NABM + (ushort)PCM.OutControlRegister), 0x11);
         }
