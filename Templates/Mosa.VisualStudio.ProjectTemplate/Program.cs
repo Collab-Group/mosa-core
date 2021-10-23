@@ -4,6 +4,7 @@ using Mosa.External.x86.Driver;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.Plug;
 using System.Threading;
+using System.Runtime.InteropServices;
 
 namespace $safeprojectname$
 {
