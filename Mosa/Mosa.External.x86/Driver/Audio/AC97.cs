@@ -6,7 +6,7 @@ using System;
 using System.Runtime.InteropServices;
 using static Mosa.Runtime.x86.Native;
 
-namespace Mosa.External.x86.Driver
+namespace Mosa.External.x86.Driver.Audio
 {
     struct Options
     {
