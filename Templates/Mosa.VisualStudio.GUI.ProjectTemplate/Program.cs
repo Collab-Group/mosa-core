@@ -8,6 +8,7 @@ using Mosa.Kernel.x86;
 using Mosa.Runtime.Plug;
 using System.Drawing;
 using System.Threading;
+using System.Runtime.InteropServices;
 
 namespace $safeprojectname$
 {
