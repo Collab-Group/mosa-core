@@ -10,7 +10,7 @@ using static Mosa.External.x86.MMIO;
 
 namespace Mosa.External.x86.Driver
 {
-    public unsafe class Intel825XX : EthernetController
+    public unsafe class Intel8254X : EthernetController
     {
         #region Statics
         public static uint BAR0;
@@ -46,7 +46,7 @@ namespace Mosa.External.x86.Driver
 
         public static void Initialize(PCIDevice device)
         {
-            Console.WriteLine("Intel 825XX Series Ethernet Controller Exist");
+            Console.WriteLine("Intel 8254X Series Ethernet Controller Found");
             device.EnableDevice();
 
             BAR0 = (uint)(device.BAR0 & (~3));
@@ -247,7 +247,7 @@ namespace Mosa.External.x86.Driver
         }
         #endregion
 
-        public Intel825XX(PCIDevice device)
+        public Intel8254X(PCIDevice device)
         {
             Initialize(device);
         }

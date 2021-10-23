@@ -114,7 +114,7 @@ namespace Mosa.External.x86.Networking
                         )
                     {
                         //Must Be Static. MOSA Compiler Got Some Problems
-                        Controller = new Intel825XX(dev);
+                        Controller = new Intel8254X(dev);
                     }
                 }
             }
