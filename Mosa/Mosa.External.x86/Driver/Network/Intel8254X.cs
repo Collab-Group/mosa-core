@@ -46,7 +46,7 @@ namespace Mosa.External.x86.Driver
 
         public static void Initialize(PCIDevice device)
         {
-            Console.WriteLine("Intel 8254X Series Ethernet Controller Found");
+            Console.WriteLine("Intel 8254X Series Gigabit Ethernet Controller Found");
             device.EnableDevice();
 
             BAR0 = (uint)(device.BAR0 & (~3));
