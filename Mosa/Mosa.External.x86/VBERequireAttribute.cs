@@ -10,6 +10,8 @@ namespace Mosa.External.x86
         private int XRes;
         private int YRes;
 
+
+        //Tell Compiler To Enable VBE With A Specific Resolution If GPU Supported
         public VBERequireAttribute(int xres, int yres)
         {
             this.XRes = xres;
