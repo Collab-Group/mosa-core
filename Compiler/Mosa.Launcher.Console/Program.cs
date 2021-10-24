@@ -6,17 +6,14 @@ using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Diagnostics;
 using System.IO;
-using Mosa.Platform.Intel.CompilerStages;
 
 namespace Mosa.Launcher.Console
 {
     class Program
     {
-        private static Settings Settings = MultibootV1Stage.Settings;
+        private static Settings Settings = new Settings();
 
         private static CompilerHooks CompilerHooks;
-        private static MosaLinker Linker;
-        private static TypeSystem TypeSystem;
 
         private static string OutputName;
         private static string SourceName;
@@ -58,8 +55,6 @@ namespace Mosa.Launcher.Console
         public static bool JustBuild = false;
         private static bool VBEEnable = false;
         private static bool GrubEnable = false;
-        public static int Width = 640;
-        public static int Height = 480;
 
         //Arguments:
         //Arguments 1 Is The Input File
@@ -108,48 +103,6 @@ namespace Mosa.Launcher.Console
                             break;
                         case "-GRUB":
                             GrubEnable = true;
-                            break;
-                        case "-320X200":
-                            SetVBEResolution(320, 200);
-                            break;
-                        case "-640X400":
-                            SetVBEResolution(640, 400);
-                            break;
-                        case "-640X480":
-                            SetVBEResolution(640, 480);
-                            break;
-                        case "-800X500":
-                            SetVBEResolution(800, 500);
-                            break;
-                        case "-800X600":
-                            SetVBEResolution(800, 600);
-                            break;
-                        case "-896X672":
-                            SetVBEResolution(896, 672);
-                            break;
-                        case "-1024X640":
-                            SetVBEResolution(1024, 640);
-                            break;
-                        case "-1024X768":
-                            SetVBEResolution(1024, 768);
-                            break;
-                        case "-1152X720":
-                            SetVBEResolution(1152, 720);
-                            break;
-                        case "-1280X1024":
-                            SetVBEResolution(1280, 1024);
-                            break;
-                        case "-1360X768":
-                            SetVBEResolution(1360, 768);
-                            break;
-                        case "-1440X900":
-                            SetVBEResolution(1440, 900);
-                            break;
-                        case "-1600X1200":
-                            SetVBEResolution(1600, 1200);
-                            break;
-                        case "-1920X1080":
-                            SetVBEResolution(1920, 1080);
                             break;
                     }
                 }
@@ -202,12 +155,6 @@ namespace Mosa.Launcher.Console
             return;
         }
 
-        private static void SetVBEResolution(int nWidth, int nHeight)
-        {
-            Width = nWidth;
-            Height = nHeight;
-        }
-
         public static void WriteLine(string s) 
         {
             Debug.WriteLine($"\t{s}");
@@ -236,11 +183,6 @@ namespace Mosa.Launcher.Console
 
                 var platform = Settings.GetValue("Compiler.Platform", "x86");
 
-                if (platform == "armv8a32")
-                {
-                    platform = "ARMv8A32";
-                }
-
                 var fileKorlibPlatform = Path.Combine(SourceFolder, $"Mosa.Plug.Korlib.{platform}.dll");
 
                 if (fileKorlibPlatform != null)
@@ -253,9 +195,6 @@ namespace Mosa.Launcher.Console
 
             compiler.Load();
             compiler.Compile();
-
-            Linker = compiler.Linker;
-            TypeSystem = compiler.TypeSystem;
 
             GC.Collect();
         }
@@ -412,8 +351,8 @@ namespace Mosa.Launcher.Console
             Settings.SetValue("Optimizations.ValueNumbering", true);
             Settings.SetValue("Multiboot.Version", "v1");
             Settings.SetValue("Multiboot.Video", VBEEnable);
-            Settings.SetValue("Multiboot.Video.Width", Width);
-            Settings.SetValue("Multiboot.Video.Height", Height);
+            Settings.SetValue("Multiboot.Video.Width", 1920);
+            Settings.SetValue("Multiboot.Video.Height", 1080);
             Settings.SetValue("Multiboot.Video.Depth", 32);
             Settings.SetValue("Launcher.PlugKorlib", true);
             Settings.SetValue("Launcher.HuntForCorLib", true);
