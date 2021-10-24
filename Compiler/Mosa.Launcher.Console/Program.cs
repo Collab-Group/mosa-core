@@ -1,8 +1,6 @@
 using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
-using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -56,9 +54,12 @@ namespace Mosa.Launcher.Console
         private static bool VBEEnable = false;
         private static bool GrubEnable = false;
 
+        public static uint PreferedVBEXResolution = 1920;
+        public static uint PreferedVBEYResolution = 1080;
+
         //Arguments:
         //Arguments 1 Is The Input File
-        //-VBE (Enable VBE)
+        //-VBE (Enable VBE) With Resolution -VBExresXyres Example -VBE1024X768
         //-JUSTBUILD (Tell Compiler Do Not Launch VirtualBox After Compiling)
         //-GRUB (Use GRUB2 As Bootloader Instead Of Syslinux)
 
@@ -82,7 +83,10 @@ namespace Mosa.Launcher.Console
                 {
                     args = new string[]
                     {
-                        @"C:\Users\nifan\source\repos\MOSA1\MOSA1\bin\MOSA1.dll"
+                        @"C:\Users\nifan\source\repos\MOSA1\MOSA1\bin\MOSA1.dll",
+                        "-VBE320x200",
+                        "-GRUB",
+                        //"-JUSTBUILD"
                     };
                 }
 
@@ -91,24 +95,38 @@ namespace Mosa.Launcher.Console
                 SourceName = args[0];
                 OutputName = AppFolder + @"\output\main.exe";
 
+                string s;
                 foreach (var v in args)
                 {
-                    switch (v.ToUpper())
+                    //Uppered
+                    s = v.ToUpper();
+
+                    if (s.IndexOf("-VBE") == 0)
                     {
-                        case "-VBE":
-                            VBEEnable = true;
-                            break;
-                        case "-JUSTBUILD":
-                            JustBuild = true;
-                            break;
-                        case "-GRUB":
-                            GrubEnable = true;
-                            break;
+                        VBEEnable = true;
+                        if (s.IndexOf("X") != -1)
+                        {
+                            string[] res = s.Replace("-VBE", "").Split('X');
+                            PreferedVBEXResolution = Convert.ToUInt32(res[0]);
+                            PreferedVBEYResolution = Convert.ToUInt32(res[1]);
+                        }
+                    }
+                    else if (s == "-JUSTBUILD")
+                    {
+                        JustBuild = true;
+                    }
+                    else if (s == "-GRUB")
+                    {
+                        GrubEnable = true;
                     }
                 }
 
-                WriteLine($"VBE Status: {VBEEnable}");
+                WriteLine($"VBE Enabled: {VBEEnable}");
+                WriteLine($"GRUB Enabled: {GrubEnable}");
+                WriteLine($"JUSTBUILD Enabled: {JustBuild}");
                 WriteLine($"Output ISO Path: {ISOFilePath}");
+                if (VBEEnable)
+                    WriteLine($"Prefered VBE Resolution: {PreferedVBEXResolution}x{PreferedVBEYResolution}");
 
                 DefaultSettings();
                 RegisterPlatforms();
@@ -130,7 +148,7 @@ namespace Mosa.Launcher.Console
                 {
                     MakeISO_Grub2();
                 }
-                else 
+                else
                 {
                     MakeISO_Syslinux();
                 }
@@ -155,7 +173,7 @@ namespace Mosa.Launcher.Console
             return;
         }
 
-        public static void WriteLine(string s) 
+        public static void WriteLine(string s)
         {
             Debug.WriteLine($"\t{s}");
         }
@@ -351,8 +369,8 @@ namespace Mosa.Launcher.Console
             Settings.SetValue("Optimizations.ValueNumbering", true);
             Settings.SetValue("Multiboot.Version", "v1");
             Settings.SetValue("Multiboot.Video", VBEEnable);
-            Settings.SetValue("Multiboot.Video.Width", 1920);
-            Settings.SetValue("Multiboot.Video.Height", 1080);
+            Settings.SetValue("Multiboot.Video.Width", PreferedVBEXResolution);
+            Settings.SetValue("Multiboot.Video.Height", PreferedVBEYResolution);
             Settings.SetValue("Multiboot.Video.Depth", 32);
             Settings.SetValue("Launcher.PlugKorlib", true);
             Settings.SetValue("Launcher.HuntForCorLib", true);
