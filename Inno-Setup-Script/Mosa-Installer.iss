@@ -62,8 +62,7 @@ Source: "..\Tools\virtualbox\*.*"; DestDir: "{app}\Tools\virtualbox"; Flags: ign
 Source: "..\Tools\imdisk\*.*"; DestDir: "{app}\Tools\imdisk"; Flags: ignoreversion
 
 ;Grub2
-Source: "..\Tools\grub2\boot\grub\*.*"; DestDir: "{app}\Tools\grub2\boot\grub"; Flags: ignoreversion
-Source: "..\Tools\grub2\boot\grub\i386-pc\*.*"; DestDir: "{app}\Tools\grub2\boot\grub\i386-pc"; Flags: ignoreversion
+Source: "..\Tools\grub2\*.*"; DestDir: "{app}\Tools\grub2"; Flags: ignoreversion
 
 [ThirdParty]
 UseRelativePaths=True

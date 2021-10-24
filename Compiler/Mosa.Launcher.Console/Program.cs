@@ -4,6 +4,7 @@ using Mosa.Compiler.Framework.Trace;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 
 namespace Mosa.Launcher.Console
 {
@@ -51,17 +52,13 @@ namespace Mosa.Launcher.Console
         private static DateTime StartTime;
 
         public static bool JustBuild = false;
-        private static bool VBEEnable = false;
-        private static bool GrubEnable = false;
 
-        public static uint PreferedVBEXResolution = 1920;
-        public static uint PreferedVBEYResolution = 1080;
+        public static uint PreferedVBEXResolution = 1024;
+        public static uint PreferedVBEYResolution = 768;
 
         //Arguments:
         //Arguments 1 Is The Input File
-        //-VBE (Enable VBE) With Resolution -VBExresXyres Example -VBE1024X768
         //-JUSTBUILD (Tell Compiler Do Not Launch VirtualBox After Compiling)
-        //-GRUB (Use GRUB2 As Bootloader Instead Of Syslinux)
 
         //!Install before use!
 
@@ -84,13 +81,9 @@ namespace Mosa.Launcher.Console
                     args = new string[]
                     {
                         @"C:\Users\nifan\source\repos\MOSA1\MOSA1\bin\MOSA1.dll",
-                        "-VBE320x200",
-                        "-GRUB",
                         //"-JUSTBUILD"
                     };
                 }
-
-                //If you want to change "main.exe" to other name you have to modify the syslinux.cfg
 
                 SourceName = args[0];
                 OutputName = AppFolder + @"\output\main.exe";
@@ -100,33 +93,15 @@ namespace Mosa.Launcher.Console
                 {
                     //Uppered
                     s = v.ToUpper();
-
-                    if (s.IndexOf("-VBE") == 0)
-                    {
-                        VBEEnable = true;
-                        if (s.IndexOf("X") != -1)
-                        {
-                            string[] res = s.Replace("-VBE", "").Split('X');
-                            PreferedVBEXResolution = Convert.ToUInt32(res[0]);
-                            PreferedVBEYResolution = Convert.ToUInt32(res[1]);
-                        }
-                    }
-                    else if (s == "-JUSTBUILD")
+                    
+                    if (s == "-JUSTBUILD")
                     {
                         JustBuild = true;
                     }
-                    else if (s == "-GRUB")
-                    {
-                        GrubEnable = true;
-                    }
                 }
-
-                WriteLine($"VBE Enabled: {VBEEnable}");
-                WriteLine($"GRUB Enabled: {GrubEnable}");
+                
                 WriteLine($"JUSTBUILD Enabled: {JustBuild}");
                 WriteLine($"Output ISO Path: {ISOFilePath}");
-                if (VBEEnable)
-                    WriteLine($"Prefered VBE Resolution: {PreferedVBEXResolution}x{PreferedVBEYResolution}");
 
                 DefaultSettings();
                 RegisterPlatforms();
@@ -144,19 +119,14 @@ namespace Mosa.Launcher.Console
 
                 Compile();
 
-                if (GrubEnable)
-                {
-                    MakeISO_Grub2();
-                }
-                else
-                {
-                    MakeISO_Syslinux();
-                }
+                MakeISO_Grub2();
 
                 if (!JustBuild)
                 {
                     RunVirtualBox();
                 }
+
+                WriteLine("Please Right Click Visual Studio Output Window And Uncheck \"Module Load Message\" For Better Use!");
 
                 Environment.Exit(0);
             }
@@ -217,34 +187,9 @@ namespace Mosa.Launcher.Console
             GC.Collect();
         }
 
-        private static void MakeISO_Syslinux()
-        {
-            DirectoryInfo directoryInfo = new DirectoryInfo(AppFolder + @"\Tools\syslinux");
-            foreach (var v in directoryInfo.GetFiles())
-                v.CopyTo(Path.Combine(OutputFolder, v.Name), true);
-
-            var args = $"-relaxed-filenames -J -R -o \"{ISOFilePath}\" -b isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table \"{OutputFolder}\"";
-
-            Process proc = new Process();
-            proc.StartInfo.FileName = AppFolder + @"\Tools\mkisofs\mkisofs.exe";
-            proc.StartInfo.Arguments = args;
-            proc.StartInfo.UseShellExecute = false;
-            proc.StartInfo.CreateNoWindow = true;
-            proc.Start();
-            while (!proc.HasExited) ;
-        }
-
         private static void MakeISO_Grub2()
         {
-            Directory.CreateDirectory(Path.Combine(OutputFolder, @"boot\grub\i386-pc"));
-
-            DirectoryInfo directoryInfo = new DirectoryInfo(AppFolder + @"\Tools\grub2\boot\grub\i386-pc");
-            foreach (var v in directoryInfo.GetFiles())
-                v.CopyTo(Path.Combine(Path.Combine(OutputFolder, @"boot\grub\i386-pc"), v.Name), true);
-
-            directoryInfo = new DirectoryInfo(AppFolder + @"\Tools\grub2\boot\grub");
-            foreach (var v in directoryInfo.GetFiles())
-                v.CopyTo(Path.Combine(Path.Combine(OutputFolder, @"boot\grub"), v.Name), true);
+            ZipFile.ExtractToDirectory(Path.Combine(AppFolder, @"Tools\grub2\grub2.zip"), Path.Combine(AppFolder, @"output\"));
 
             File.Copy(Path.Combine(AppFolder, @"output\main.exe"), Path.Combine(AppFolder, @"output\boot\main.exe"), true);
             File.Delete(Path.Combine(AppFolder, @"output\main.exe"));
@@ -368,9 +313,9 @@ namespace Mosa.Launcher.Console
             Settings.SetValue("Optimizations.TwoPass", true);
             Settings.SetValue("Optimizations.ValueNumbering", true);
             Settings.SetValue("Multiboot.Version", "v1");
-            Settings.SetValue("Multiboot.Video", VBEEnable);
-            Settings.SetValue("Multiboot.Video.Width", PreferedVBEXResolution);
-            Settings.SetValue("Multiboot.Video.Height", PreferedVBEYResolution);
+            Settings.SetValue("Multiboot.Video", false);
+            Settings.SetValue("Multiboot.Video.Width", 0);
+            Settings.SetValue("Multiboot.Video.Height", 0);
             Settings.SetValue("Multiboot.Video.Depth", 32);
             Settings.SetValue("Launcher.PlugKorlib", true);
             Settings.SetValue("Launcher.HuntForCorLib", true);

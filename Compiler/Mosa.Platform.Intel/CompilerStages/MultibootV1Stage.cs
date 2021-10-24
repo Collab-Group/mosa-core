@@ -3,6 +3,7 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.MosaTypeSystem;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 
@@ -76,17 +77,13 @@ namespace Mosa.Platform.Intel.CompilerStages
 
 		#endregion Data Members
 
-		public bool HasVideo { get; set; }
-		public int Width { get; set; }
-		public int Height { get; set; }
-		public int Depth { get; set; }
+		public bool HasVideo { get { return CompilerSettings.Settings.GetValue("Multiboot.Video", false); } }
+		public int Width { get { return CompilerSettings.Settings.GetValue("Multiboot.Video.Width", 0); } }
+		public int Height { get { return CompilerSettings.Settings.GetValue("Multiboot.Video.Height", 0); } }
+		public int Depth { get { return 32; } }
 
 		protected override void Initialization()
 		{
-			HasVideo = CompilerSettings.Settings.GetValue("Multiboot.Video", false);
-			Width = CompilerSettings.Settings.GetValue("Multiboot.Video.Width", 0);
-			Height = CompilerSettings.Settings.GetValue("Multiboot.Video.Height", 0);
-			Depth = CompilerSettings.Settings.GetValue("Multiboot.Video.Depth", 0);
 		}
 
 		protected override void Setup()

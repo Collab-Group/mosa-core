@@ -483,31 +483,51 @@ namespace Mosa.Compiler.Framework
 		}
 
 		private void PlugMethod()
-		{
-			var plugMethod = Compiler.PlugSystem.GetReplacement(Method);
+        {
+            var plugMethod = Compiler.PlugSystem.GetReplacement(Method);
 
-			if (plugMethod == null)
-				return;
+            if (plugMethod == null)
+                return;
 
-			MethodData.ReplacedBy = plugMethod;
+            //
+            VBERequireAttribute(plugMethod);
 
-			Compiler.MethodScanner.MethodInvoked(plugMethod, Method);
+            MethodData.ReplacedBy = plugMethod;
 
-			IsMethodPlugged = true;
-			IsCILStream = false;
-			IsExecutePipeline = false;
-			IsStackFrameRequired = false;
+            Compiler.MethodScanner.MethodInvoked(plugMethod, Method);
 
-			if (NotifyTraceLogHandler != null)
-			{
-				var traceLog = new TraceLog(TraceType.MethodInstructions, Method, "XX-Plugged Method", MethodData.Version);
-				traceLog?.Log($"Plugged by {plugMethod.FullName}");
+            IsMethodPlugged = true;
+            IsCILStream = false;
+            IsExecutePipeline = false;
+            IsStackFrameRequired = false;
 
-				NotifyTraceLogHandler.Invoke(traceLog);
-			}
-		}
+            if (NotifyTraceLogHandler != null)
+            {
+                var traceLog = new TraceLog(TraceType.MethodInstructions, Method, "XX-Plugged Method", MethodData.Version);
+                traceLog?.Log($"Plugged by {plugMethod.FullName}");
 
-		public bool IsTraceable(int tracelevel)
+                NotifyTraceLogHandler.Invoke(traceLog);
+            }
+        }
+
+        private void VBERequireAttribute(MosaMethod plugMethod)
+        {
+            if (plugMethod.Name == "KMain")
+            {
+                var v = plugMethod.FindCustomAttribute("Mosa.External.x86.VBERequireAttribute");
+                if (v != null)
+                {
+                    int xres = (int)v.Arguments[0].Value;
+                    int yres = (int)v.Arguments[1].Value;
+
+                    Compiler.CompilerSettings.Settings.SetValue("Multiboot.Video", true);
+                    Compiler.CompilerSettings.Settings.SetValue("Multiboot.Video.Width", xres);
+                    Compiler.CompilerSettings.Settings.SetValue("Multiboot.Video.Height", yres);
+                }
+            }
+        }
+
+        public bool IsTraceable(int tracelevel)
 		{
 			return Compiler.IsTraceable(tracelevel);
 		}
