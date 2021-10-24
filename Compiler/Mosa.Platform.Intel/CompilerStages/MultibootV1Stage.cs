@@ -1,5 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.MosaTypeSystem;
@@ -21,6 +22,7 @@ namespace Mosa.Platform.Intel.CompilerStages
 	/// </remarks>
 	public abstract class MultibootV1Stage : BaseCompilerStage
 	{
+		public static Settings Settings = new Settings();
 		protected abstract void CreateMultibootMethod();
 
 		#region Constants
@@ -85,7 +87,7 @@ namespace Mosa.Platform.Intel.CompilerStages
 		{
 			HasVideo = CompilerSettings.Settings.GetValue("Multiboot.Video", false);
 			Width = CompilerSettings.Settings.GetValue("Multiboot.Video.Width", 0);
-			Height = CompilerSettings.Settings.GetValue("Multiboot.Video.Geight", 0);
+			Height = CompilerSettings.Settings.GetValue("Multiboot.Video.Height", 0);
 			Depth = CompilerSettings.Settings.GetValue("Multiboot.Video.Depth", 0);
 		}
 
