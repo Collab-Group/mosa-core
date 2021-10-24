@@ -53,9 +53,6 @@ namespace Mosa.Launcher.Console
 
         public static bool JustBuild = false;
 
-        public static uint PreferedVBEXResolution = 1024;
-        public static uint PreferedVBEYResolution = 768;
-
         //Arguments:
         //Arguments 1 Is The Input File
         //-JUSTBUILD (Tell Compiler Do Not Launch VirtualBox After Compiling)
@@ -66,15 +63,6 @@ namespace Mosa.Launcher.Console
         {
             try
             {
-                /*
-                if (!Environment.Is64BitOperatingSystem)
-                {
-                    WriteLine("Fatal! 32-Bit Operating System Is Not Supported");
-                    WriteLine("Press Any Key To Continue...");
-                    return;
-                }
-                */
-
                 //For me to debug
                 if (args.Length == 0)
                 {
