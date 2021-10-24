@@ -4,6 +4,7 @@ using System;
 
 namespace Mosa.External.x86
 {
+    //Check Out Compiler.Mosa.Compiler.Framework.MethodCompiler.VBERequireAttribute
     public class VBERequireAttribute : Attribute
     {
         private int XRes;
