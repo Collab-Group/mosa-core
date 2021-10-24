@@ -146,7 +146,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			// Emit type table
 			LinkerSymbol typeNameSymbol;
 
-
+			//Enum.GetName Implementation
 			if (type.IsEnum)
 			{
 				string EnumItems = string.Empty;
