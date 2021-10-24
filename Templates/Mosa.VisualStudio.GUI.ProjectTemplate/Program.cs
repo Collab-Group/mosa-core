@@ -20,7 +20,8 @@ namespace $safeprojectname$
         public static int[] cursor;
 
         public static void Main() { }
-
+        
+        [VBERequire(1600, 1200)]
         [Plug("Mosa.Runtime.StartUp::KMain")]
         [UnmanagedCallersOnly(EntryPoint = "KMain", CallingConvention = CallingConvention.StdCall)]
         public static void KMain() 
