@@ -4,7 +4,7 @@ using dnlib.DotNet;
 
 namespace Mosa.Compiler.MosaTypeSystem.Metadata
 {
-	internal class UnitDesc<Def, Sig> where Def : IMDTokenProvider
+	public class UnitDesc<Def, Sig> where Def : IMDTokenProvider
 	{
 		public ScopedToken Token { get; private set; }
 

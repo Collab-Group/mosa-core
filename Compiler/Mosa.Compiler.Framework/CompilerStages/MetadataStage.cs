@@ -3,6 +3,7 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Compiler.MosaTypeSystem.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -143,7 +144,27 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		private LinkerSymbol CreateTypeDefinition(MosaType type, LinkerSymbol assemblyTableSymbol)
 		{
 			// Emit type table
-			var typeNameSymbol = EmitStringWithLength(Metadata.NameString + type.FullName, type.FullName);
+			LinkerSymbol typeNameSymbol;
+
+
+			if (type.IsEnum)
+			{
+				string EnumItems = string.Empty;
+                for (int i = 1; i < type.Fields.Count; i++) 
+				{
+                    EnumItems += type.Fields[i].Name;
+					EnumItems += ":";
+					EnumItems += ((UnitDesc<dnlib.DotNet.FieldDef, dnlib.DotNet.FieldSig>)type.Fields[i].UnderlyingObject).Definition.Constant.Value.ToString();
+					if (i + 1 != type.Fields.Count)
+						EnumItems += ",";
+				}
+				typeNameSymbol = EmitStringWithLength(Metadata.NameString + type.FullName, EnumItems);
+			}
+            else 
+			{
+				typeNameSymbol = EmitStringWithLength(Metadata.NameString + type.FullName, type.FullName);
+			}
+
 			var typeTableSymbol = Linker.DefineSymbol(Metadata.TypeDefinition + type.FullName, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
 			var writer = new BinaryWriter(typeTableSymbol.Stream);
 
