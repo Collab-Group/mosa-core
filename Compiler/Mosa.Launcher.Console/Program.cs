@@ -14,8 +14,6 @@ namespace Mosa.Launcher.Console
         private static Settings Settings = new Settings();
 
         private static CompilerHooks CompilerHooks;
-        private static MosaLinker Linker;
-        private static TypeSystem TypeSystem;
 
         private static string OutputName;
         private static string SourceName;
@@ -185,11 +183,6 @@ namespace Mosa.Launcher.Console
 
                 var platform = Settings.GetValue("Compiler.Platform", "x86");
 
-                if (platform == "armv8a32")
-                {
-                    platform = "ARMv8A32";
-                }
-
                 var fileKorlibPlatform = Path.Combine(SourceFolder, $"Mosa.Plug.Korlib.{platform}.dll");
 
                 if (fileKorlibPlatform != null)
@@ -202,9 +195,6 @@ namespace Mosa.Launcher.Console
 
             compiler.Load();
             compiler.Compile();
-
-            Linker = compiler.Linker;
-            TypeSystem = compiler.TypeSystem;
 
             GC.Collect();
         }
