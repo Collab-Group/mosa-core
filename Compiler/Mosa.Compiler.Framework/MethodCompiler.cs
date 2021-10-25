@@ -489,8 +489,11 @@ namespace Mosa.Compiler.Framework
             if (plugMethod == null)
                 return;
 
-            //
-            VBERequireAttribute(plugMethod);
+			//
+			if(Method.FullName == "Mosa.Runtime.StartUp::KMain():System.Void")
+            {
+                VBERequireAttribute(plugMethod);
+            }
 
             MethodData.ReplacedBy = plugMethod;
 
@@ -512,20 +515,17 @@ namespace Mosa.Compiler.Framework
 
         private void VBERequireAttribute(MosaMethod plugMethod)
         {
-            if (plugMethod.Name == "KMain")
-            {
-                var v = plugMethod.FindCustomAttribute("Mosa.External.x86.VBERequireAttribute");
-                if (v != null)
-                {
-                    int xres = (int)v.Arguments[0].Value;
-                    int yres = (int)v.Arguments[1].Value;
+			var v = plugMethod.FindCustomAttribute("Mosa.External.x86.VBERequireAttribute");
+			if (v != null)
+			{
+				int xres = (int)v.Arguments[0].Value;
+				int yres = (int)v.Arguments[1].Value;
 
-                    Compiler.CompilerSettings.Settings.SetValue("Multiboot.Video", true);
-                    Compiler.CompilerSettings.Settings.SetValue("Multiboot.Video.Width", xres);
-                    Compiler.CompilerSettings.Settings.SetValue("Multiboot.Video.Height", yres);
-                }
-            }
-        }
+				Compiler.CompilerSettings.Settings.SetValue("Multiboot.Video", true);
+				Compiler.CompilerSettings.Settings.SetValue("Multiboot.Video.Width", xres);
+				Compiler.CompilerSettings.Settings.SetValue("Multiboot.Video.Height", yres);
+			}
+		}
 
         public bool IsTraceable(int tracelevel)
 		{
