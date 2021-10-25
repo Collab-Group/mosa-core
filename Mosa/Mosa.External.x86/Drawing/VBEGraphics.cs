@@ -8,9 +8,9 @@ namespace Mosa.External.x86.Drawing
     public unsafe class VBEGraphics : Graphics
     {
         private readonly VBEDriver vBEDriver;
-        private readonly MemoryBlock memoryBlock;
-        private readonly MemoryBlock memoryBlock_Cache;
-        private readonly Pointer vbeDriverAddr;
+        private readonly MemoryBlock SecondBuffer;
+        private readonly MemoryBlock ThirdBuffer;
+        private readonly Pointer VideoMemory;
 
         public VBEGraphics()
         {
@@ -18,17 +18,17 @@ namespace Mosa.External.x86.Drawing
 
             Bpp = 4;
 
-            vbeDriverAddr = vBEDriver.VideoMemory.Address;
+            VideoMemory = vBEDriver.VideoMemory.Address;
 
             Width = (int)vBEDriver.ScreenWidth;
             Height = (int)vBEDriver.ScreenHeight;
 
             CurrentDriver = "VBE";
 
-            memoryBlock = new MemoryBlock((uint)FrameSize);
-            memoryBlock_Cache = new MemoryBlock((uint)FrameSize);
+            SecondBuffer = new MemoryBlock((uint)FrameSize);
+            ThirdBuffer = new MemoryBlock((uint)FrameSize);
 
-            VideoMemoryCacheAddr = (uint)memoryBlock.Address;
+            VideoMemoryCacheAddr = (uint)SecondBuffer.Address;
 
             //Clean
             Clear(0x0);
@@ -43,13 +43,13 @@ namespace Mosa.External.x86.Drawing
         {
             if (X < Width)
             {
-                memoryBlock.Write32((uint)((Width * Y + X) * Bpp), Color);
+                SecondBuffer.Write32((uint)((Width * Y + X) * Bpp), Color);
             }
         }
 
         public override uint GetPoint(int X, int Y)
         {
-            memoryBlock.Read32((uint)((Width * Y + X) * Bpp));
+            SecondBuffer.Read32((uint)((Width * Y + X) * Bpp));
 
             return 0;
         }
@@ -60,12 +60,12 @@ namespace Mosa.External.x86.Drawing
             {
                 for (int i = 0; i < FrameSize; i += 4)
                 {
-                    if (memoryBlock.Address.Load32(i) != memoryBlock_Cache.Address.Load32(i))
+                    if (SecondBuffer.Address.Load32(i) != ThirdBuffer.Address.Load32(i))
                     {
-                        vbeDriverAddr.Store32(i, memoryBlock.Address.Load32(i));
+                        VideoMemory.Store32(i, SecondBuffer.Address.Load32(i));
                     }
                 }
-                ASM.MEMCPY((uint)memoryBlock_Cache.Address, (uint)memoryBlock.Address, (uint)FrameSize);
+                ASM.MEMCPY((uint)ThirdBuffer.Address, (uint)SecondBuffer.Address, (uint)FrameSize);
             }
             else if (VBE.VBEModeInfo->BitsPerPixel == 24)
             {
