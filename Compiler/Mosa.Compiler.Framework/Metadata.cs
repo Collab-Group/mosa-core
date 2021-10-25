@@ -4,6 +4,8 @@ namespace Mosa.Compiler.Framework
 {
 	public struct Metadata
 	{
+		public const string ResourcesTable = "<$>ResourcesTable";
+
 		public const string AssembliesTable = "<$>AssembliesTable";
 
 		public const string NameString = "$Name$";

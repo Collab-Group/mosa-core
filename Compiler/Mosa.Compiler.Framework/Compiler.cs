@@ -157,6 +157,7 @@ namespace Mosa.Compiler.Framework
 				new MethodTableStage(),
 				new ExceptionTableStage(),
 				new MetadataStage(),
+				new ResourcesStage(),
 				(!string.IsNullOrEmpty(compilerSettings.PreLinkHashFile)) ? new PreLinkHashFileStage() : null,
 				new LinkerLayoutStage(),
 				(!string.IsNullOrEmpty(compilerSettings.PostLinkHashFile)) ? new PostLinkHashFileStage() : null,

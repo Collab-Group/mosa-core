@@ -699,6 +699,12 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				// Get custom attribute
 				var ca = unit.CustomAttributes[i];
 
+				//Do not create definition for ResourceAttribute
+				if (ca.Constructor.FullName == "Mosa.External.x86.ResourceAttribute::.ctor(System.String[]):System.Void")
+				{
+					continue;
+				}
+
 				// Build definition
 				var customAttributeTableSymbol = CreateCustomAttribute(unit, ca, i);
 

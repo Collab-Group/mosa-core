@@ -2,12 +2,14 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
+using Mosa.Compiler.Framework.CompilerStages;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text.Json;
 using static Mosa.Compiler.Framework.CompilerHooks;
 
 namespace Mosa.Compiler.Framework
@@ -492,6 +494,7 @@ namespace Mosa.Compiler.Framework
 			//
 			if(Method.FullName == "Mosa.Runtime.StartUp::KMain():System.Void")
             {
+				ResourceAttribute(plugMethod);
                 VBERequireAttribute(plugMethod);
             }
 
@@ -527,7 +530,22 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-        public bool IsTraceable(int tracelevel)
+		private void ResourceAttribute(MosaMethod plugMethod)
+		{
+			var v = plugMethod.FindCustomAttribute("Mosa.External.x86.ResourceAttribute");
+			if (v != null)
+			{
+				var items = ((List<dnlib.DotNet.CAArgument>)(v.Arguments[0].Value));
+				
+				for(int i = 0; i < items.Count; i++) 
+				{
+					string name = items[i].Value.ToString();
+					ResourcesStage.Files.Add(name);
+				}
+			}
+		}
+
+		public bool IsTraceable(int tracelevel)
 		{
 			return Compiler.IsTraceable(tracelevel);
 		}

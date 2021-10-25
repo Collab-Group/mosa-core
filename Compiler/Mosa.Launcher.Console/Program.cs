@@ -68,7 +68,7 @@ namespace Mosa.Launcher.Console
                 {
                     args = new string[]
                     {
-                        @"C:\Users\nifan\source\repos\MOSA1\MOSA1\bin\MOSA1.dll",
+                        @"C:\Users\nifan\source\repos\MOSA2\MOSA2\bin\MOSA2.dll",
                         //"-JUSTBUILD"
                     };
                 }
