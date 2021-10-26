@@ -1,4 +1,5 @@
-﻿using Mosa.Kernel.x86;
+﻿using Mosa.External.x86.Driver.Input;
+using Mosa.Kernel.x86;
 using Mosa.Runtime.x86;
 using System;
 using static Mosa.Runtime.x86.Native;
@@ -7,8 +8,8 @@ namespace Mosa.External.x86.Driver
 {
     public static class PS2Mouse
     {
-        private const byte Data = 0x0060;
-        private const byte Command = 0x0064;
+        private const byte Data = 0x60;
+        private const byte Command = 0x64;
 
         private const byte SetDefaults = 0xF6;
         private const byte EnableDataReporting = 0xF4;
@@ -41,7 +42,7 @@ namespace Mosa.External.x86.Driver
             WriteRegister(0xF2);
 
             WriteRegister(0xF3);
-            WriteRegister(200);
+            WriteRegister(80);
 
             Nop();
 
@@ -53,7 +54,7 @@ namespace Mosa.External.x86.Driver
                 Console.WriteLine("Wheel Available");
             }
 
-            Btn = "None";
+            MouseStatus = MouseStatus.None;
             Console.WriteLine("PS/2 mouse enabled!");
         }
 
@@ -61,7 +62,8 @@ namespace Mosa.External.x86.Driver
         public static byte[] MData = new byte[3];
         private static int aX;
         private static int aY;
-        public static string Btn;
+
+        public static MouseStatus MouseStatus;
 
         public static int X = 0;
         public static int Y = 0;
@@ -93,37 +95,32 @@ namespace Mosa.External.x86.Driver
             {
                 if (D == 0xfa)
                     Phase = 1;
-                return;
             }
-
-            if (Phase == 1)
+            else if (Phase == 1)
             {
                 if ((D & (1 << 3)) == (1 << 3))
                 {
                     MData[0] = D;
                     Phase = 2;
                 }
-                return;
             }
-
-            if (Phase == 2)
+            else if (Phase == 2)
             {
                 MData[1] = D;
                 Phase = 3;
-                return;
             }
-
-            if (Phase == 3)
+            else if (Phase == 3)
             {
                 MData[2] = D;
                 Phase = 1;
 
                 MData[0] &= 0x07;
-                Btn = MData[0] switch
+
+                MouseStatus = MData[0] switch
                 {
-                    0x01 => "Left",
-                    0x02 => "Right",
-                    _ => "None",
+                    0x01 => MouseStatus.Left,
+                    0x02 => MouseStatus.Right,
+                    _ => MouseStatus.None,
                 };
 
                 if (MData[1] > 127)
@@ -139,8 +136,6 @@ namespace Mosa.External.x86.Driver
                 X = Math.Clamp(X + aX, 0, ScreenWidth);
                 Y = Math.Clamp(Y - aY, 0, ScreenHeight);
             }
-
-            return;
         }
     }
 }
