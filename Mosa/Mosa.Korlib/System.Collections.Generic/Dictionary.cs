@@ -38,6 +38,16 @@
             values = new List<TValue>();
         }
 
+        public bool ContainsKey(TKey key) 
+        {
+            return keys.IndexOf(key) != -1;
+        }
+
+        public bool ContainsValue(TValue value) 
+        {
+            return values.IndexOf(value) != -1;
+        }
+
         public void Add(TKey key, TValue value)
         {
             keys.Add(key);
