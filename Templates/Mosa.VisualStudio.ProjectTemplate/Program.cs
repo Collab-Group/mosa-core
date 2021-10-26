@@ -10,8 +10,6 @@ namespace $safeprojectname$
 {
     public static class Program
     {
-        public static string Input = "";
-
         public static void Main() { }
 
         [Plug("Mosa.Runtime.StartUp::KMain")]
@@ -46,39 +44,9 @@ namespace $safeprojectname$
 
             Console.WriteLine("MOSA booted successfully! Type anything and get an echo of what you've typed.");
 
-            PS2Keyboard.KeyCode keyCode;
             for (; ; )
             {
-                keyCode = PS2Keyboard.GetKeyPressed();
-                switch (keyCode)
-                {
-                    case PS2Keyboard.KeyCode.Delete:
-                        if (Input.Length != 0)
-                        {
-                            Console.RemovePreviousOne();
-                            Input = Input.Substring(0, Input.Length - 1);
-                        }
-                        break;
-
-                    case PS2Keyboard.KeyCode.Enter:
-                        Console.WriteLine();
-                        Console.WriteLine("Input: " + Input);
-                        Input = "";
-                        break;
-
-                    default:
-                        if (PS2Keyboard.IsCapsLock)
-                        {
-                            Console.Write(PS2Keyboard.KeyCodeToString(keyCode));
-                            Input += PS2Keyboard.KeyCodeToString(keyCode);
-                        }
-                        else
-                        {
-                            Console.Write(PS2Keyboard.KeyCodeToString(keyCode).ToLower());
-                            Input += PS2Keyboard.KeyCodeToString(keyCode).ToLower();
-                        }
-                        break;
-                }
+                Console.WriteLine(Console.ReadLine());
             }
         }
     }
