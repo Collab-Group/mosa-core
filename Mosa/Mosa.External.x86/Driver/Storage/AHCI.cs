@@ -145,7 +145,7 @@ namespace Mosa.External.x86.Driver
 
             // 0x100 - 0x10FF, Port control registers
             //tagHBA_PORT	ports[1];	// 1 ~ 32
-            public fixed byte ports[0x10FF - 0x100];
+            public fixed byte ports[0x1100 - 0x100];
         }
     }
 }
