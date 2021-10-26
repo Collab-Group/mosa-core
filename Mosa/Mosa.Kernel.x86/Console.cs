@@ -267,9 +267,14 @@ namespace Mosa.Kernel.x86
             PS2Keyboard.KeyCode code;
             for (; ; )
             {
+                Native.Hlt();
                 code = PS2Keyboard.GetKeyPressed();
+                if (code == 0) continue;
 
-                if (code == PS2Keyboard.KeyCode.Enter) { break; }
+                if (code == PS2Keyboard.KeyCode.Enter) 
+                {
+                    break;
+                }
                 else if (code == PS2Keyboard.KeyCode.Delete)
                 {
                     if (Line.Length != 0)
@@ -278,7 +283,7 @@ namespace Mosa.Kernel.x86
                         Line = Line.Substring(0, Line.Length - 1);
                     }
                 }
-                else if (code != 0)
+                else
                 {
                     Line += code.KeyCodeToString();
                     Write(code.KeyCodeToString());
