@@ -89,6 +89,8 @@ namespace Mosa.External.x86.Driver
 
         public static void OnInterrupt()
         {
+            Native.Cli();
+
             byte D = IOPort.In8(Data);
 
             if (Phase == 0)
@@ -136,6 +138,8 @@ namespace Mosa.External.x86.Driver
                 X = Math.Clamp(X + aX, 0, ScreenWidth);
                 Y = Math.Clamp(Y - aY, 0, ScreenHeight);
             }
+
+            Native.Sti();
         }
     }
 }
