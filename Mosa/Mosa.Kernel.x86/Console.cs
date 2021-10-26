@@ -128,8 +128,8 @@ namespace Mosa.Kernel.x86
 				CursorTop++;
 				MoveUpPrevious();
 			}
-            else
-            {
+            		else
+           		{
 				MoveUpPrevious();
 
 				Native.Set8(0x0B8000 + ((CursorTop * Columns + CursorLeft) * 2), (byte)chr);
@@ -212,23 +212,23 @@ namespace Mosa.Kernel.x86
 		}
 
 		public static void WriteLine(string line, byte Color)
-        {
+        	{
 			byte c = Console.Color;
 			Console.Color = Color;
 			WriteLine(line);
 			Console.Color = c;
-        }
+        	}
 
 		public static void Clear(byte Color, bool ChangeBackBackgroundColor=false)
-        {
+        	{
 			byte c = BackgroundColor;
 			BackgroundColor = Color;
 			Clear();
 			if (ChangeBackBackgroundColor)
-            {
+            		{
 				BackgroundColor = c;
-            }
-        }
+            		}
+        	}
 
 		/// <summary>
 		/// Clears this instance.
