@@ -28,6 +28,7 @@
         public void Remove(TKey key) 
         {
             values.Remove(values[keys.IndexOf(key)]);
+
             keys.Remove(key);
         }
 
