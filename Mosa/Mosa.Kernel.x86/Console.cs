@@ -263,6 +263,7 @@ namespace Mosa.Kernel.x86
 
         public static string ReadLine()
         {
+            string S = "";
             string Line = "";
             PS2Keyboard.KeyCode code;
             for (; ; )
@@ -285,8 +286,16 @@ namespace Mosa.Kernel.x86
                 }
                 else
                 {
-                    Line += code.KeyCodeToString();
-                    Write(code.KeyCodeToString());
+                    if (PS2Keyboard.IsCapsLock)
+                    {
+                        S = code.KeyCodeToString().ToUpper();
+                    }
+                    else
+                    {
+                        S = code.KeyCodeToString().ToLower();
+                    }
+                    Line += S;
+                    Write(S);
                 }
             }
             WriteLine();
