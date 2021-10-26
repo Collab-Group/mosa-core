@@ -265,23 +265,26 @@ namespace Mosa.Kernel.x86
         {
             string Line = "";
             PS2Keyboard.KeyCode code;
-            while ((code = PS2Keyboard.GetKeyPressed()) != PS2Keyboard.KeyCode.Enter)
+            for (; ; )
             {
-                if (code == PS2Keyboard.KeyCode.Delete)
+                code = PS2Keyboard.GetKeyPressed();
+
+                if (code == PS2Keyboard.KeyCode.Enter) { break; }
+                else if (code == PS2Keyboard.KeyCode.Delete)
                 {
                     if (Line.Length != 0)
                     {
-                        Console.RemovePreviousOne();
+                        RemovePreviousOne();
                         Line = Line.Substring(0, Line.Length - 1);
                     }
                 }
                 else if (code != 0)
                 {
                     Line += code.KeyCodeToString();
-                    Console.Write(code.KeyCodeToString());
+                    Write(code.KeyCodeToString());
                 }
             }
-            Console.WriteLine();
+            WriteLine();
             return Line;
         }
     }
