@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.External.x86.Driver;
 using Mosa.Runtime.x86;
 
 namespace Mosa.Kernel.x86
@@ -253,6 +254,27 @@ namespace Mosa.Kernel.x86
 			Native.Set8(0x0B8000 + ((CursorTop * Columns + CursorLeft) * 2), (byte)' ');
 			Native.Set8(0x0B8000 + ((CursorTop * Columns + CursorLeft) * 2) + 1, color);
 			SetCursor(CursorTop, CursorLeft);
+		}
+
+		public static PS2Keyboard.KeyCode ReadKey()
+		{
+			return PS2Keyboard.GetKeyPressed();
+		}
+
+		public static string ReadLine()
+		{
+			string Line = "";
+			PS2Keyboard.KeyCode code;
+			while ((code = PS2Keyboard.GetKeyPressed()) != PS2Keyboard.KeyCode.Enter)
+			{
+				if (code != 0)
+				{
+					Line += code.KeyCodeToString();
+					Console.Write(code.KeyCodeToString());
+				}
+			}
+			Console.WriteLine();
+			return Line;
 		}
 	}
 }
