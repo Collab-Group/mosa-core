@@ -53,5 +53,11 @@
             keys.Add(key);
             values.Add(value);
         }
+        
+        public void Clear() 
+        {
+            keys.Clear();
+            values.Clear();
+        }
     }
 }
