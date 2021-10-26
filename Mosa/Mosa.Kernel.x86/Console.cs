@@ -1,5 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.External.x86.Driver;
 using Mosa.Runtime.x86;
 
 namespace Mosa.Kernel.x86
@@ -257,6 +258,47 @@ namespace Mosa.Kernel.x86
 			CursorTop = top;
 			CursorLeft = left;
 			UpdateCursor();
+		}
+		
+		public static string ReadLine()
+		{
+			string S = "";
+			string Line = "";
+			PS2Keyboard.KeyCode code;
+			for (; ; )
+			{
+				Native.Hlt();
+				code = PS2Keyboard.GetKeyPressed();
+				if (code == 0) continue;
+
+				if (code == PS2Keyboard.KeyCode.Enter)
+				{
+					break;
+				}
+				else if (code == PS2Keyboard.KeyCode.Delete)
+				{
+					if (Line.Length != 0)
+					{
+						RemovePreviousOne();
+						Line = Line.Substring(0, Line.Length - 1);
+					}
+				}
+				else
+				{
+					if (PS2Keyboard.IsCapsLock)
+					{
+						S = code.KeyCodeToString().ToUpper();
+					}
+					else
+					{
+						S = code.KeyCodeToString().ToLower();
+					}
+					Line += S;
+					Write(S);
+				}
+			}
+			WriteLine();
+			return Line;
 		}
 
 		/// <summary>
