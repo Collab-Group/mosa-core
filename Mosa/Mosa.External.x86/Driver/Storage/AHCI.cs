@@ -1,5 +1,6 @@
 
 using Mosa.Kernel.x86;
+using Mosa.Runtime.x86;
 using System.Runtime.InteropServices;
 
 namespace Mosa.External.x86.Driver
@@ -52,7 +53,7 @@ namespace Mosa.External.x86.Driver
             public uint clbu;
             public uint fb;
             public uint fbu;
-            public uint Is;
+            public int Is;
             public uint ie;
             public uint cmd;
             public uint rsv0;
@@ -218,6 +219,60 @@ namespace Mosa.External.x86.Driver
                     return AHCI_DEV_PM;
                 default:
                     return AHCI_DEV_SATA;
+            }
+        }
+
+        public const uint AHCI_BASE = 0x400000;
+
+        public const byte HBA_PxCMD_ST = 0x0001;
+        public const byte HBA_PxCMD_FRE = 0x0010;
+        public const short HBA_PxCMD_FR = 0x4000;
+        public const uint HBA_PxCMD_CR = 0x8000;
+
+        public unsafe void PortRebase(HBA_PORT *port, int portno)
+        {
+            StopCMD(port);
+
+            port->clb = (uint)(AHCI_BASE + (portno << 10));
+            port->clbu = 0;
+            ASM.MEMFILL((uint)(void*)port->clb, 0, 1024);
+
+            port->fb = (uint)(AHCI_BASE + (32 << 10) + (portno << 8));
+            port->fbu = 0;
+            ASM.MEMFILL((uint)(void*)port->fb, 0, 256);
+
+            HBA_CMD_HEADER* cmdheader = (HBA_CMD_HEADER*)(port->clb);
+            for (int i = 0; i < 32; i++)
+            {
+                cmdheader[i].prdtl = 8;
+
+                cmdheader[i].ctba = (uint)(AHCI_BASE + (40 << 10) + (portno << 13) + (i << 8));
+                cmdheader[i].ctbau = 0;
+                ASM.MEMFILL((uint)(void*)cmdheader[i].ctba, 0, 256);
+            }
+            StartCMD(port);
+        }
+
+        public unsafe void StartCMD(HBA_PORT *port)
+        {
+            while ((port->cmd & HBA_PxCMD_CR) != 0)
+                ;
+            port->cmd |= HBA_PxCMD_FRE;
+            port->cmd |= HBA_PxCMD_ST;
+        }
+
+        public unsafe void StopCMD(HBA_PORT *port)
+        {
+            //port->cmd &= ~HBA_PxCMD_ST;
+            //port->cmd &= ~HBA_PxCMD_FRE;
+
+            for (; ; )
+            {
+                if ((port->cmd & HBA_PxCMD_FR) != 0)
+                    continue;
+                if ((port->cmd & HBA_PxCMD_CR) != 0)
+                    continue;
+                break;
             }
         }
     }
