@@ -17,6 +17,14 @@
         List<TKey> keys;
         List<TValue> values;
 
+        public int Count
+        {
+            get
+            {
+                return values.Count;
+            }
+        }
+
         public Dictionary()
         {
             keys = new List<TKey>();
