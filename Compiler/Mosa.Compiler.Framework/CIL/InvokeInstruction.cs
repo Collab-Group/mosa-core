@@ -2,6 +2,7 @@
 
 using Mosa.Compiler.MosaTypeSystem;
 using System;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -112,6 +113,11 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <returns></returns>
 		protected static MosaMethod DecodeInvocationTarget(InstructionNode node, IInstructionDecoder decoder)
 		{
+			//fixed me ¡ª delegate* <void> calls
+			if(decoder.Instruction.Operand is dnlib.DotNet.MethodSig) 
+			{
+				Debugger.Break();
+			}
 			var method = (MosaMethod)decoder.Instruction.Operand;
 
 			node.InvokeMethod = method;
