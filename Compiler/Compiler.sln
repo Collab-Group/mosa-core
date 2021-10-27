@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Compiler.Common", "Mos
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Compiler.Framework", "Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj", "{FA5B7BE8-5107-4E3C-8684-7138FCFB4F97}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Compiler.Framework.API", "Mosa.Compiler.Framework.API\Mosa.Compiler.Framework.API.csproj", "{57596AE9-DAF1-4FA5-80C1-04B92760070C}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Compiler.MosaTypeSystem", "Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj", "{B6DBE2DB-2BCF-4837-A4B8-3D7D2A307202}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Launcher.Console", "Mosa.Launcher.Console\Mosa.Launcher.Console.csproj", "{BA23DE80-81EC-488F-B02A-AFA25AE3D660}"
@@ -41,14 +39,6 @@ Global
 		{FA5B7BE8-5107-4E3C-8684-7138FCFB4F97}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FA5B7BE8-5107-4E3C-8684-7138FCFB4F97}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{FA5B7BE8-5107-4E3C-8684-7138FCFB4F97}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{57596AE9-DAF1-4FA5-80C1-04B92760070C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{57596AE9-DAF1-4FA5-80C1-04B92760070C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{57596AE9-DAF1-4FA5-80C1-04B92760070C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{57596AE9-DAF1-4FA5-80C1-04B92760070C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{57596AE9-DAF1-4FA5-80C1-04B92760070C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{57596AE9-DAF1-4FA5-80C1-04B92760070C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{57596AE9-DAF1-4FA5-80C1-04B92760070C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{57596AE9-DAF1-4FA5-80C1-04B92760070C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{B6DBE2DB-2BCF-4837-A4B8-3D7D2A307202}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B6DBE2DB-2BCF-4837-A4B8-3D7D2A307202}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B6DBE2DB-2BCF-4837-A4B8-3D7D2A307202}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU

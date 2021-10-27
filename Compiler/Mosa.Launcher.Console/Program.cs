@@ -68,7 +68,7 @@ namespace Mosa.Launcher.Console
                 {
                     args = new string[]
                     {
-                        @"C:\Users\nifan\source\repos\MOSA2\MOSA2\bin\MOSA2.dll",
+                        @"C:\Users\nifan\source\repos\MOSA1\MOSA1\bin\MOSA1.dll",
                         //"-JUSTBUILD"
                     };
                 }
@@ -278,7 +278,7 @@ namespace Mosa.Launcher.Console
             Settings.SetValue("Compiler.Platform", "x86");
             Settings.SetValue("Compiler.BaseAddress", 0x00400000);
             Settings.SetValue("Compiler.Binary", true);
-            Settings.SetValue("Compiler.MethodScanner", false);
+            Settings.SetValue("Compiler.MethodScanner", true);
             Settings.SetValue("Compiler.TraceLevel", 0);
             Settings.SetValue("Compiler.Multithreading", true);
             Settings.SetValue("CompilerDebug.DebugFile", string.Empty);
