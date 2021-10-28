@@ -278,7 +278,7 @@ namespace Mosa.Launcher.Console
             Settings.SetValue("Compiler.Platform", "x86");
             Settings.SetValue("Compiler.BaseAddress", 0x00400000);
             Settings.SetValue("Compiler.Binary", true);
-            Settings.SetValue("Compiler.MethodScanner", true);
+            Settings.SetValue("Compiler.MethodScanner", false);
             Settings.SetValue("Compiler.TraceLevel", 0);
             Settings.SetValue("Compiler.Multithreading", true);
             Settings.SetValue("CompilerDebug.DebugFile", string.Empty);
