@@ -67,13 +67,7 @@ namespace $safeprojectname$
             {
                 case 0x21:
                     PS2Keyboard.OnInterrupt();
-                    PS2Keyboard.KeyCode keyCode = PS2Keyboard.GetKeyPressed();
-                    if (keyCode == PS2Keyboard.KeyCode.F12)
-                    {
-                        Panic.Error("Hello World!!!");
-                    }
                     break;
-
                 case 0x2C:
                     PS2Mouse.OnInterrupt();
                     break;
