@@ -10,6 +10,10 @@ namespace Mosa.Kernel.x86
 	/// </summary>
 	public static class Panic
 	{
+		public delegate void PanicHandler(string message);
+		
+		public static event PanicHandler OnPanic;
+		
 		private static bool firstError = true;
 
 		public static uint EBP = 0;
@@ -31,9 +35,16 @@ namespace Mosa.Kernel.x86
 		public static void Setup()
 		{
 		}
+		
+		public static void SetPanicHandler(PanicHandler panicHandler)
+		{
+			OnPanic = panicHandler;	
+		}
 
 		public static void Error(string message)
 		{
+			OnPanic(message);
+			
 			IDT.SetInterruptHandler(null);
 
 			Console.BackgroundColor = ConsoleColor.Black;
