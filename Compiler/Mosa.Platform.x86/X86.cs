@@ -11,6 +11,8 @@ namespace Mosa.Platform.x86
 	/// </summary>
 	public static class X86
 	{
+		public static readonly ReferenceCountAdd ReferenceCountAdd = new ReferenceCountAdd();
+
 		public static readonly Adc32 Adc32 = new Adc32();
 		public static readonly Add32 Add32 = new Add32();
 		public static readonly Addsd Addsd = new Addsd();

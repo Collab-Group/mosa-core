@@ -16,7 +16,9 @@ namespace System
 	{
 		public TypeDefinition* TypeDefinition { get; }
 
-		private readonly void* Pad;
+		//private readonly void* Pad;
+		public uint ReferenceCount;
+		//warn. If we further use x64, this parameter should be ulong
 
 		/// <summary>
 		/// Initializes a new instance of the System.Object class.
