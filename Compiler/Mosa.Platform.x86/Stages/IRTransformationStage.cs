@@ -569,7 +569,7 @@ namespace Mosa.Platform.x86.Stages
 		private void MoveObject(Context context)
 		{
 			context.ReplaceInstruction(X86.Mov32);
-			context.AppendInstruction(X86.ReferenceCountAdd, context.Result, context.Operand1);
+			//context.AppendInstruction(X86.ReferenceCountAdd, context.Result, context.Operand1);
 		}
 
 		private void MoveR4(Context context)
