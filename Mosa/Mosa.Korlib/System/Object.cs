@@ -16,9 +16,22 @@ namespace System
 	{
 		public TypeDefinition* TypeDefinition { get; }
 
-		//private readonly void* Pad;
-		public uint ReferenceCount;
-		//warn. If we further use x64, this parameter should be ulong
+		private readonly void* Reserved;
+
+		public uint ReferenceCount { 
+			get 
+			{
+				if(sizeof(void*) == 4) 
+				{
+					return (uint)Reserved;
+                }
+                else 
+				{
+					//This situation is for 64bit
+					return (uint)Reserved << 32;
+				}
+			}
+		}
 
 		/// <summary>
 		/// Initializes a new instance of the System.Object class.
