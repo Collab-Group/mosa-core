@@ -33,7 +33,7 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 		{
-			//MOV [EAX+4],1
+			//ADD DWORD [EAX + 4],1
 
 			opcodeEncoder.Append8Bits(0x83);
 			opcodeEncoder.Append8Bits(0x40);
