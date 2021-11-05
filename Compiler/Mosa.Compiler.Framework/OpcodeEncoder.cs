@@ -153,6 +153,14 @@ namespace Mosa.Compiler.Framework
 			AppendBits(value, 8);
 		}
 
+		public void AppendBytes(byte[] value) 
+		{
+			for(int i = 0; i < value.Length; i++) 
+			{
+				Append8Bits(value[i]);
+			}
+		}
+
 		public void AppendByte(byte value)
 		{
 			AppendBits(value, 8);
