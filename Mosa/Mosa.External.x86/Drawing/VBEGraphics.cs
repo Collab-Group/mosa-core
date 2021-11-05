@@ -68,10 +68,11 @@ namespace Mosa.External.x86.Drawing
                     }
                     else if (VBE.VBEModeInfo->BitsPerPixel == 24)
                     {
+                        VideoMemory.Store24((i / 4) * 3, SecondBuffer.Address.Load32(i) & 0x00FFFFFF);
                     }
                     else if (VBE.VBEModeInfo->BitsPerPixel == 16)
                     {
-                        VideoMemory.Store16(i / 2, Color.RGB888ToRGB565(SecondBuffer.Address.Load32(i)));
+                        VideoMemory.Store16((i / 4) * 2, Color.RGB888ToRGB565(SecondBuffer.Address.Load32(i)));
                     }
                     else if (VBE.VBEModeInfo->BitsPerPixel == 8)
                     {
