@@ -1,14 +1,10 @@
 using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Trace;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
-using System.Net;
-using System.Net.Http;
 
 namespace Mosa.Launcher.Console
 {
@@ -85,13 +81,13 @@ namespace Mosa.Launcher.Console
                 {
                     //Uppered
                     s = v.ToUpper();
-                    
+
                     if (s == "-JUSTBUILD")
                     {
                         JustBuild = true;
                     }
                 }
-                
+
                 WriteLine($"JUSTBUILD Enabled: {JustBuild}");
                 WriteLine($"Output ISO Path: {ISOFilePath}");
 
