@@ -523,10 +523,12 @@ namespace Mosa.Compiler.Framework
 			{
 				int xres = (int)v.Arguments[0].Value;
 				int yres = (int)v.Arguments[1].Value;
+				int bpp = (int)v.Arguments[2].Value;
 
 				Compiler.CompilerSettings.Settings.SetValue("Multiboot.Video", true);
 				Compiler.CompilerSettings.Settings.SetValue("Multiboot.Video.Width", xres);
 				Compiler.CompilerSettings.Settings.SetValue("Multiboot.Video.Height", yres);
+				Compiler.CompilerSettings.Settings.SetValue("Multiboot.Video.Depth", bpp);
 			}
 		}
 

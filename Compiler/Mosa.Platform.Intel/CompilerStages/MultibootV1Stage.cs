@@ -80,7 +80,7 @@ namespace Mosa.Platform.Intel.CompilerStages
 		public bool HasVideo { get { return CompilerSettings.Settings.GetValue("Multiboot.Video", false); } }
 		public int Width { get { return CompilerSettings.Settings.GetValue("Multiboot.Video.Width", 0); } }
 		public int Height { get { return CompilerSettings.Settings.GetValue("Multiboot.Video.Height", 0); } }
-		public int Depth { get { return 32; } }
+		public int Depth { get { return CompilerSettings.Settings.GetValue("Multiboot.Video.Depth", 0); } }
 
 		protected override void Initialization()
 		{

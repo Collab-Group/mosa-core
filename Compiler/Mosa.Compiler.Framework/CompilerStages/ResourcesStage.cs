@@ -36,6 +36,8 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
         private static void AddFile(BinaryWriter writer,string Name,byte[] Content)
         {
+            if(Content == null) throw new FileNotFoundException($"Please Copy The File: {Name} To bin Folder");
+
             byte[] NameB = Encoding.ASCII.GetBytes(Name);
 
             //namesize:uint

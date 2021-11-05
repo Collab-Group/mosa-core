@@ -7,13 +7,15 @@ namespace Mosa.External.x86
     //Check Out Compiler.Mosa.Compiler.Framework.MethodCompiler.VBERequireAttribute
     public class VBERequireAttribute : Attribute
     {
+        private int bpp;
         private int xres;
         private int yres;
 
 
         //Tell Compiler To Enable VBE With A Specific Resolution If GPU Supported
-        public VBERequireAttribute(int xres, int yres)
+        public VBERequireAttribute(int xres, int yres,int bpp)
         {
+            this.bpp = bpp;
             this.xres = xres;
             this.yres = yres;
         }

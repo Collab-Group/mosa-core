@@ -2,6 +2,7 @@
 using Mosa.Kernel.x86;
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
+using System.Drawing;
 
 namespace Mosa.External.x86.Drawing
 {
@@ -56,26 +57,29 @@ namespace Mosa.External.x86.Drawing
 
         public override void Update()
         {
-            if (VBE.VBEModeInfo->BitsPerPixel == 32)
+            for (uint i = 0; i < FrameSize; i += 4)
             {
-                for (int i = 0; i < FrameSize; i += 4)
+                if (SecondBuffer.Address.Load32(i) != ThirdBuffer.Address.Load32(i))
                 {
-                    if (SecondBuffer.Address.Load32(i) != ThirdBuffer.Address.Load32(i))
+
+                    if (VBE.VBEModeInfo->BitsPerPixel == 32)
                     {
                         VideoMemory.Store32(i, SecondBuffer.Address.Load32(i));
                     }
+                    else if (VBE.VBEModeInfo->BitsPerPixel == 24)
+                    {
+                    }
+                    else if (VBE.VBEModeInfo->BitsPerPixel == 16)
+                    {
+                        VideoMemory.Store16(i / 2, Color.RGB888ToRGB565(SecondBuffer.Address.Load32(i)));
+                    }
+                    else if (VBE.VBEModeInfo->BitsPerPixel == 8)
+                    {
+                        //No formula
+                    }
                 }
-                ASM.MEMCPY((uint)ThirdBuffer.Address, (uint)SecondBuffer.Address, (uint)FrameSize);
             }
-            else if (VBE.VBEModeInfo->BitsPerPixel == 24)
-            {
-            }
-            else if (VBE.VBEModeInfo->BitsPerPixel == 16)
-            {
-            }
-            else if (VBE.VBEModeInfo->BitsPerPixel == 8)
-            {
-            }
+            ASM.MEMCPY((uint)ThirdBuffer.Address, (uint)SecondBuffer.Address, (uint)FrameSize);
         }
     }
 }

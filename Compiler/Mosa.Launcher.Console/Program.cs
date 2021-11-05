@@ -122,7 +122,7 @@ namespace Mosa.Launcher.Console
             {
                 WriteLine("Exception Thrown While Compiling");
                 WriteLine(E.Message);
-                WriteLine(E.StackTrace);
+                //WriteLine(E.StackTrace);
                 WriteLine("Please Report This Problem");
                 WriteLine("Press Any Key To Continue...");
                 Environment.Exit(0);
@@ -302,9 +302,6 @@ namespace Mosa.Launcher.Console
             Settings.SetValue("Optimizations.ValueNumbering", true);
             Settings.SetValue("Multiboot.Version", "v1");
             Settings.SetValue("Multiboot.Video", false);
-            Settings.SetValue("Multiboot.Video.Width", 0);
-            Settings.SetValue("Multiboot.Video.Height", 0);
-            Settings.SetValue("Multiboot.Video.Depth", 32);
             Settings.SetValue("Launcher.PlugKorlib", true);
             Settings.SetValue("Launcher.HuntForCorLib", true);
             Settings.SetValue("Linker.Drawf", false);

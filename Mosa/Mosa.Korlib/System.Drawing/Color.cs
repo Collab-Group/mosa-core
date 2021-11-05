@@ -196,8 +196,7 @@
             return new Color() { A = (byte)((argb >> 24) & 0xFF), R = (byte)((argb >> 16) & 0xFF), G = (byte)((argb >> 8) & 0xFF), B = (byte)((argb) & 0xFF) };
         }
 
-        /*
-        public static ushort Convert8888RGBto565RGB(uint argb)
+        public static ushort RGB888ToRGB565(uint argb)
         {
             byte r = (byte)((byte)((argb >> 16) & 0xFF) >> 3);
             byte g = (byte)((byte)((argb >> 8) & 0xFF) >> 2);
@@ -205,16 +204,6 @@
 
             return (ushort)((r << 11) | (g << 5) | b);
         }
-
-        public static uint Convert565RGBto8888RGB(ushort rgb)
-        {
-            byte R8 = (byte)(255 / 31 * ((rgb << 11) & 0x1F));
-            byte G8 = (byte)(255 / 63 * ((rgb << 5) & 0x3F));
-            byte B8 = (byte)(255 / 31 * ((rgb) & 0x1F));
-
-            return (uint)FromArgb(R8, G8, B8).ToArgb();
-        }
-        */
 
         public override string ToString()
         {
