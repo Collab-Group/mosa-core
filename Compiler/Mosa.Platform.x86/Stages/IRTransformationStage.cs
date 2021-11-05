@@ -473,19 +473,6 @@ namespace Mosa.Platform.x86.Stages
             LoadStore.OrderOperands(context, MethodCompiler);
 
             context.SetInstruction(X86.MovLoad32, context.Result, context.Operand1, context.Operand2);
-
-            NewMethod(context);
-        }
-
-        private static void NewMethod(Context context)
-        {
-			//This code only for x86 platform
-			/*
-            if (context.Operand1.Type.Namespace == "MOSA1")
-            {
-                context.AppendInstruction(X86.ReferenceCountAdd, null, context.Operand1);
-            }
-			*/
         }
 
         private void LoadParam32(Context context)
@@ -496,8 +483,6 @@ namespace Mosa.Platform.x86.Stages
 		private void LoadParamObject(Context context)
 		{
 			context.SetInstruction(X86.MovLoad32, context.Result, StackFrame, context.Operand1);
-
-			NewMethod(context);
 		}
 
 		private void LoadParamR4(Context context)
@@ -584,9 +569,6 @@ namespace Mosa.Platform.x86.Stages
 		private void MoveObject(Context context)
 		{
 			context.ReplaceInstruction(X86.Mov32);
-			//context.AppendInstruction(X86.ReferenceCountAdd, context.Result, context.Operand1);
-
-			NewMethod(context);
 		}
 
 		private void MoveR4(Context context)
@@ -735,8 +717,6 @@ namespace Mosa.Platform.x86.Stages
 			LoadStore.OrderOperands(context, MethodCompiler);
 
 			context.SetInstruction(X86.MovStore32, null, context.Operand1, context.Operand2, context.Operand3);
-
-			NewMethod(context);
 		}
 
 		private void StoreParam32(Context context)
@@ -757,8 +737,6 @@ namespace Mosa.Platform.x86.Stages
 		private void StoreParamObject(Context context)
 		{
 			context.SetInstruction(X86.MovStore32, null, StackFrame, context.Operand1, context.Operand2);
-
-			NewMethod(context);
 		}
 
 		private void StoreParamR4(Context context)
