@@ -17,7 +17,7 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-DefaultDirName={userappdata}\{#MyAppName}
+DefaultDirName=C:\Program Files\{#MyAppName}
 DisableDirPage=yes
 DisableReadyPage=yes
 DefaultGroupName={#MyAppName}
@@ -35,9 +35,6 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 [Tasks]
 
 [Run]
-
-[Dirs]
-Name: "{app}\Tools"
 
 [Files]
 ;Visual Studio Extension

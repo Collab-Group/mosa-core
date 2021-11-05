@@ -1,10 +1,14 @@
 using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Trace;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
+using System.Net;
+using System.Net.Http;
 
 namespace Mosa.Launcher.Console
 {
@@ -38,7 +42,7 @@ namespace Mosa.Launcher.Console
             }
         }
 
-        public static string AppFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "MOSA-Core");
+        public static string AppFolder = @"C:\Program Files\MOSA-Core";
         public static string VirtualBoxPath = @"C:\Program Files\Oracle\VirtualBox\VBoxManage.exe";
 
         public static string ISOFilePath
