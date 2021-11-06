@@ -87,9 +87,7 @@ namespace Mosa.Runtime
             if (obj == null) return;
 
             uint Address = (uint)Intrinsic.GetObjectAddress(obj);
-            //                   ///                      Size Of Object Data                ///Size Of  TypeDef And SyncBlock///              
-            uint Size = (uint)((*((uint*)(obj.GetType().TypeHandle.Value + (Pointer.Size * 3)))) + 2 * sizeof(Pointer));
-            Dispose(Address, Size);
+            Dispose(Address, obj.TypeDefinition->SizeOf);
         }
 
         public static void Dispose(uint Address, uint Size)
