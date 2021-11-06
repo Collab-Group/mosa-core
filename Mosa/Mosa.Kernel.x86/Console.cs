@@ -60,7 +60,7 @@ namespace Mosa.Kernel.x86
 			set { color &= 0x0F; color |= (byte)((value & 0x0F) << 4); }
 		}
 
-		public static void Setup() 
+		internal static void Setup() 
 		{
 			BackgroundColor = ConsoleColor.Black;
 			Clear();
@@ -101,7 +101,7 @@ namespace Mosa.Kernel.x86
 			}
 		}
 
-		public static void RemovePreviousOne()
+		public static void Back()
 		{
 			Previous();
 			UpdateCursor();
@@ -259,6 +259,16 @@ namespace Mosa.Kernel.x86
 			CursorLeft = left;
 			UpdateCursor();
 		}
+
+		public static PS2Keyboard.KeyCode ReadKey() 
+		{
+			PS2Keyboard.KeyCode key;
+			while ((key = PS2Keyboard.GetKeyPressed()) == 0)
+			{
+				Native.Hlt();
+			};
+			return key;
+		}
 		
 		public static string ReadLine()
 		{
@@ -267,9 +277,7 @@ namespace Mosa.Kernel.x86
 			PS2Keyboard.KeyCode code;
 			for (; ; )
 			{
-				Native.Hlt();
-				code = PS2Keyboard.GetKeyPressed();
-				if (code == 0) continue;
+				code = ReadKey();
 
 				if (code == PS2Keyboard.KeyCode.Enter)
 				{
@@ -279,7 +287,7 @@ namespace Mosa.Kernel.x86
 				{
 					if (Line.Length != 0)
 					{
-						RemovePreviousOne();
+						Console.Back();
 						Line = Line.Substring(0, Line.Length - 1);
 					}
 				}
@@ -294,10 +302,10 @@ namespace Mosa.Kernel.x86
 						S = code.KeyCodeToString().ToLower();
 					}
 					Line += S;
-					Write(S);
+					Console.Write(S);
 				}
 			}
-			WriteLine();
+			Console.WriteLine();
 			return Line;
 		}
 
