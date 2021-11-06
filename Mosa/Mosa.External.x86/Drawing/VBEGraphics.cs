@@ -50,9 +50,7 @@ namespace Mosa.External.x86.Drawing
 
         public override uint GetPoint(int X, int Y)
         {
-            SecondBuffer.Read32((uint)((Width * Y + X) * Bpp));
-
-            return 0;
+            return SecondBuffer.Read32((uint)((Width * Y + X) * Bpp));
         }
 
         public override void Update()
