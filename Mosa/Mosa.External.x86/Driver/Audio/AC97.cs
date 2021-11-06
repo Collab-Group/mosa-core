@@ -31,7 +31,6 @@ namespace Mosa.External.x86.Driver.Audio
             Console.WriteLine("Intel ICH AC97 Audio Controller Found");
 
             device.EnableDevice();
-            Console.WriteLine($"INT:{device.InterruptLine}");
 
             NAM = device.BAR0 & ~(0xFU);
             NABM = device.BAR1 & ~(0xFU);
