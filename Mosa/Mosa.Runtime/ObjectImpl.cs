@@ -4,11 +4,12 @@ namespace Mosa.Runtime
 {
     public static class ObjectImpl 
     {
-        public static void Dispose(this object obj) 
+        public static unsafe void Dispose(this object obj) 
         {
-#pragma warning disable 
-            GC.Dispose(obj);
-#pragma warning restore
+            if (obj == null) return;
+
+            uint Address = (uint)Intrinsic.GetObjectAddress(obj);
+            GC.Dispose(Address, obj.TypeDefinition->SizeOf);
         }
     }
 }

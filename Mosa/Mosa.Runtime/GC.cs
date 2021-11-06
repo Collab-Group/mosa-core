@@ -77,19 +77,6 @@ namespace Mosa.Runtime
             READY = true;
         }
 
-        [Obsolete("use object.Dispose()")]
-        public static void Dispose(object obj)
-        {
-            // An object has the following memory layout:
-            //   - Pointer TypeDef
-            //   - Pointer SyncBlock
-            //   - 0 .. n object data fields
-            if (obj == null) return;
-
-            uint Address = (uint)Intrinsic.GetObjectAddress(obj);
-            Dispose(Address, obj.TypeDefinition->SizeOf);
-        }
-
         public static void Dispose(uint Address, uint Size)
         {
             for (uint u = 0; u < DescriptorsSize; u += (2 * sizeof(uint)))
