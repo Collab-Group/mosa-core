@@ -91,6 +91,7 @@ namespace Mosa.External.x86.Drawing.Fonts
             for (int i = 0; i < RegisteredBitFont.Count; i++)
             {
                 BitFontDescriptor v = RegisteredBitFont[i];
+                if (v.Name != FontName) continue;
                 int Size8 = v.Size / 8;
 
                 if (v.Name == FontName)
