@@ -8,77 +8,58 @@ using static Mosa.Runtime.x86.Native;
 
 namespace Mosa.External.x86.Driver.Audio
 {
-    struct Options
-    {
-        public const byte MasterVolume = 0x0002;
-        public const byte GlobalControlStat = 0x0060;
-    }
-
-    struct PCM
-    {
-        public const byte OutBufferDescriptorBar = 0x10;
-        public const byte OutLastValidIndex = 0x15;
-        public const byte OutStatusRegister = 0x16;
-        public const byte OutControlRegister = 0x1B;
-    }
-
     public unsafe class AC97
     {
         private static uint NAM, NABM;
 
-        public const ushort ListLength = 32;
-        public const ushort BufferLength = 0xFFFE;
+        private const ushort ListLength = 32;
+        private const ushort BufferLength = 0xFFFE;
 
-        public static bool Exist = false;
+        public static bool Probe = false;
 
-        public static byte max = 0;
+        private static Pointer BufferListAddr;
 
-        public static Pointer BufferListAddr;
+        private static byte* Buffer;
 
-        public static byte* Buffer;
-
+        //Issue: This Code Only Works On Virtual Box
         public static unsafe void Initialize()
         {
-            foreach (var device in PCI.Devices)
-            {
-                if (device.ClassID == 0x04 && device.Subclass == 0x01)
-                {
-                    Console.WriteLine("AC97 Device Found");
+            PCIDevice device = PCI.GetDevice(VendorID.Intel, (DeviceID)0x2425);
 
-                    device.EnableDevice();
-                    Console.WriteLine($"INT:{device.InterruptLine}");
+            if (device == null) return;
 
-                    NAM = device.BAR0 & ~(0xFU);
-                    NABM = device.BAR1 & ~(0xFU);
+            Console.WriteLine("Intel ICH AC97 Audio Controller Found");
 
-                    IDT.INTs.Add(new IDT.INT(0x20u, OnInterrupt));
+            device.EnableDevice();
+            Console.WriteLine($"INT:{device.InterruptLine}");
 
-                    //Reset
-                    Out32((ushort)(NABM + 0x2C), 0x00000002);
-                    Out16((ushort)NAM, 54188);
+            NAM = device.BAR0 & ~(0xFU);
+            NABM = device.BAR1 & ~(0xFU);
 
-                    BufferListAddr = GC.AllocateObject((uint)(ListLength * sizeof(BufferDescriptor)));
-                    Buffer = (byte*)GC.AllocateObject(1024 * 1024);
+            IDT.INTs.Add(new IDT.INT(0x20u, OnInterrupt));
 
-                    Out16((ushort)(NAM + 0x02), 0x0F0F);
-                    Out16((ushort)(NAM + 0x18), 0x0F0F);
-                    Out16((ushort)(NAM + 0x2C), 48000);
+            //Reset
+            Out32((ushort)(NABM + 0x2C), 0x00000002);
+            Out16((ushort)NAM, 54188);
 
-                    Console.WriteLine("AC97 Initialized");
-                    Exist = true;
-                }
-            }
+            BufferListAddr = GC.AllocateObject((uint)(ListLength * sizeof(BufferDescriptor)));
+            Buffer = (byte*)GC.AllocateObject(1024 * 1024);
+
+            Out16((ushort)(NAM + 0x02), 0x0F0F);
+            Out16((ushort)(NAM + 0x18), 0x0F0F);
+            Out16((ushort)(NAM + 0x2C), 48000);
+
+            Probe = true;
         }
 
         private static int Status;
-        public static bool Finished { get => Status == 7; }
 
-        public static void OnInterrupt()
+        private static void OnInterrupt()
         {
-            if (!Exist) return;
+            if (!Probe) return;
 
-            Status = In16((ushort)(NABM + PCM.OutStatusRegister));
-            if (Status != 0) Out16((ushort)(NABM + PCM.OutStatusRegister), (ushort)(Status & 0x1E));
+            Status = In16((ushort)(NABM + 0x16));
+            if (Status != 0) Out16((ushort)(NABM + 0x16), (ushort)(Status & 0x1E));
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -90,15 +71,15 @@ namespace Mosa.External.x86.Driver.Audio
         }
 
         //48Khz DualChannel
-        public static unsafe void Play(byte[] Data)
+        public static unsafe void Play(byte[] PCM)
         {
-            if (!Exist) return;
+            if (!Probe) return;
 
             int k = 0;
 
-            fixed (byte* P = Data) ASM.MEMCPY((uint)Buffer, (uint)P, (uint)Data.Length);
+            fixed (byte* P = PCM) ASM.MEMCPY((uint)Buffer, (uint)P, (uint)PCM.Length);
 
-            for (uint i = 0; i < Math.Clamp(Data.Length, 0, 1024 * 1024) - (Math.Clamp(Data.Length, 0, 1024 * 1024) % BufferLength); i += BufferLength * 2)
+            for (uint i = 0; i < Math.Clamp(PCM.Length, 0, 1024 * 1024) - (Math.Clamp(PCM.Length, 0, 1024 * 1024) % BufferLength); i += BufferLength * 2)
             {
                 BufferDescriptor* desc = (BufferDescriptor*)(BufferListAddr + (sizeof(BufferDescriptor) * k));
                 desc->Addr = (uint)(Buffer + i);
@@ -108,27 +89,17 @@ namespace Mosa.External.x86.Driver.Audio
             }
 
             if (k > 0) k--;
-            max = (byte)(k & 0xFF);
+            Out8((ushort)(NABM + (ushort)0x1B), 0x2);
 
-            Out8((ushort)(NABM + (ushort)PCM.OutControlRegister), 0x2);
+            Out32((ushort)(NABM + (ushort)0x10), (uint)BufferListAddr);
 
-            Out32((ushort)(NABM + (ushort)PCM.OutBufferDescriptorBar), (uint)BufferListAddr);
+            //SetIndex
+            Out8((ushort)(NABM + (ushort)0x15), (byte)(k & 0xFF));
 
-            SetIndex(max);
+            PCM.Dispose();
 
-            Data.Dispose();
-
-            Play();
-        }
-
-        public static void SetIndex(byte index)
-        {
-            Out8((ushort)(NABM + (ushort)PCM.OutLastValidIndex), index);
-        }
-
-        public static void Play()
-        {
-            Out8((ushort)(NABM + (ushort)PCM.OutControlRegister), 0x11);
+            //Play
+            Out8((ushort)(NABM + (ushort)0x1B), 0x11);
         }
     }
 }
