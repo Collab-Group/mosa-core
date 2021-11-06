@@ -4,8 +4,8 @@ namespace Mosa.External.x86.Driver
 {
     public static partial class PS2Keyboard
     {
-        public static KeyCode Code;
-        public static byte KData = 0x00;
+        internal static KeyCode Code;
+        internal static byte KData = 0x00;
 
         public static void OnInterrupt()
         {
@@ -15,7 +15,7 @@ namespace Mosa.External.x86.Driver
 
         public static bool IsCapsLock = false;
 
-        public static KeyCode GetKeyPressed()
+        internal static KeyCode GetKeyPressed()
         {
             Code = (KeyCode)KData;
             KData = 0;
