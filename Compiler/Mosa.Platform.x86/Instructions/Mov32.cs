@@ -23,12 +23,17 @@ namespace Mosa.Platform.x86.Instructions
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
-			/*
-			if (node.Operand1.Type.Namespace.Contains("MOSA1")) opcodeEncoder.AppendBytes(new byte[]
-			{
-				0x83 ,0x40 ,0x04 ,0x01
-			});
-			*/
+			//if (node.Operand1.Type.Namespace.Contains("MOSA1")) 
+			if (
+				node.Operand1.Type.BaseType != null &&
+				node.Operand1.Type.BaseType.FullName == "System.Object" && 
+				node.Operand1.Type.FullName != "System.String"
+				)
+				//Debugger.Break();
+				opcodeEncoder.AppendBytes(new byte[]
+				{
+					0xC7 ,0x40 ,0x04 ,0x01 ,0x00 ,0x00 ,0x00
+				});
 
 			if (node.Operand1.IsCPURegister)
 			{
