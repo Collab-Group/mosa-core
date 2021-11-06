@@ -24,6 +24,8 @@ namespace Mosa.Platform.x86.Instructions
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
+			ReferenceCountStage.AddReferenceCount(node, opcodeEncoder);
+
 			if ((node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 5) && node.Operand2.IsConstantZero)
 			{
 				opcodeEncoder.Append8Bits(0x8B);
