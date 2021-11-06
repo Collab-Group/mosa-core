@@ -38,7 +38,7 @@ namespace Mosa.External.x86.Drawing.Fonts
         private const int FontAlpha = 96;
         private static bool AtEdge = false;
 
-        public static int DrawBitFontChar(Graphics graphics, byte[] Raw, int Size, int Size8, uint Color, int Index, int X, int Y, bool Calculate = false, bool AntiAliasing = true)
+        private static int DrawBitFontChar(Graphics graphics, byte[] Raw, int Size, int Size8, uint Color, int Index, int X, int Y, bool Calculate = false, bool AntiAliasing = true)
         {
             if (Index < 0)
                 return Size / 2;
