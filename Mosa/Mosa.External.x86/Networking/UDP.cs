@@ -50,7 +50,8 @@ namespace Mosa.External.x86.Networking
                 ASM.MEMCPY((uint)P, (uint)frame, length);
             }
             OnReceived?.Invoke(Buffer, Ethernet.SwapLeftRight(header->DestPort));
-            GC.Dispose(Buffer);
+            //GC.Dispose(Buffer);
+            Buffer.Dispose();
         }
     }
 }

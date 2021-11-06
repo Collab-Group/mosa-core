@@ -2241,7 +2241,8 @@ namespace Mosa.Kernel.x86
 					{
 						if (INTs != null) foreach (var v in INTs) if (v.IRQ == stack->Interrupt)
 								{
-									GC.Dispose(v);
+									v.Dispose();
+									//GC.Dispose(v);
 									Native.Call(v.Method);
 								};
 

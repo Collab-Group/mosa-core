@@ -93,7 +93,8 @@ namespace Mosa.External.x86.FileSystem
             public void Free()
             {
                 GC.Dispose((uint)Item, (uint)sizeof(DirectoryItem));
-                GC.Dispose(this);
+                //GC.Dispose(this);
+                this.Dispose();
             }
         }
 
@@ -177,7 +178,8 @@ namespace Mosa.External.x86.FileSystem
                         result[i] = buffer[i];
                     }
 
-                    GC.Dispose(buffer);
+                    //GC.Dispose(buffer);
+                    buffer.Dispose();
 
                     return result;
                 }
@@ -242,8 +244,10 @@ namespace Mosa.External.x86.FileSystem
                         for (int i = 0; i < Data.Length; i++) _B[i] = Data[i];
                         Disk.WriteBlock(GetSectorOffset(_Clus), _CNT, _B);
 
-                        GC.Dispose(_B);
-                        GC.Dispose(_Buffer);
+                        //GC.Dispose(_B);
+                        _B.Dispose();
+                        //GC.Dispose(_Buffer);
+                        _Buffer.Dispose();
 
                         return;
                     }
@@ -355,8 +359,10 @@ namespace Mosa.External.x86.FileSystem
             }
             Disk.WriteBlock(Pos, 1, fat1);
 
-            GC.Dispose(rsvdsec);
-            GC.Dispose(fat1);
+            //GC.Dispose(rsvdsec);
+            rsvdsec.Dispose();
+            //GC.Dispose(fat1);
+            fat1.Dispose();
             #endregion
 
             //WriteItem
@@ -375,8 +381,10 @@ namespace Mosa.External.x86.FileSystem
                     Disk.WriteBlock(TargetDirectorySector, 1, buffer);
 
                     //Disposing
-                    GC.Dispose(buffer);
-                    GC.Dispose(bufferToWrite);
+                    //GC.Dispose(buffer);
+                    buffer.Dispose();
+                    //GC.Dispose(bufferToWrite);
+                    bufferToWrite.Dispose();
                     GC.Dispose((uint)item, (uint)sizeof(DirectoryItem));
 
                     Items.Add(new ADirectoryItem()
@@ -434,7 +442,8 @@ namespace Mosa.External.x86.FileSystem
                         switch (Native.Get8((uint)(P + i)))
                         {
                             case Status.Empty:
-                                GC.Dispose(Buffer);
+                                //GC.Dispose(Buffer);
+                                Buffer.Dispose();
                                 Console.WriteLine("Finish");
                                 return;
                             case Status.SpecialFile:
@@ -469,7 +478,8 @@ namespace Mosa.External.x86.FileSystem
                             ReadList(GetSectorOffset(Items[Items.Count - 1].Cluster), parent + string.FromPointer(item->Name, 8, 0x20) + "/");
                         }
                     }
-                    GC.Dispose(Buffer);
+                    Buffer.Dispose();
+                    //GC.Dispose(Buffer);
                 }
             } while (Index++ != -1);
         }

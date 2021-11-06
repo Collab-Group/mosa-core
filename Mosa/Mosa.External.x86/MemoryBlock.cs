@@ -78,7 +78,8 @@ namespace Mosa.External.x86
         {
             if (IsManaged)
                 GC.Dispose((uint)address, size);
-            GC.Dispose(this);
+            this.Dispose();
+            //GC.Dispose(this);
         }
 
         public int this[uint offset]

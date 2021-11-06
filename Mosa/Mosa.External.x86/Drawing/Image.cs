@@ -55,7 +55,8 @@ namespace System.Drawing
         public void Dispose()
         {
             RawData.Free();
-            GC.Dispose(this);
+            //GC.Dispose(this);
+            this.Dispose();
         }
     }
 }

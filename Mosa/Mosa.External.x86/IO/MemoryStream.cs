@@ -251,9 +251,10 @@ namespace System.IO
         protected override void Dispose(bool disposing)
         {
             if (disposing) // If Dispose() is called from another Dispose method and not a finalizer
-                GC.Dispose(blocks);
+                blocks.Dispose();
+                //GC.Dispose(blocks);
 
-            /* We do not currently use unmanaged resources */
+                /* We do not currently use unmanaged resources */
             base.Dispose(disposing);
         }
 

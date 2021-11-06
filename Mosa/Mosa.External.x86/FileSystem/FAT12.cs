@@ -147,7 +147,8 @@ namespace Mosa.External.x86.FileSystem
             for (int i = 0; i < fileInfo.Size; i++)
                 result[i] = data[i];
 
-            GC.Dispose(data);
+            //GC.Dispose(data);
+            data.Dispose();
 
             return result;
         }

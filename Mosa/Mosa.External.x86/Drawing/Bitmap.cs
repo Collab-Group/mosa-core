@@ -74,9 +74,12 @@ namespace Mosa.External.x86.Drawing
                 w++;
             }
 
-            GC.Dispose(memoryBlock);
-            GC.Dispose(temp);
-            GC.Dispose(bitmapHeader);
+            //GC.Dispose(memoryBlock);
+            //GC.Dispose(temp);
+            //GC.Dispose(bitmapHeader);
+            memoryBlock.Free();
+            temp.Dispose();
+            bitmapHeader.Dispose();
 
             return;
         }
