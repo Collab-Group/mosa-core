@@ -35,13 +35,17 @@ namespace Mosa.External.x86.Drawing.Fonts
             bitFontDescriptor.Dispose();
         }
 
-        public static int DrawBitFontChar(Graphics graphics, byte[] Raw, int Size, int Size8, uint Color, int Index, int X, int Y, bool Calculate = false)
+        private const int FontAlpha = 96;
+        private static bool AtEdge = false;
+
+        public static int DrawBitFontChar(Graphics graphics, byte[] Raw, int Size, int Size8, uint Color, int Index, int X, int Y, bool Calculate = false, bool AntiAliasing = true)
         {
             if (Index < 0)
                 return Size / 2;
 
             int MaxX = 0;
             int SizePerFont = Size * Size8 * Index;
+            AtEdge = false;
 
             for (int h = 0; h < Size; h++)
                 for (int aw = 0; aw < Size8; aw++)
@@ -54,10 +58,30 @@ namespace Mosa.External.x86.Drawing.Fonts
                             int y = Y + h;
 
                             if (!Calculate)
+                            {
                                 graphics.DrawPoint(Color, x, y);
+
+                                if (AntiAliasing && AtEdge)
+                                {
+                                    int tx = X + (aw * 8) + ww - 1;
+                                    int ty = Y + h;
+                                    Color ac = System.Drawing.Color.FromArgb((int)graphics.GetPoint(tx, ty));
+                                    ac.R = (byte)((((((byte)((Color >> 16) & 0xFF)) * FontAlpha) + ((255 - FontAlpha) * ac.R)) >> 8) & 0xFF);
+                                    ac.G = (byte)((((((byte)((Color >> 8) & 0xFF)) * FontAlpha) + ((255 - FontAlpha) * ac.G)) >> 8) & 0xFF);
+                                    ac.B = (byte)((((((byte)((Color) & 0xFF)) * FontAlpha) + ((255 - FontAlpha) * ac.B)) >> 8) & 0xFF);
+                                    graphics.DrawPoint((uint)ac.ToArgb(), tx, ty);
+                                    ac.Dispose();
+                                }
+
+                                AtEdge = false;
+                            }
 
                             if (max > MaxX)
                                 MaxX = max;
+                        }
+                        else
+                        {
+                            AtEdge = true;
                         }
             return MaxX;
         }
@@ -87,7 +111,7 @@ namespace Mosa.External.x86.Drawing.Fonts
         }
 
         //TotalX will be the last line of it used.
-        public static int DrawBitFontString(this Graphics graphics, string FontName, uint color, string Text, int X, int Y, int Divide = 0)
+        public static int DrawBitFontString(this Graphics graphics, string FontName, uint color, string Text, int X, int Y, bool AntiAlising = true, int Divide = 0)
         {
             BitFontDescriptor bitFontDescriptor = new BitFontDescriptor();
 
@@ -109,7 +133,7 @@ namespace Mosa.External.x86.Drawing.Fonts
                 for (int i = 0; i < Lines[l].Length; i++)
                 {
                     char c = Lines[l][i];
-                    UsedX += BitFont.DrawBitFontChar(graphics, bitFontDescriptor.Raw, Size, Size8, color, bitFontDescriptor.Charset.IndexOf(c), UsedX + X, Y + bitFontDescriptor.Size * l) + 2 + Divide;
+                    UsedX += BitFont.DrawBitFontChar(graphics, bitFontDescriptor.Raw, Size, Size8, color, bitFontDescriptor.Charset.IndexOf(c), UsedX + X, Y + bitFontDescriptor.Size * l, false, AntiAlising) + 2 + Divide;
                 }
                 TotalX += UsedX;
             }
