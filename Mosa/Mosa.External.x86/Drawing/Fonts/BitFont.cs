@@ -85,5 +85,38 @@ namespace Mosa.External.x86.Drawing.Fonts
             }
             return 0;
         }
+
+        //TotalX will be the last line of it used.
+        public static int DrawBitFontString(this Graphics graphics, string FontName, uint color, string Text, int X, int Y, int Divide = 0)
+        {
+            BitFontDescriptor bitFontDescriptor = new BitFontDescriptor();
+
+            for (int i1 = 0; i1 < BitFont.RegisteredBitFont.Count; i1++)
+            {
+                if (BitFont.RegisteredBitFont[i1].Name == FontName)
+                    bitFontDescriptor = BitFont.RegisteredBitFont[i1];
+            }
+
+            int Size = bitFontDescriptor.Size;
+            int Size8 = Size / 8;
+
+            int TotalX = 0;
+            string[] Lines = Text.Split('\n');
+
+            for (int l = 0; l < Lines.Length; l++)
+            {
+                int UsedX = 0;
+                for (int i = 0; i < Lines[l].Length; i++)
+                {
+                    char c = Lines[l][i];
+                    UsedX += BitFont.DrawBitFontChar(graphics, bitFontDescriptor.Raw, Size, Size8, color, bitFontDescriptor.Charset.IndexOf(c), UsedX + X, Y + bitFontDescriptor.Size * l) + 2 + Divide;
+                }
+                TotalX += UsedX;
+            }
+
+            bitFontDescriptor.Dispose();
+
+            return TotalX;
+        }
     }
 }

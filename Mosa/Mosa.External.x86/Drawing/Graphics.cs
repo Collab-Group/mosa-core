@@ -21,58 +21,6 @@ namespace Mosa.External.x86.Drawing
 
         public string CurrentDriver;
 
-        //TotalX will be the last line of it used.
-        public virtual int DrawBitFontString(string FontName, uint color, string Text, int X, int Y, int Divide = 0)
-        {
-            BitFontDescriptor bitFontDescriptor = new BitFontDescriptor();
-
-            for (int i1 = 0; i1 < BitFont.RegisteredBitFont.Count; i1++)
-            {
-                if (BitFont.RegisteredBitFont[i1].Name == FontName)
-                    bitFontDescriptor = BitFont.RegisteredBitFont[i1];
-            }
-
-            int Size = bitFontDescriptor.Size;
-            int Size8 = Size / 8;
-
-            int TotalX = 0;
-            string[] Lines = Text.Split('\n');
-
-            for (int l = 0; l < Lines.Length; l++)
-            {
-                int UsedX = 0;
-                for (int i = 0; i < Lines[l].Length; i++)
-                {
-                    char c = Lines[l][i];
-                    UsedX += BitFont.DrawBitFontChar(this, bitFontDescriptor.Raw, Size, Size8, color, bitFontDescriptor.Charset.IndexOf(c), UsedX + X, Y + bitFontDescriptor.Size * l) + 2 + Divide;
-                }
-                TotalX += UsedX;
-            }
-
-            bitFontDescriptor.Dispose();
-
-            return TotalX;
-        }
-
-        public virtual void DrawACS16String(uint color, string s, int x, int y)
-        {
-            for (int c = 0; c < s.Length; c++)
-            {
-                int offset = ((byte)s[c] & 0xFF) * 16;
-                byte[] fontbuf = new byte[16];
-
-                if (ASC16.Buffer == null) ASC16.Setup();
-
-                for (int k = 0; k < fontbuf.Length; k++)
-                    fontbuf[k] = ASC16.Buffer[offset + k];
-
-                for (int i = 0; i < ASC16.FontHeight; i++)
-                    for (int j = 0; j < ASC16.FontWidth; j++)
-                        if ((fontbuf[i] & (0x80 >> j)) != 0)
-                            DrawPoint(color, x + j + (c * 8), y + i);
-            }
-        }
-
         public virtual void DrawFilledRectangle(uint Color, int X, int Y, int aWidth, int aHeight)
         {
             //Limit Won't Work

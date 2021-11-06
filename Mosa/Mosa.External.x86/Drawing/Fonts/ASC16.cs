@@ -20,5 +20,24 @@ namespace Mosa.External.x86.Drawing.Fonts
         // Note: the size of the font is FontWidth * FontHeight
         public const int FontWidth = 8;
         public const int FontHeight = 16;
+
+        public static void DrawACS16String(this Graphics graphics,uint color, string s, int x, int y)
+        {
+            for (int c = 0; c < s.Length; c++)
+            {
+                int offset = ((byte)s[c] & 0xFF) * 16;
+                byte[] fontbuf = new byte[16];
+
+                if (Buffer == null) Setup();
+
+                for (int k = 0; k < fontbuf.Length; k++)
+                    fontbuf[k] = Buffer[offset + k];
+
+                for (int i = 0; i < FontHeight; i++)
+                    for (int j = 0; j < FontWidth; j++)
+                        if ((fontbuf[i] & (0x80 >> j)) != 0)
+                            graphics.DrawPoint(color, x + j + (c * 8), y + i);
+            }
+        }
     }
 }
