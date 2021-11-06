@@ -34,7 +34,7 @@ namespace Mosa.Runtime
 
             if (READY)
             {
-                for (uint u = 0; u < DescriptorsSize; u += (2 * sizeof(uint)))
+                for (int u = 0; u < DescriptorsSize; u += sizeof(FreeMemoryDescriptor))
                 {
                     if (((FreeMemoryDescriptor*)(DescriptorsAddress + u))->Size >= size)
                     {
@@ -60,15 +60,15 @@ namespace Mosa.Runtime
 
         private static uint DescriptorsAddress;
         private static uint DescriptorsSize;
-        private const uint DescriptorsNumber = 4096;
+        private const uint DescriptorsNumber = 0x20000;
         private static bool READY = false;
 
         public static void Setup()
         {
-            DescriptorsSize = DescriptorsNumber * (2 * sizeof(uint));
+            DescriptorsSize = (uint)(DescriptorsNumber * sizeof(FreeMemoryDescriptor));
             DescriptorsAddress = (uint)AllocateMemory(DescriptorsSize);
 
-            for (uint u = 0; u < DescriptorsSize; u += (2 * sizeof(uint)))
+            for (int u = 0; u < DescriptorsSize; u += sizeof(FreeMemoryDescriptor))
             {
                 ((FreeMemoryDescriptor*)(DescriptorsAddress + u))->Address = 0;
                 ((FreeMemoryDescriptor*)(DescriptorsAddress + u))->Size = 0;
@@ -79,7 +79,7 @@ namespace Mosa.Runtime
 
         public static void Dispose(uint Address, uint Size)
         {
-            for (uint u = 0; u < DescriptorsSize; u += (2 * sizeof(uint)))
+            for (int u = 0; u < DescriptorsSize; u += sizeof(FreeMemoryDescriptor))
             {
                 if (((FreeMemoryDescriptor*)(DescriptorsAddress + u))->Size == 0)
                 {

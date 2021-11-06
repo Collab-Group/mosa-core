@@ -95,6 +95,10 @@ namespace Mosa.External.x86.Drawing.Fonts
                 {
                     return RegisteredBitFont[i];
                 }
+                else 
+                {
+                    RegisteredBitFont[i].Dispose();
+                }
             }
 
             Panic.Error("BitFont Descriptor Not Found");
