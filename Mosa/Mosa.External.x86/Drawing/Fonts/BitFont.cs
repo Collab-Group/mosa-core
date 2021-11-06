@@ -1,4 +1,5 @@
-﻿using Mosa.Runtime;
+﻿using Mosa.Kernel.x86;
+using Mosa.Runtime;
 using System.Collections.Generic;
 using System.Drawing;
 
@@ -86,41 +87,43 @@ namespace Mosa.External.x86.Drawing.Fonts
             return MaxX;
         }
 
+        private static BitFontDescriptor GetBitFontDescriptor(string FontName)
+        {
+            for (int i = 0; i < RegisteredBitFont.Count; i++) 
+            {
+                if(RegisteredBitFont[i].Name == FontName) 
+                {
+                    return RegisteredBitFont[i];
+                }
+            }
+
+            Panic.Error("BitFont Descriptor Not Found");
+            return new BitFontDescriptor();
+        }
+
         public static int Calculate(string FontName, string s)
         {
-            for (int i = 0; i < RegisteredBitFont.Count; i++)
+            BitFontDescriptor bitFontDescriptor = GetBitFontDescriptor(FontName);
+            int Size8 = bitFontDescriptor.Size / 8;
+
+            int r = 0;
+            if (bitFontDescriptor.Name == FontName)
             {
-                BitFontDescriptor v = RegisteredBitFont[i];
-                if (v.Name != FontName) continue;
-                int Size8 = v.Size / 8;
-
-                if (v.Name == FontName)
+                for (int i1 = 0; i1 < s.Length; i1++)
                 {
-                    int r = 0;
-                    for (int i1 = 0; i1 < s.Length; i1++)
-                    {
-                        char j = s[i1];
-                        r += DrawBitFontChar(null, v.Raw, v.Size, Size8, 0, v.Charset.IndexOf(j), 0, 0, true);
-                    }
-
-                    return r;
+                    char j = s[i1];
+                    r += DrawBitFontChar(null, bitFontDescriptor.Raw, bitFontDescriptor.Size, Size8, 0, bitFontDescriptor.Charset.IndexOf(j), 0, 0, true);
                 }
-
-                v.Dispose();
             }
-            return 0;
+
+            return r;
+            bitFontDescriptor.Dispose();
         }
 
         //TotalX will be the last line of it used.
         public static int DrawBitFontString(this Graphics graphics, string FontName, uint color, string Text, int X, int Y, bool AntiAlising = true, int Divide = 0)
         {
-            BitFontDescriptor bitFontDescriptor = new BitFontDescriptor();
-
-            for (int i1 = 0; i1 < BitFont.RegisteredBitFont.Count; i1++)
-            {
-                if (BitFont.RegisteredBitFont[i1].Name == FontName)
-                    bitFontDescriptor = BitFont.RegisteredBitFont[i1];
-            }
+            BitFontDescriptor bitFontDescriptor = GetBitFontDescriptor(FontName);
 
             int Size = bitFontDescriptor.Size;
             int Size8 = Size / 8;
