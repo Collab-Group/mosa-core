@@ -56,6 +56,7 @@ namespace Mosa.Launcher.Console
         //Arguments:
         //Arguments 1 Is The Input File
         //-JUSTBUILD (Tell Compiler Do Not Launch VirtualBox After Compiling)
+        //-THREAD{ThreadCount} (Compile With {{ThreadCount}} Threads)
 
         //!Install before use!
 
@@ -69,6 +70,7 @@ namespace Mosa.Launcher.Console
                     args = new string[]
                     {
                         @"C:\Users\nifan\Documents\GitHub\MOSA-GUI-Sample\MOSA1\bin\MOSA1.dll",
+                        "-THREAD128"
                         //"-JUSTBUILD"
                     };
                 }
@@ -82,9 +84,14 @@ namespace Mosa.Launcher.Console
                     //Uppered
                     s = v.ToUpper();
 
-                    if (s == "-JUSTBUILD")
+                    if (s.IndexOf("-JUSTBUILD") == 0)
                     {
                         JustBuild = true;
+                    }
+                    if (s.IndexOf("-THREAD") == 0)
+                    {
+                        s = s.Replace("-THREAD", "");
+                        Settings.SetValue("Compiler.Multithreading.MaxThreads", Convert.ToInt32(s));
                     }
                 }
 

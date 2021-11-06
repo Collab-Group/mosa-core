@@ -5,6 +5,7 @@ using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework
 {
@@ -143,6 +144,8 @@ namespace Mosa.Compiler.Framework
 			}
 
 			var maxThreads = CompilerSettings.MaxThreads != 0 ? CompilerSettings.MaxThreads : Environment.ProcessorCount;
+
+			Debug.WriteLine($"\tCompile With {maxThreads} Threads");
 
 			Compiler.ExecuteCompile(maxThreads);
 
