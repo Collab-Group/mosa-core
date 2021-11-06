@@ -63,10 +63,10 @@ namespace Mosa.Runtime
         private const uint DescriptorsNumber = 0x20000;
         private static bool READY = false;
 
-        public static void Setup()
+        public static void Setup(uint DescriptorStartAddress)
         {
             DescriptorsSize = (uint)(DescriptorsNumber * sizeof(FreeMemoryDescriptor));
-            DescriptorsAddress = (uint)AllocateMemory(DescriptorsSize);
+            DescriptorsAddress = DescriptorStartAddress;
 
             for (int u = 0; u < DescriptorsSize; u += sizeof(FreeMemoryDescriptor))
             {
