@@ -24,7 +24,7 @@ namespace Mosa.External.x86.Driver.Audio
         //Issue: This Code Only Works On Virtual Box
         public static unsafe void Initialize()
         {
-            PCIDevice device = PCI.GetDevice(VendorID.Intel, (DeviceID)0x2425);
+            PCIDevice device = PCI.GetDevice(VendorID.Intel, (DeviceID)0x2415);
 
             if (device == null) return;
 
