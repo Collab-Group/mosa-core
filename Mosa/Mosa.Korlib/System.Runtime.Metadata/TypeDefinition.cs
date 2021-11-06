@@ -7,20 +7,20 @@ namespace System.Runtime.Metadata
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public unsafe struct TypeDefinition
     {
-        public void* Name;
-        public void* CustomAttributes;
-        public void* TypeCodeAndAttributes;
-        private uint _SizeOf;
-        public void* Assembly;
-        public void* ParentType;
-        public void* DeclaringType;
-        public void* ElementType;
-        public void* DefaultConstructor;
-        public void* Properties;
-        public void* Fields;
-        public void* SlotTable;
-        public void* Bitmap;
-        public uint NumberOfMethods;
+        public void* Name { get; }
+        public void* CustomAttributes { get; }
+        public void* TypeCodeAndAttributes { get; }
+        private uint _SizeOf { get; }
+        public void* Assembly { get; }
+        public void* ParentType { get; }
+        public void* DeclaringType { get; }
+        public void* ElementType { get; }
+        public void* DefaultConstructor { get; }
+        public void* Properties { get; }
+        public void* Fields { get; }
+        public void* SlotTable { get; }
+        public void* Bitmap { get; }
+        public uint NumberOfMethods { get; }
 
         public uint SizeOf { get => _SizeOf + (uint)(sizeof(void*) * 2); }
     }
