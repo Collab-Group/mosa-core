@@ -7,7 +7,7 @@ namespace Mosa.External.x86.Driver
         internal static KeyCode Code;
         internal static byte KData = 0x00;
 
-        public static void OnInterrupt()
+        internal static void OnInterrupt()
         {
             KData = IOPort.In8(0x60);
             if (KData == (byte)KeyCode.CapsLock) IsCapsLock = !IsCapsLock;
