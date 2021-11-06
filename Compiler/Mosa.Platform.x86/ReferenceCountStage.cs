@@ -6,6 +6,8 @@ namespace Mosa.Platform.x86
     {
         public static void AddReferenceCount(InstructionNode node, OpcodeEncoder opcodeEncoder)
         {
+            /*
+            //Maybe not safe
             //if (node.Operand1.Type.Namespace.Contains("MOSA1")) 
             if (
                 !node.Operand1.IsStaticField &&
@@ -22,6 +24,7 @@ namespace Mosa.Platform.x86
                 {
                     0x83 ,0x40 ,0x04 ,0x01
                 });
+            */
         }
     }
 }
