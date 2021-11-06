@@ -60,7 +60,7 @@ namespace Mosa.Kernel.x86
 			set { color &= 0x0F; color |= (byte)((value & 0x0F) << 4); }
 		}
 
-		public static void Setup() 
+		internal static void Setup() 
 		{
 			BackgroundColor = ConsoleColor.Black;
 			Clear();
@@ -101,7 +101,7 @@ namespace Mosa.Kernel.x86
 			}
 		}
 
-		public static void RemovePreviousOne()
+		public static void Back()
 		{
 			Previous();
 			UpdateCursor();
@@ -264,49 +264,66 @@ namespace Mosa.Kernel.x86
 		{
 			string S = "";
 			string Line = "";
-			PS2Keyboard.KeyCode code;
+			KeyCode code;
 			for (; ; )
-			{
-				Native.Hlt();
-				code = PS2Keyboard.GetKeyPressed();
-				if (code == 0) continue;
+            {
+                code = ReadKey();
 
-				if (code == PS2Keyboard.KeyCode.Enter)
-				{
-					break;
-				}
-				else if (code == PS2Keyboard.KeyCode.Delete)
-				{
-					if (Line.Length != 0)
-					{
-						RemovePreviousOne();
-						Line = Line.Substring(0, Line.Length - 1);
-					}
-				}
-				else
-				{
-					if (PS2Keyboard.IsCapsLock)
-					{
-						S = code.KeyCodeToString().ToUpper();
-					}
-					else
-					{
-						S = code.KeyCodeToString().ToLower();
-					}
-					Line += S;
-					Write(S);
-				}
-			}
-			WriteLine();
+                if (code == KeyCode.Enter)
+                {
+                    break;
+                }
+                else if (code == KeyCode.Delete)
+                {
+                    if (Line.Length != 0)
+                    {
+                        Back();
+                        Line = Line.Substring(0, Line.Length - 1);
+                    }
+                }
+                else
+                {
+                    if (PS2Keyboard.IsCapsLock)
+                    {
+                        S = code.KeyCodeToString().ToUpper();
+                    }
+                    else
+                    {
+                        S = code.KeyCodeToString().ToLower();
+                    }
+                    Line += S;
+                    Write(S);
+                }
+            }
+            WriteLine();
 			return Line;
 		}
 
-		/// <summary>
-		/// Sets the cursor.
-		/// </summary>
-		/// <param name="row">The row.</param>
-		/// <param name="column">The column.</param>
-		private static void SetCursor(uint row, uint column)
+        public static KeyCode ReadKey(bool WaitForKey = true)
+        {
+            if (WaitForKey) 
+			{
+				KeyCode code;
+				for (; ; )
+				{
+					Native.Hlt();
+					code = PS2Keyboard.GetKeyPressed();
+					if (code != 0) break;
+				}
+				return code;
+            }
+            else 
+			{
+				return PS2Keyboard.GetKeyPressed();
+			}
+        }
+
+        /// <summary>
+        /// Sets the cursor.
+        /// </summary>
+        /// <param name="row">The row.</param>
+        /// <param name="column">The column.</param>
+        private static void SetCursor(uint row, uint column)
 		{
 			uint location = (row * Columns) + column;
 
