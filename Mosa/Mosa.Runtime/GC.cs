@@ -9,7 +9,7 @@ namespace Mosa.Runtime
     public unsafe static class GC
     {
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        private struct MemoryDescriptor
+        public struct MemoryDescriptor
         {
             public uint Address;
             public uint Size;
@@ -63,7 +63,7 @@ namespace Mosa.Runtime
             return TotalAllocPtr;
         }
 
-        private static MemoryDescriptor* MemoryDescriptors;
+        public static MemoryDescriptor* MemoryDescriptors;
         private const uint DescriptorsNumber = 0x20000;
         private static bool READY = false;
 
