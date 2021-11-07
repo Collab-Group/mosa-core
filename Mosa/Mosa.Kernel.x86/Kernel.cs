@@ -36,11 +36,11 @@ namespace Mosa.Kernel.x86
             PIT.Setup();
 
             // Initializing the memory management
+            GC.Setup(Address.GCMemoryDescriptors);
             PageFrameAllocator.Setup();
             PageTable.Setup();
             VirtualPageAllocator.Setup();
             //PAE.Setup();
-            GC.Setup(Address.GCMemoryDescriptors);
 
             IDT.INTs = new List<IDT.INT>();
 

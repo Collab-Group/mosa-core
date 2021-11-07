@@ -35,69 +35,66 @@ namespace Mosa.Runtime
             TotalAllocSize = size;
             TotalAllocType = type;
 
-            if (READY)
+            for (int i = 0; i < DescriptorsNumber; i++)
             {
-                for (int i = 0; i < DescriptorsNumber; i++)
+                if ((&MemoryDescriptors[i])->Size >= size)
                 {
-                    if ((&MemoryDescriptors[i])->Size >= size)
+                    Pointer RESULT = new Pointer((&MemoryDescriptors[i])->Address);
+
+                    TotalReuse++;
+
+                    //Clear
+                    (&MemoryDescriptors[i])->Size -= size;
+                    (&MemoryDescriptors[i])->Address += size;
+
+                    //The size of object won't less than 16
+                    if ((&MemoryDescriptors[i])->Size < 16)
                     {
-                        Pointer RESULT = new Pointer((&MemoryDescriptors[i])->Address);
-
-                        TotalReuse++;
-
-                        //Clear
-                        (&MemoryDescriptors[i])->Size -= size;
-                        (&MemoryDescriptors[i])->Address += size;
-
-                        //The size of object won't less than 16
-                        if((&MemoryDescriptors[i])->Size < 16) 
-                        {
-                            (&MemoryDescriptors[i])->Size = 0;
-                        }
-
-                        if ((&MemoryDescriptors[i])->Size == 0) TotalFullUsed++;
-
-                        return RESULT;
+                        (&MemoryDescriptors[i])->Size = 0;
                     }
+
+                    if ((&MemoryDescriptors[i])->Size == 0) TotalFullUsed++;
+
+                    return RESULT;
                 }
             }
 
             TotalAlloc++;
-
             TotalAllocPtr = AllocateMemory(size);
-
             return TotalAllocPtr;
         }
 
         public static MemoryDescriptor* MemoryDescriptors;
-        private const uint DescriptorsNumber = 0x20000;
-        private static bool READY = false;
+        public static uint DescriptorsNumber = 0;
 
         public static void Setup(uint DescriptorStartAddress)
         {
             MemoryDescriptors = (MemoryDescriptor*)DescriptorStartAddress;
-
-            for (int i = 0; i < DescriptorsNumber; i++)
-            {
-                (&MemoryDescriptors[i])->Size = 0;
-                (&MemoryDescriptors[i])->Address = 0;
-            }
-
-            READY = true;
         }
+
+        public static int Index = 0;
 
         public static void Dispose(uint Address, uint Size)
         {
-            for (int i = 0; i < DescriptorsNumber; i++)
+            Index = 0;
+            for (; Index < DescriptorsNumber; Index++)
             {
-                if ((&MemoryDescriptors[i])->Size == 0)
+                if ((&MemoryDescriptors[Index])->Size == 0)
                 {
-                    Internal.MemoryClear((Pointer)Address, Size);
-                    (&MemoryDescriptors[i])->Size = Size;
-                    (&MemoryDescriptors[i])->Address = Address;
-                    break;
+                    DoDispose(Address, Size, Index);
+                    return;
                 }
             }
+            DoDispose(Address, Size, Index);
+            DescriptorsNumber++;
+            return;
+        }
+
+        private static void DoDispose(uint Address, uint Size, int Index)
+        {
+            Internal.MemoryClear((Pointer)Address, Size);
+            (&MemoryDescriptors[Index])->Size = Size;
+            (&MemoryDescriptors[Index])->Address = Address;
         }
     }
 }
