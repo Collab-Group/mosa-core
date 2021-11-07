@@ -3,6 +3,7 @@
 using Mosa.Runtime.Metadata;
 using System;
 using System.Diagnostics;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace Mosa.Runtime
@@ -55,7 +56,7 @@ namespace Mosa.Runtime
 			uint allocationSize = ((uint)(Pointer.Size) * 3) + (elements * elementSize);
 			allocationSize = (allocationSize + 3) & ~3u;    // Align to 4-bytes boundary
 
-			var memory = GC.AllocateObject(allocationSize);
+			var memory = GC.AllocateObject(allocationSize, TypeCode.Array);
 
 			memory.StorePointer(0, new Pointer(handle.Value));
 

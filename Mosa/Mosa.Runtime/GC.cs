@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -25,16 +25,19 @@ namespace Mosa.Runtime
         public static ulong TotalAlloc = 0;
         public static ulong TotalReuse = 0;
         public static ulong TotalAllocSize = 0;
+        public static ulong TotalFullUsed = 0;
         public static Pointer TotalAllocPtr;
+        public static TypeCode TotalAllocType;
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public static Pointer AllocateObject(uint size)
+        public static Pointer AllocateObject(uint size, TypeCode type = TypeCode.Object)
         {
             TotalAllocSize = size;
+            TotalAllocType = type;
 
             if (READY)
             {
-                for (int i = 0; i < DescriptorsNumber; i ++)
+                for (int i = 0; i < DescriptorsNumber; i++)
                 {
                     if ((&MemoryDescriptors[i])->Size >= size)
                     {
@@ -45,6 +48,8 @@ namespace Mosa.Runtime
                         //Clear
                         (&MemoryDescriptors[i])->Size -= size;
                         (&MemoryDescriptors[i])->Address += size;
+
+                        if ((&MemoryDescriptors[i])->Size == 0) TotalFullUsed++;
 
                         return RESULT;
                     }
@@ -66,7 +71,7 @@ namespace Mosa.Runtime
         {
             MemoryDescriptors = (MemoryDescriptor*)DescriptorStartAddress;
 
-            for (int i = 0; i < DescriptorsNumber; i ++)
+            for (int i = 0; i < DescriptorsNumber; i++)
             {
                 (&MemoryDescriptors[i])->Size = 0;
                 (&MemoryDescriptors[i])->Address = 0;
