@@ -24,14 +24,7 @@ namespace Mosa.Launcher.Console
                 return false;
             }
 
-            DirectoryInfo directoryInfo = new DirectoryInfo(AppFolder + @"\Tools\vmware");
-            foreach (var v in directoryInfo.GetFiles())
-            {
-                v.CopyTo(Path.Combine(OutputFolder, v.Name), true);
-            }
-
-            var args = '"' + Path.Combine(OutputFolder, "MOSA.vmx") + '"';
-
+            var args = '"' + Path.Combine(AppFolder + @"\Tools\vmware", "MOSA.vmx") + '"';
 
             ProcessStartInfo processStartInfo = new ProcessStartInfo();
             processStartInfo.UseShellExecute = false;
