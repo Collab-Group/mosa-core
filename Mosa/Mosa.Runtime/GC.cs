@@ -50,7 +50,7 @@ namespace Mosa.Runtime
                         (&MemoryDescriptors[i])->Address += size;
 
                         //Not sure
-                        if((&MemoryDescriptors[i])->Size <= sizeof(ulong)) 
+                        if((&MemoryDescriptors[i])->Size <= sizeof(uint)) 
                         {
                             (&MemoryDescriptors[i])->Size = 0;
                         }
