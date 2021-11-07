@@ -34,7 +34,8 @@ namespace Mosa.Launcher.Console
 
 
             ProcessStartInfo processStartInfo = new ProcessStartInfo();
-            processStartInfo.UseShellExecute = true;
+            processStartInfo.UseShellExecute = false;
+            //processStartInfo.CreateNoWindow = true;
             processStartInfo.Arguments = args;
 
             if (File.Exists(VMPlayerPath0))
