@@ -49,8 +49,8 @@ namespace Mosa.Runtime
                         (&MemoryDescriptors[i])->Size -= size;
                         (&MemoryDescriptors[i])->Address += size;
 
-                        //Not sure
-                        if((&MemoryDescriptors[i])->Size <= sizeof(uint)) 
+                        //The size of object won't less than 16
+                        if((&MemoryDescriptors[i])->Size < 16) 
                         {
                             (&MemoryDescriptors[i])->Size = 0;
                         }
