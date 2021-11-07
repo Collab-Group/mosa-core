@@ -5,7 +5,7 @@ namespace Mosa.External.x86
 {
     public static class EnumImpl
     {
-        public static unsafe string GetName(this Enum @enum)
+        public static unsafe string GetEnumName(this Enum @enum)
         {
             string result = null;
 
