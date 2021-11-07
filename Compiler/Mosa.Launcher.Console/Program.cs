@@ -1,3 +1,5 @@
+//!Install before use!
+
 using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Trace;
@@ -56,8 +58,6 @@ namespace Mosa.Launcher.Console
         //Arguments 1 Is The Input File
         //-JUSTBUILD (Tell Compiler Do Not Launch VirtualBox After Compiling)
         //-THREAD{ThreadCount} (Compile With {{ThreadCount}} Threads)
-
-        //!Install before use!
 
         static void Main(string[] args)
         {
