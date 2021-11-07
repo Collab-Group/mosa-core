@@ -49,6 +49,12 @@ namespace Mosa.Runtime
                         (&MemoryDescriptors[i])->Size -= size;
                         (&MemoryDescriptors[i])->Address += size;
 
+                        //Not sure
+                        if((&MemoryDescriptors[i])->Size <= sizeof(ulong)) 
+                        {
+                            (&MemoryDescriptors[i])->Size = 0;
+                        }
+
                         if ((&MemoryDescriptors[i])->Size == 0) TotalFullUsed++;
 
                         return RESULT;
