@@ -15,8 +15,8 @@ namespace Mosa.Platform.x86
                 node.Operand1.Register != null &&
                 node.Operand1.Register.RegisterCode == 0 && //0 Is EAX Register
                 node.Operand1.Type.BaseType.FullName == "System.Object" &&
-                //TODO - String ReferenceCount
-                node.Operand1.Type.FullName != "System.String"
+                //TODO - String And Array ReferenceCount
+                !node.Operand1.IsArray
                 )
                 //Debugger.Break();
                 opcodeEncoder.AppendBytes(new byte[]
