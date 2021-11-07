@@ -8,7 +8,7 @@ using System.IO.Compression;
 
 namespace Mosa.Launcher.Console
 {
-    class Program
+    partial class Program
     {
         private static Settings Settings = new Settings();
 
@@ -39,7 +39,6 @@ namespace Mosa.Launcher.Console
         }
 
         public static string AppFolder = @"C:\Program Files\MOSA-Core";
-        public static string VirtualBoxPath = @"C:\Program Files\Oracle\VirtualBox\VBoxManage.exe";
 
         public static string ISOFilePath
         {
@@ -118,7 +117,13 @@ namespace Mosa.Launcher.Console
 
                 if (!JustBuild)
                 {
-                    RunVirtualBox();
+                    if (!RunVMWareWorkstation()) 
+                    {
+                        if (!RunVirtualBox())
+                        {
+                            WriteLine("No Virtual Machine Software Found!");
+                        }
+                    }
                 }
 
                 WriteLine("Please Right Click Visual Studio Output Window And Uncheck \"Module Load Message\" For Better Use!");
@@ -180,61 +185,6 @@ namespace Mosa.Launcher.Console
             compiler.Compile();
 
             GC.Collect();
-        }
-
-        private static void MakeISO_Grub2()
-        {
-            ZipFile.ExtractToDirectory(Path.Combine(AppFolder, @"Tools\grub2\grub2.zip"), Path.Combine(AppFolder, @"output\"));
-
-            File.Copy(Path.Combine(AppFolder, @"output\main.exe"), Path.Combine(AppFolder, @"output\boot\main.exe"), true);
-            File.Delete(Path.Combine(AppFolder, @"output\main.exe"));
-
-            //var args = $"-relaxed-filenames -J -R -o \"{ISOFilePath}\" -b isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table \"{OutputFolder}\"";
-            var args = $"-relaxed-filenames -J -R -o \"{ISOFilePath}\" -b \"{@"boot/grub/i386-pc/eltorito.img"}\" -no-emul-boot -boot-load-size 4 -boot-info-table \"{OutputFolder}\"";
-
-            Process proc = new Process();
-            proc.StartInfo.FileName = AppFolder + @"\Tools\mkisofs\mkisofs.exe";
-            proc.StartInfo.Arguments = args;
-            proc.StartInfo.UseShellExecute = false;
-            proc.StartInfo.CreateNoWindow = true;
-            proc.Start();
-            while (!proc.HasExited) ;
-        }
-
-        private static void RunVirtualBox()
-        {
-            if (!File.Exists(VirtualBoxPath))
-            {
-                throw new FileNotFoundException("VirtualBox not found! Here to get VirtualBox: https://www.virtualbox.org/");
-
-                return;
-            }
-
-            ProcessStartInfo processStartInfo = new ProcessStartInfo();
-            processStartInfo.UseShellExecute = false;
-            processStartInfo.CreateNoWindow = true;
-            processStartInfo.FileName = VirtualBoxPath;
-
-            string path = @"C:\Users\" + Environment.UserName + @"\VirtualBox VMs";
-            if (!File.Exists(path + @"\MOSA\MOSA.vbox"))
-            {
-                //Import VM
-                processStartInfo.Arguments = $"import \"{AppFolder + @"\Tools\virtualbox\MOSA.ova"}\"";
-                Process p1 = Process.Start(processStartInfo);
-                p1.WaitForExit();
-            }
-
-            // Attach output ISO
-            processStartInfo.Arguments = $"storageattach \"MOSA\" --storagectl IDE --port 1 --device 0 --type dvddrive --medium \"{ISOFilePath}\"";
-            Process p2 = Process.Start(processStartInfo);
-            p2.WaitForExit();
-
-            WriteLine(@"Warning: If this is your first time using this version (Last modify time: 6th October 2021). Please Delete C:\Users\Your Use Name\VirtualBox VMs\MOSA !!!");
-            WriteLine("If It Asks You Select Boot Disk");
-            WriteLine("Please Press Cancel");
-            // Launch VM
-            processStartInfo.Arguments = "startvm MOSA";
-            Process.Start(processStartInfo);
         }
 
         private static void NotifyEvent(CompilerEvent compilerEvent, string message, int threadID)
