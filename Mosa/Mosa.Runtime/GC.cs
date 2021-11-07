@@ -9,7 +9,7 @@ namespace Mosa.Runtime
     public unsafe static class GC
     {
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        private struct FreeMemoryDescriptor
+        private struct MemoryDescriptor
         {
             public uint Address;
             public uint Size;
@@ -34,17 +34,17 @@ namespace Mosa.Runtime
 
             if (READY)
             {
-                for (int u = 0; u < DescriptorsSize; u += sizeof(FreeMemoryDescriptor))
+                for (int i = 0; i < DescriptorsNumber; i ++)
                 {
-                    if (((FreeMemoryDescriptor*)(DescriptorsAddress + u))->Size >= size)
+                    if ((&MemoryDescriptors[i])->Size >= size)
                     {
-                        Pointer RESULT = new Pointer(((FreeMemoryDescriptor*)(DescriptorsAddress + u))->Address);
+                        Pointer RESULT = new Pointer((&MemoryDescriptors[i])->Address);
 
                         TotalReuse++;
 
                         //Clear
-                        ((FreeMemoryDescriptor*)(DescriptorsAddress + u))->Size -= size;
-                        ((FreeMemoryDescriptor*)(DescriptorsAddress + u))->Address += size;
+                        (&MemoryDescriptors[i])->Size -= size;
+                        (&MemoryDescriptors[i])->Address += size;
 
                         return RESULT;
                     }
@@ -58,20 +58,18 @@ namespace Mosa.Runtime
             return TotalAllocPtr;
         }
 
-        private static uint DescriptorsAddress;
-        private static uint DescriptorsSize;
+        private static MemoryDescriptor* MemoryDescriptors;
         private const uint DescriptorsNumber = 0x20000;
         private static bool READY = false;
 
         public static void Setup(uint DescriptorStartAddress)
         {
-            DescriptorsSize = (uint)(DescriptorsNumber * sizeof(FreeMemoryDescriptor));
-            DescriptorsAddress = DescriptorStartAddress;
+            MemoryDescriptors = (MemoryDescriptor*)DescriptorStartAddress;
 
-            for (int u = 0; u < DescriptorsSize; u += sizeof(FreeMemoryDescriptor))
+            for (int i = 0; i < DescriptorsNumber; i ++)
             {
-                ((FreeMemoryDescriptor*)(DescriptorsAddress + u))->Address = 0;
-                ((FreeMemoryDescriptor*)(DescriptorsAddress + u))->Size = 0;
+                (&MemoryDescriptors[i])->Size = 0;
+                (&MemoryDescriptors[i])->Address = 0;
             }
 
             READY = true;
@@ -79,13 +77,13 @@ namespace Mosa.Runtime
 
         public static void Dispose(uint Address, uint Size)
         {
-            for (int u = 0; u < DescriptorsSize; u += sizeof(FreeMemoryDescriptor))
+            for (int i = 0; i < DescriptorsNumber; i++)
             {
-                if (((FreeMemoryDescriptor*)(DescriptorsAddress + u))->Size == 0)
+                if ((&MemoryDescriptors[i])->Size == 0)
                 {
                     Internal.MemoryClear((Pointer)Address, Size);
-                    ((FreeMemoryDescriptor*)(DescriptorsAddress + u))->Address = Address;
-                    ((FreeMemoryDescriptor*)(DescriptorsAddress + u))->Size = Size;
+                    (&MemoryDescriptors[i])->Size = Size;
+                    (&MemoryDescriptors[i])->Address = Address;
                     break;
                 }
             }
