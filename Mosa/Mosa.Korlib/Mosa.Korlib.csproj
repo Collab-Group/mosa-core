@@ -15,9 +15,5 @@
     <SkipCommonResourcesIncludes>true</SkipCommonResourcesIncludes>
     <NoWarn>$(NoWarn),0419,0649,1573,1591,3021,CA2002</NoWarn>
     <RuntimeMetadataVersion>v4.0.30319</RuntimeMetadataVersion>
-	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-	<Version>2.4</Version>
-	<Authors>MOSA-Core</Authors>
-	<PackageId>Mosa.Korlib</PackageId>
   </PropertyGroup>
 </Project>
