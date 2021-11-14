@@ -8,7 +8,9 @@
     <DisableStandardFrameworkResolution>true</DisableStandardFrameworkResolution>
     <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <NuspecFile>Mosa.Kernel.x86.nuspec</NuspecFile>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>2.4</Version>
+    <Authors>MOSA-Core</Authors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DocumentationFile />
