@@ -13,7 +13,7 @@ namespace Mosa.Launcher.Console
     {
         private static void MakeISO_Grub2()
         {
-            ZipFile.ExtractToDirectory(Path.Combine(AppFolder, @"Tools\grub2\grub2.zip"), Path.Combine(AppFolder, @"output\"),true);
+            ZipFile.ExtractToDirectory(Path.Combine(AppFolder, @"Tools\grub2\grub2.zip"), Path.Combine(AppFolder, @"output\"));
 
             File.Copy(Path.Combine(AppFolder, @"output\main.exe"), Path.Combine(AppFolder, @"output\boot\main.exe"), true);
             File.Delete(Path.Combine(AppFolder, @"output\main.exe"));
