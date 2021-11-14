@@ -24,7 +24,7 @@ namespace Mosa.Launcher.Console
                 return false;
             }
 
-            var args = '"' + Path.Combine(AppFolder + @"\Tools\vmware", "MOSA.vmx") + '"';
+            var args = '"' + AppFolder + @"\Tools\vmware"+ "MOSA.vmx" + '"';
 
             ProcessStartInfo processStartInfo = new ProcessStartInfo();
             processStartInfo.UseShellExecute = false;

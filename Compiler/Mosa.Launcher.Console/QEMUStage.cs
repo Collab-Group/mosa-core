@@ -15,7 +15,7 @@ namespace Mosa.Launcher.Console
             ProcessStartInfo processStartInfo = new ProcessStartInfo();
             processStartInfo.UseShellExecute = false;
             processStartInfo.CreateNoWindow = true;
-            processStartInfo.FileName = Path.Combine(AppFolder, @"\Tools\qemu\qemu.exe"); ;
+            processStartInfo.FileName = AppFolder + @"\Tools\qemu\qemu.exe";
 
             // Attach output ISO
             processStartInfo.Arguments = $"-boot d -cdrom \"{ISOFilePath}\" -m 512";

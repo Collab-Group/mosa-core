@@ -46,7 +46,7 @@ namespace Mosa.Launcher.Console
         {
             get
             {
-                return Path.Combine(OutputFolder, "MOSA.iso");
+                return AppFolder + @"\output\MOSA.iso";
             }
         }
 
@@ -72,14 +72,14 @@ namespace Mosa.Launcher.Console
                     args = new string[]
                     {
                         //@"C:\Users\nifan\Documents\GitHub\MOSA-GUI-Sample\MOSA1\bin\MOSA1.dll",
-                        @"C:\Users\nifan\source\repos\MOSA1\MOSA1\bin\MOSA1.dll",
-                        "-THREAD128"
+                        @"C:\Users\Administrator\source\Repos\MOSA1\MOSA1\bin\MOSA1.dll",
+                        //"-THREAD128"
                         //"-JUSTBUILD"
                     };
                 }
 
                 SourceName = args[0];
-                OutputName = Path.Combine(AppFolder, @"\output\main.exe");
+                OutputName = AppFolder + @"\output\main.exe";
 
                 string s;
                 foreach (var v in args)
@@ -109,15 +109,15 @@ namespace Mosa.Launcher.Console
                 RegisterPlatforms();
                 SetFile();
 
-                CompilerHooks = new CompilerHooks();
-                CompilerHooks.NotifyEvent += NotifyEvent;
-
                 if (Directory.Exists(OutputFolder))
                 {
                     Directory.Delete(OutputFolder, true);
                 }
 
                 Directory.CreateDirectory(OutputFolder);
+
+                CompilerHooks = new CompilerHooks();
+                CompilerHooks.NotifyEvent += NotifyEvent;
 
                 Compile();
 
@@ -141,7 +141,7 @@ namespace Mosa.Launcher.Console
 
                 Environment.Exit(0);
             }
-            catch (Exception E)
+            catch (NullReferenceException E)
             {
                 WriteLine("Exception Thrown While Compiling");
                 WriteLine(E.Message);
@@ -163,7 +163,7 @@ namespace Mosa.Launcher.Console
         {
             if (Settings.GetValue("Launcher.HuntForCorLib", false))
             {
-                var fileCorlib = Path.Combine(SourceFolder, "mscorlib.dll");
+                var fileCorlib = SourceFolder+ "mscorlib.dll";
 
                 if (fileCorlib != null)
                 {
@@ -173,7 +173,7 @@ namespace Mosa.Launcher.Console
 
             if (Settings.GetValue("Launcher.PlugKorlib", false))
             {
-                var fileKorlib = Path.Combine(SourceFolder, "Mosa.Plug.Korlib.dll");
+                var fileKorlib = SourceFolder+ "Mosa.Plug.Korlib.dll";
 
                 if (fileKorlib != null)
                 {
@@ -184,7 +184,7 @@ namespace Mosa.Launcher.Console
 
                 WriteLine($"Target Architecture: {platform}");
 
-                var fileKorlibPlatform = Path.Combine(SourceFolder, $"Mosa.Plug.Korlib.{platform}.dll");
+                var fileKorlibPlatform = SourceFolder+ $"Mosa.Plug.Korlib.{platform}.dll";
 
                 if (fileKorlibPlatform != null)
                 {
@@ -235,7 +235,7 @@ namespace Mosa.Launcher.Console
         {
             Settings.AddPropertyListValue("Compiler.SourceFiles", SourceName);
             Settings.AddPropertyListValue("SearchPaths", SourceFolder);
-            Settings.AddPropertyListValue("SearchPaths", Path.Combine(AppFolder, "asm"));
+            Settings.AddPropertyListValue("SearchPaths", AppFolder+ "asm");
         }
 
         private static void RegisterPlatforms()
@@ -254,7 +254,7 @@ namespace Mosa.Launcher.Console
             Settings.SetValue("Compiler.Multithreading", true);
             Settings.SetValue("CompilerDebug.DebugFile", string.Empty);
             Settings.SetValue("CompilerDebug.AsmFile", string.Empty);
-            Settings.SetValue("CompilerDebug.MapFile", Path.Combine(AppFolder, @"\output\map.txt"));
+            Settings.SetValue("CompilerDebug.MapFile", AppFolder + @"\output\map.txt");
             Settings.SetValue("CompilerDebug.NasmFile", string.Empty);
             Settings.SetValue("CompilerDebug.InlineFile", string.Empty);
             Settings.SetValue("Optimizations.Basic", true);

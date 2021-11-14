@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Mosa.Launcher.Console
 {
@@ -13,10 +8,10 @@ namespace Mosa.Launcher.Console
     {
         private static void MakeISO_Grub2()
         {
-            ZipFile.ExtractToDirectory(Path.Combine(AppFolder, @"Tools\grub2\grub2.zip"), Path.Combine(AppFolder, @"output\"));
+            ZipFile.ExtractToDirectory(AppFolder+ @"Tools\grub2\grub2.zip", AppFolder+ @"output\");
 
-            File.Copy(Path.Combine(AppFolder, @"output\main.exe"), Path.Combine(AppFolder, @"output\boot\main.exe"), true);
-            File.Delete(Path.Combine(AppFolder, @"output\main.exe"));
+            File.Copy(AppFolder+ @"output\main.exe", AppFolder+ @"output\boot\main.exe", true);
+            File.Delete(AppFolder+ @"output\main.exe");
 
             //var args = $"-relaxed-filenames -J -R -o \"{ISOFilePath}\" -b isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table \"{OutputFolder}\"";
             var args = $"-relaxed-filenames -J -R -o \"{ISOFilePath}\" -b \"{@"boot/grub/i386-pc/eltorito.img"}\" -no-emul-boot -boot-load-size 4 -boot-info-table \"{OutputFolder}\"";
