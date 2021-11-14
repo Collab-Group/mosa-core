@@ -52,12 +52,15 @@ namespace Mosa.Launcher.Console
 
         private static DateTime StartTime;
 
+        //For Arguments
         public static bool JustBuild = false;
+        public static bool IA64 = false;
 
         //Arguments:
         //Arguments 1 Is The Input File
         //-JUSTBUILD (Tell Compiler Do Not Launch VirtualBox After Compiling)
         //-THREAD{ThreadCount} (Compile With {{ThreadCount}} Threads)
+        //-IA64 (Intel x64 Architecture)
 
         static void Main(string[] args)
         {
@@ -88,10 +91,14 @@ namespace Mosa.Launcher.Console
                     {
                         JustBuild = true;
                     }
-                    if (s.IndexOf("-THREAD") == 0)
+                    else if (s.IndexOf("-THREAD") == 0)
                     {
                         s = s.Replace("-THREAD", "");
                         Settings.SetValue("Compiler.Multithreading.MaxThreads", Convert.ToInt32(s));
+                    }
+                    else if (s.IndexOf("-IA64") == 0)
+                    {
+                        IA64 = true;
                     }
                 }
 
@@ -172,6 +179,8 @@ namespace Mosa.Launcher.Console
 
                 var platform = Settings.GetValue("Compiler.Platform", "x86");
 
+                WriteLine($"Target Architecture: {platform}");
+
                 var fileKorlibPlatform = Path.Combine(SourceFolder, $"Mosa.Plug.Korlib.{platform}.dll");
 
                 if (fileKorlibPlatform != null)
@@ -229,11 +238,12 @@ namespace Mosa.Launcher.Console
         private static void RegisterPlatforms()
         {
             PlatformRegistry.Add(new Mosa.Platform.x86.Architecture());
+            PlatformRegistry.Add(new Mosa.Platform.x64.Architecture());
         }
 
         private static void DefaultSettings()
         {
-            Settings.SetValue("Compiler.Platform", "x86");
+            Settings.SetValue("Compiler.Platform", IA64 ? "x64" : "x86");
             Settings.SetValue("Compiler.BaseAddress", 0x00400000);
             Settings.SetValue("Compiler.Binary", true);
             Settings.SetValue("Compiler.MethodScanner", false);
@@ -241,7 +251,7 @@ namespace Mosa.Launcher.Console
             Settings.SetValue("Compiler.Multithreading", true);
             Settings.SetValue("CompilerDebug.DebugFile", string.Empty);
             Settings.SetValue("CompilerDebug.AsmFile", string.Empty);
-            Settings.SetValue("CompilerDebug.MapFile", string.Empty);
+            Settings.SetValue("CompilerDebug.MapFile", AppFolder + @"\output\map.txt");
             Settings.SetValue("CompilerDebug.NasmFile", string.Empty);
             Settings.SetValue("CompilerDebug.InlineFile", string.Empty);
             Settings.SetValue("Optimizations.Basic", true);
