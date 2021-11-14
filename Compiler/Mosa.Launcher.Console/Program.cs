@@ -140,7 +140,7 @@ namespace Mosa.Launcher.Console
 
                 Environment.Exit(0);
             }
-            catch (NullReferenceException E)
+            catch (Exception E)
             {
                 WriteLine("Exception Thrown While Compiling");
                 WriteLine(E.Message);
