@@ -79,7 +79,7 @@ namespace Mosa.Launcher.Console
                 }
 
                 SourceName = args[0];
-                OutputName = AppFolder + @"\output\main.exe";
+                OutputName = Path.Combine(AppFolder, @"\output\main.exe");
 
                 string s;
                 foreach (var v in args)
@@ -129,7 +129,10 @@ namespace Mosa.Launcher.Console
                     {
                         if (!RunVirtualBox())
                         {
-                            WriteLine("No Virtual Machine Software Found!");
+                            if (!RunQEMU())
+                            {
+                                WriteLine("No Virtual Machine Software Found!");
+                            }
                         }
                     }
                 }
@@ -251,7 +254,7 @@ namespace Mosa.Launcher.Console
             Settings.SetValue("Compiler.Multithreading", true);
             Settings.SetValue("CompilerDebug.DebugFile", string.Empty);
             Settings.SetValue("CompilerDebug.AsmFile", string.Empty);
-            Settings.SetValue("CompilerDebug.MapFile", AppFolder + @"\output\map.txt");
+            Settings.SetValue("CompilerDebug.MapFile", Path.Combine(AppFolder, @"\output\map.txt"));
             Settings.SetValue("CompilerDebug.NasmFile", string.Empty);
             Settings.SetValue("CompilerDebug.InlineFile", string.Empty);
             Settings.SetValue("Optimizations.Basic", true);

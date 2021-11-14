@@ -58,6 +58,10 @@ Source: "..\Tools\syslinux\*.*"; DestDir: "{app}\Tools\syslinux"; Flags: ignorev
 Source: "..\Tools\virtualbox\*.*"; DestDir: "{app}\Tools\virtualbox"; Flags: ignoreversion
 Source: "..\Tools\vmware\*.*"; DestDir: "{app}\Tools\vmware"; Flags: ignoreversion
 Source: "..\Tools\imdisk\*.*"; DestDir: "{app}\Tools\imdisk"; Flags: ignoreversion
+;QEMU
+Source: "..\Tools\qemu\keymaps\*.*"; DestDir: "{app}\Tools\qemu\keymaps"; Flags: ignoreversion
+Source: "..\Tools\qemu\qemu\*.*"; DestDir: "{app}\Tools\qemu\qemu"; Flags: ignoreversion
+Source: "..\Tools\qemu\*.*"; DestDir: "{app}\Tools\qemu"; Flags: ignoreversion
 
 ;Grub2
 Source: "..\Tools\grub2\*.*"; DestDir: "{app}\Tools\grub2"; Flags: ignoreversion
