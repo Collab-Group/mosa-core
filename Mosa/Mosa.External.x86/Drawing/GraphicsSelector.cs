@@ -14,7 +14,8 @@ namespace Mosa.External.x86.Drawing
             //VBE Should Always Be The Top
             if (VBE.IsVBEAvailable) 
             {
-                CurrentGraphics =  new VBEGraphics();
+                CurrentGraphics = new VBEGraphics();
+                VBEConsole.setup(CurrentGraphics, 0);
                 return CurrentGraphics;
             }
 

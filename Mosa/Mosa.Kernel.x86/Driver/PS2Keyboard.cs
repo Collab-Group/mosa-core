@@ -11,11 +11,20 @@ namespace Mosa.External.x86.Driver
         {
             KData = IOPort.In8(0x60);
             if (KData == (byte)KeyCode.CapsLock) IsCapsLock = !IsCapsLock;
+            else if (KData == 0x2A /*Left Shift*/ || KData == 0x36 /*Right Shift*/) /* Pressed */
+            {
+                IsShiftHeld = true;
+            }
+            else if (KData == 0xAA /*Left Shift*/ || KData == 0xB6 /*Right Shift*/) /* Pressed */
+            {
+                IsShiftHeld = false;
+            }
         }
 
         public static bool IsCapsLock = false;
+        public static bool IsShiftHeld = false;
 
-        internal static KeyCode GetKeyPressed()
+        public static KeyCode GetKeyPressed()
         {
             Code = (KeyCode)KData;
             KData = 0;
@@ -24,73 +33,74 @@ namespace Mosa.External.x86.Driver
 
         public static string KeyCodeToString(this KeyCode keyCode)
         {
-            return keyCode switch
-            {
-                KeyCode.A => "A",
-                KeyCode.B => "B",
-                KeyCode.C => "C",
-                KeyCode.D => "D",
-                KeyCode.E => "E",
-                KeyCode.F => "F",
-                KeyCode.G => "G",
-                KeyCode.H => "H",
-                KeyCode.I => "I",
-                KeyCode.J => "J",
-                KeyCode.K => "K",
-                KeyCode.L => "L",
-                KeyCode.M => "M",
-                KeyCode.N => "N",
-                KeyCode.O => "O",
-                KeyCode.P => "P",
-                KeyCode.Q => "Q",
-                KeyCode.R => "R",
-                KeyCode.S => "S",
-                KeyCode.T => "T",
-                KeyCode.U => "U",
-                KeyCode.V => "V",
-                KeyCode.W => "W",
-                KeyCode.X => "X",
-                KeyCode.Y => "Y",
-                KeyCode.Z => "Z",
-                KeyCode.Space => " ",
-                KeyCode.Num1 => "1",
-                KeyCode.Num2 => "2",
-                KeyCode.Num3 => "3",
-                KeyCode.Num4 => "4",
-                KeyCode.Num5 => "5",
-                KeyCode.Num6 => "6",
-                KeyCode.Num7 => "7",
-                KeyCode.Num8 => "8",
-                KeyCode.Num9 => "9",
-                KeyCode.Num0 => "0",
-                KeyCode.Dash => "-",
-                KeyCode.Equals => "=",
-                KeyCode.Tab => "    ",
-                KeyCode.RightFacedSquareBracket => "[",
-                KeyCode.LeftFacedSquareBracket => "]",
-                KeyCode.SemiColon => ";",
-                KeyCode.SingleQuote => "'",
-                KeyCode.BackTick => "`",
-                KeyCode.BackSlash => "\\",
-                KeyCode.Comma => ",",
-                KeyCode.Period => ".",
-                KeyCode.ForwardSlash => "/",
-                KeyCode.Star => "*",
-                KeyCode.NumPadPeriod => ".",
-                KeyCode.NumPad0 => "0",
-                KeyCode.NumPad1 => "1",
-                KeyCode.NumPad2 => "2",
-                KeyCode.NumPad3 => "3",
-                KeyCode.NumPad4 => "4",
-                KeyCode.NumPad5 => "5",
-                KeyCode.NumPad6 => "6",
-                KeyCode.NumPad7 => "7",
-                KeyCode.NumPad8 => "8",
-                KeyCode.NumPad9 => "9",
-                KeyCode.NumPadMinus => "-",
-                KeyCode.NumPadPlus => "+",
-                _ => string.Empty
-            };
+            bool shouldUppercase = IsShiftHeld ^ IsCapsLock;
+
+            if (keyCode == KeyCode.A) return shouldUppercase ? "A" : "a";
+            if (keyCode == KeyCode.B) return shouldUppercase ? "B" : "b";
+            if (keyCode == KeyCode.C) return shouldUppercase ? "C" : "c";
+            if (keyCode == KeyCode.D) return shouldUppercase ? "D" : "d";
+            if (keyCode == KeyCode.E) return shouldUppercase ? "E" : "e";
+            if (keyCode == KeyCode.F) return shouldUppercase ? "F" : "f";
+            if (keyCode == KeyCode.G) return shouldUppercase ? "G" : "g";
+            if (keyCode == KeyCode.H) return shouldUppercase ? "H" : "h";
+            if (keyCode == KeyCode.I) return shouldUppercase ? "I" : "i";
+            if (keyCode == KeyCode.J) return shouldUppercase ? "J" : "j";
+            if (keyCode == KeyCode.K) return shouldUppercase ? "K" : "k";
+            if (keyCode == KeyCode.L) return shouldUppercase ? "L" : "l";
+            if (keyCode == KeyCode.M) return shouldUppercase ? "M" : "m";
+            if (keyCode == KeyCode.N) return shouldUppercase ? "N" : "n";
+            if (keyCode == KeyCode.O) return shouldUppercase ? "O" : "o";
+            if (keyCode == KeyCode.P) return shouldUppercase ? "P" : "p";
+            if (keyCode == KeyCode.Q) return shouldUppercase ? "Q" : "q";
+            if (keyCode == KeyCode.R) return shouldUppercase ? "R" : "r";
+            if (keyCode == KeyCode.S) return shouldUppercase ? "S" : "s";
+            if (keyCode == KeyCode.T) return shouldUppercase ? "T" : "t";
+            if (keyCode == KeyCode.U) return shouldUppercase ? "U" : "u";
+            if (keyCode == KeyCode.V) return shouldUppercase ? "V" : "v";
+            if (keyCode == KeyCode.W) return shouldUppercase ? "W" : "w";
+            if (keyCode == KeyCode.X) return shouldUppercase ? "X" : "x";
+            if (keyCode == KeyCode.Y) return shouldUppercase ? "Y" : "y";
+            if (keyCode == KeyCode.Z) return shouldUppercase ? "Z" : "z";
+            if (keyCode == KeyCode.Space) return " ";
+            if (keyCode == KeyCode.Num1) return IsShiftHeld ? "!" : "1";
+            if (keyCode == KeyCode.Num2) return IsShiftHeld ? "@" : "2";
+            if (keyCode == KeyCode.Num3) return IsShiftHeld ? "#" : "3";
+            if (keyCode == KeyCode.Num4) return IsShiftHeld ? "$" : "4";
+            if (keyCode == KeyCode.Num5) return IsShiftHeld ? "%" : "5";
+            if (keyCode == KeyCode.Num6) return IsShiftHeld ? "^" : "6";
+            if (keyCode == KeyCode.Num7) return IsShiftHeld ? "&" : "7";
+            if (keyCode == KeyCode.Num8) return IsShiftHeld ? "*" : "8";
+            if (keyCode == KeyCode.Num9) return IsShiftHeld ? "(" : "9";
+            if (keyCode == KeyCode.Num0) return IsShiftHeld ? ")" : "0";
+            if (keyCode == KeyCode.Dash) return IsShiftHeld ? "_" : "-";
+            if (keyCode == KeyCode.Equals) return IsShiftHeld ? "+" : "=";
+            if (keyCode == KeyCode.Tab) return "    ";
+            if (keyCode == KeyCode.RightFacedSquareBracket) return IsShiftHeld ? "{" : "[";
+            if (keyCode == KeyCode.LeftFacedSquareBracket) return IsShiftHeld ? "}" : "]";
+            if (keyCode == KeyCode.SemiColon) return IsShiftHeld ? ":" : ";";
+            if (keyCode == KeyCode.SingleQuote) return IsShiftHeld ? "\"" : "'";
+            if (keyCode == KeyCode.BackTick) return IsShiftHeld ? "~" : "`";
+            if (keyCode == KeyCode.BackSlash) return IsShiftHeld ? "|" : "\\";
+            if (keyCode == KeyCode.Comma) return IsShiftHeld ? "<" : ",";
+            if (keyCode == KeyCode.Period) return IsShiftHeld ? ">" : ".";
+            if (keyCode == KeyCode.ForwardSlash) return IsShiftHeld ? "?" : "/";
+            if (keyCode == KeyCode.Star) return "*";
+            if (keyCode == KeyCode.NumPadPeriod) return ".";
+            if (keyCode == KeyCode.NumPad0) return "0";
+            if (keyCode == KeyCode.NumPad1) return "1";
+            if (keyCode == KeyCode.NumPad2) return "2";
+            if (keyCode == KeyCode.NumPad3) return "3";
+            if (keyCode == KeyCode.NumPad4) return "4";
+            if (keyCode == KeyCode.NumPad5) return "5";
+            if (keyCode == KeyCode.NumPad6) return "6";
+            if (keyCode == KeyCode.NumPad7) return "7";
+            if (keyCode == KeyCode.NumPad8) return "8";
+            if (keyCode == KeyCode.NumPad9) return "9";
+            if (keyCode == KeyCode.NumPadMinus) return "-";
+            if (keyCode == KeyCode.NumPadPlus) return "+";
+            else return string.Empty;
+
         }
     }
+
 }

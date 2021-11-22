@@ -100,6 +100,7 @@ namespace Mosa.External.x86.Drawing
 
         public virtual void Clear(uint Color)
         {
+            VBEConsole.setBackgroundColour(Color);
             if (!CurrentDriver.Equals("VGA"))
             {
                 ASM.MEMFILL(VideoMemoryCacheAddr, (uint)FrameSize, Color);
