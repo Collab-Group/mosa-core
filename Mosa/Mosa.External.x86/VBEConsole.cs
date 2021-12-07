@@ -39,8 +39,8 @@ namespace Mosa.External.x86
         }
         public static void SetPosition(int x, int y)
         {
-            X = x;
-            Y = y;
+            X = x * fontWidth;
+            Y = y * fontHeight;
         }
         public static void Next()
         {
