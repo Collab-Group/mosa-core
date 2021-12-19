@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-
-namespace CSOS.Helper
+namespace System.Collections.Generic
 {
     public class Stack<T> : IEnumerable, IEnumerable<T>
     {
