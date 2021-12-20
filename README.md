@@ -19,15 +19,7 @@ Install all required dependencies, then double click ``CreateInstaller.bat`` if 
 A GUI-based demo of MOSA-Core is available [here](https://github.com/nifanfa/MOSA-GUI-Sample).
 
 # Informations
-**Important**: Your project name **cannot** contain spaces (or SYSLINUX, the bootloader that we use, won't be able to load your OS)  
+**Important**: Your project name **cannot** contain spaces (or the bootloader that mosa uses ( SYSLINUX ), won't be able to load your OS)  
 <br/>
 **Wiki: https://github.com/nifanfa/MOSA-Core/wiki<br/>**
 **Discord server: https://discord.gg/WrNEsmUmKa<br/>**
-[IntelliSense completion for unimported types and extension methods](https://docs.microsoft.com/en-us/visualstudio/ide/reference/intellisense-completion-unimported-types-extension-methods?view=vs-2019)<br/>
-
-MOSA's official Gitter chat:<br/>
-[![Gitter Chat][gitter-image]][gitter-chat]
-
-[gitter-image]: https://img.shields.io/badge/gitter-join%20chat%20-blue.svg
-[gitter2-image]: https://badges.gitter.im/Join%20Chat.svg
-[gitter-chat]: https://gitter.im/mosa/MOSA-Project
