@@ -65,6 +65,13 @@ body,html
     "SideBar Content"
     "SideBar Content"; 
 }
-.Header { grid-area: Header;background-color: blue; }
-.Content { grid-area: Content;overflow:scroll;background-color: black; }
-.SideBar { grid-area: SideBar;overflow:scroll;background-color: red; }
+.Header { grid-area: Header; }
+.Content { grid-area: Content;overflow:scroll; }
+.SideBar { grid-area: SideBar;overflow:scroll; }
+#articles {
+  list-style: none;
+}
+#articles>li {
+  border: 1px solid var(--outline);
+  background-color: var(--ui-color);
+}
