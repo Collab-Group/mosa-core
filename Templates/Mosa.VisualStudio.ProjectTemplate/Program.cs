@@ -34,13 +34,11 @@ namespace $safeprojectname$
         public static void MainThread()
         {
             // Initialize the IDE hard drive
-            // MOSA currently only supports FAT12 and FAT32
+            // MOSA currently only supports FAT12 ( obsolete ) and FAT32
             //IDisk disk = new IDEDisk();
             //MBR mBR = new MBR();
             //mBR.Initialize(disk);
-            //FileSystem Takes Time
             //FAT12 fs = new FAT12(disk, mBR.PartitionInfos[0]);
-            //byte[] b = fs.ReadAllBytes("TEST1.TXT");
 
             Console.WriteLine("MOSA booted successfully! Type anything and get an echo of what you've typed.");
 
