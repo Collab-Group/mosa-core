@@ -55,98 +55,16 @@ body,html
 #site {
   height:100%;
   width:100%;
-  overflow: scroll;
-    display: grid; 
-    grid-template-columns: 1fr; 
-    grid-template-rows: 0.05fr 1.2fr;
-    gap: 0px 0px; 
-    grid-template-areas: 
-      "Header"
-      "Content"; 
-  }
-.Header { 
-  display:flex;
-  width:100%;
-  grid-area: "Header";
-  background:var(--txt-color);
-  color:var(--secondary-color);
-}
-.Header>a {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background:var(--ui-color);
-  color:var(--txt-color);
-  border:2px solid var(--outline);
-  height:100%;
-  padding:5px;
-  width:min-content;
-  text-align: center;
-  padding-top:auto;
-  text-decoration: none;
-}
-.Header>a:hover {
-  background:var(--hover);
-  color:var(--txt-colorn);
-}
-.Content { grid-area: "Content"; }
-.banner>h1 {
-    text-align: center;
-}
-.banner {
-    padding:10px;
-}
-.block-item {
-    display: block;
-    background:var(--txt-color);
-    color:var(--txt-colorn);
-    padding:20px;
-    margin:50px;
-}
-.block-item>* {
-    display: block;
-    color:var(--txt-colorn);
-    margin:0;
-    padding:0;
-}
-.searchresult {
   display: grid; 
-  grid-template-columns: 25px 1fr; 
-  grid-template-rows: 0.5fr 0.5fr 2fr 1fr; 
+  grid-template-columns: 0.6fr 1.4fr; 
+  grid-template-rows: 0.2fr 1.4fr 1.4fr 1fr; 
   gap: 0px 0px; 
   grid-template-areas: 
-    "Icon Url"
-    "Title Title"
-    "Description Description"
-    "Description Description"; 
-  background:var(--ui-color);
-  width:100%;
-  border:1px solid var(--outline);
-  padding:5px;
+    "Header Header"
+    "SideBar Content"
+    "SideBar Content"
+    "SideBar Content"; 
 }
-.Icon {
-   grid-area: Icon;
-  height:16px;
-  width:16px;
-}
-.Url {
-  grid-area: Url;
-  font-size: small;
-}
-.Title {
-  grid-area: Title;
-  font-size:large;
-}
-.Description{
-  grid-area: Description; 
-  font-size:small;
-  color:var(--hover);
-}
-#searchresults {
-  height: 100%;
-  width:100%;
-  padding:10px;
-}
-#repos>*,#projects>* {
-  padding:5px;
-}
+.Header { grid-area: Header;background-color: blue; }
+.Content { grid-area: Content;overflow:scroll;background-color: black; }
+.SideBar { grid-area: SideBar;overflow:scroll;background-color: red; }
