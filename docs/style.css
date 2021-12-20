@@ -70,8 +70,14 @@ body,html
 .SideBar { grid-area: SideBar;overflow:scroll; }
 #articles {
   list-style: none;
+  padding: 0;
 }
 #articles>li {
+  padding:3px;
   border: 1px solid var(--outline);
   background-color: var(--ui-color);
+}
+#articles>li:hover {
+  color:var(--txt-colorn);
+  background-color: var(--hover);
 }
