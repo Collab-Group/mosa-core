@@ -14,10 +14,14 @@ $("#site").hide(0, () => $(() => new Promise(e => {
           {
             type: 'output',
             filter: function (text, converter, options) {
-              return showdown.helper.replaceRecursiveRegExp(text, function (wholeMatch, match, left, right) {
-                match = htmlunencode(match);
-                return `<pre><code\\b[^>]*></button>${hljs.highlightAuto(match).value}</code></pre>`;
-              }, '<pre><code\\b[^>]*>', '</code></pre>', 'g');
+              var left  = '<pre><code\\b[^>]*>',
+                  right = '</code></pre>',
+                  flags = 'g',
+                  replacement = function (wholeMatch, match, left, right) {
+                    match = htmlunencode(match);
+                    return left + hljs.highlightAuto(match).value + right;
+                  };
+              return showdown.helper.replaceRecursiveRegExp(text, replacement, left, right, flags);
             }
           }
         ];
