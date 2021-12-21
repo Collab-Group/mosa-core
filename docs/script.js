@@ -10,12 +10,9 @@ $("#site").hide(0, () => $(() => new Promise(e => {
       }]), showdown.extension("message", () => [{
         type: "output",
         filter: e => e.replace(/<\/?p[^>]*>/g, "")
-      }]), showdown.extension("highlightjs", () => [{
-        type: "output",
-        filter: e => e.replace(/<code>(.*)<\/code>/g, (e, o) => `<pre><code>${hljs.highlightAuto(o).value}</code></pre>`)
       }]),
       MDConverter = new showdown.Converter({
-        extensions: ["message", "font", "webpage", "highlightjs"],
+        extensions: ["message", "font", "webpage"],
         omitExtraWLInCodeBlocks: !0,
         noHeaderId: !0,
         parseImgDimensions: !0,
@@ -45,6 +42,6 @@ $("#site").hide(0, () => $(() => new Promise(e => {
 }).then(() => $("#loader").fadeOut("slow", () => $("#site").show()))));
 var loadArticle = (url) => {
     fetch(`./articles/${url}`).then(x => x.text()).then(x => {
-        $(".Content").html(MDConverter.makeHtml(x));
+        $(".Content").html(MDConverter.makeHtml(x).replace(/<code>(.*)<\/code>/g, (e, o) => `<pre><code>${hljs.highlightAuto(o).value}</code></pre>`));
     });
 }
