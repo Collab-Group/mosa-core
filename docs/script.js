@@ -26,7 +26,8 @@ $("#site").hide(0, () => $(() => new Promise(e => {
       });
     fetch("./articles/index.json").then(x => x.json()).then(x => x.forEach(article => {
         console.log(article.name);
-        $("#articles").append(`<li onclick="${loadArticle(article.filename)}">${article.name}</li>`);
+        //${loadArticle(article.filename)}
+        $("#articles").append(`<li onclick="">${article.name}</li>`);
     }));
     e();
 }).then(() => {
