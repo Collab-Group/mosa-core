@@ -24,12 +24,12 @@
       })), fetch("./articles/index.json").then(e => e.json()).then(e => Object.entries(e).forEach(e => {
         const [t, i] = e;
         if ("global" == t) i.forEach(e => {
-          $("#articles").append(`<li class="article" onclick='loadArticle(\"${JSON.stringify(e)}\")'>${e.title}</li>`)
+          $("#articles").append(`<li class="article" onclick='loadArticle(\`${JSON.stringify(e)}\`)'>${e.title}</li>`)
         });
         else {
           var n = $(`<li class="catagory">${t}<br><ul></ul></li>`);
           i.forEach((e, t, i) => {
-            $(n[0].children[1]).append(`<li class="article" onclick='loadArticle(\\\"${JSON.stringify(e)}\\\")'>${e.title}</li>`), t == i.length - 1 && $("#articles").append(n)
+            $(n[0].children[1]).append(`<li class="article" onclick='loadArticle(\`${JSON.stringify(e)}\`)'>${e.title}</li>`), t == i.length - 1 && $("#articles").append(n)
           })
         }
       })).then(i)
