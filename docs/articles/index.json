@@ -1,3 +1,8 @@
-[
-    {"name":"Welcome","filepath":"./articles/welcome.md"}
-]
+{
+    "global":[
+        {"name":"Welcome2","filepath":"welcome.md","catagory":"Test"}
+    ],
+    "Test":[
+        {"name":"Welcome","filepath":"welcome.md","catagory":"Test"}
+    ]
+}

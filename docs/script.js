@@ -24,8 +24,23 @@ $("#site").hide(0, () => $(() => new Promise(e => {
         emoji: !0,
         openLinksInNewWindow: !0
       });
-    fetch("./articles/index.json").then(x => x.json()).then(x => x.forEach(article => {
-        $("#articles").append(`<li onclick=\"loadArticle(\'${article.filepath}\')\">${article.name}</li>`);
+    fetch("./articles/index.json").then(x => x.json()).then(x => Object.entries(x).forEach(catagory => {
+        const [catagoryName,catagoryArticles] = catagory;
+        if (catagoryName = "global") {
+          catagoryArticles.forEach(article => {
+            $("#articles").append(`<li onclick=\"loadArticle(\'${article.filepath}\')\">${article.name}</li>`);
+          });
+        } else {
+            var $el = $(`<li>${catagoryName}<br><ul class="catagory"></ul></li>`);
+            
+            catagoryArticles.forEach((article,i,a) => {
+                $($el[0].children[2]).append(`<li onclick=\"loadArticle(\'${article.filepath}\')\">${article.name}</li>`)
+                if (i == a.length - 1) {
+                    $("#articles").append($el);
+                }
+            })
+        }
+        //$("#articles").append(`<li onclick=\"loadArticle(\'${article.filepath}\')\">${article.name}</li>`);
     }));
     e();
 }).then(() => {
@@ -33,7 +48,7 @@ $("#site").hide(0, () => $(() => new Promise(e => {
     $("#loader").fadeOut("slow", () => $("#site").show());
 })));
 var loadArticle = (url) => {
-    fetch(url).then(x => x.text()).then(x => {
+    fetch(`./articles/${url}`).then(x => x.text()).then(x => {
         $(".Content").html(MDConverter.makeHtml(x));
     });
 }
