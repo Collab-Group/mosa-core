@@ -13,7 +13,7 @@ $("#site").hide(0, () => $(() => new Promise(e => {
       }]), showdown.extension("highlightjs", () => [{
         type: "output",
         filter: e => e.replace(/<code>(.*)<\/code>/g, (e, o) => `<pre><code>${hljs.highlightAuto(o).value}</code></pre>`)
-      }]);
+      }]),
       MDConverter = new showdown.Converter({
         extensions: ["message", "font", "webpage", "highlightjs"],
         omitExtraWLInCodeBlocks: !0,
@@ -23,7 +23,7 @@ $("#site").hide(0, () => $(() => new Promise(e => {
         requireSpaceBeforeHeadingText: !0,
         emoji: !0,
         openLinksInNewWindow: !0
-      });
+      }),
     fetch("./articles/index.json").then(x => x.json()).then(x => Object.entries(x).forEach(catagory => {
         const [catagoryName,catagoryArticles] = catagory;
         if (catagoryName == "global") {
@@ -40,12 +40,8 @@ $("#site").hide(0, () => $(() => new Promise(e => {
                 }
             })
         }
-    }));
-    e();
-}).then(() => {
-    // afterload (don't use)
-    $("#loader").fadeOut("slow", () => $("#site").show());
-})));
+    })).then(e);
+}).then(() => $("#loader").fadeOut("slow", () => $("#site").show()))));
 var loadArticle = (url) => {
     fetch(`./articles/${url}`).then(x => x.text()).then(x => {
         $(".Content").html(MDConverter.makeHtml(x));
