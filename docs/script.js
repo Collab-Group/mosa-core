@@ -1,7 +1,7 @@
 var MDConverter;
 
 $("#site").hide(0, () => $(() => new Promise(e => {
-    showdown.extension("font", () => [{
+    /*showdown.extension("font", () => [{
         type: "output",
         filter: e => e.replace(/\$\{(.+)\}\((.+)\)/g, (e, o, a) => `<span style="font-family: ${o};">${a}</span>`)
       }]), showdown.extension("webpage", () => [{
@@ -10,17 +10,18 @@ $("#site").hide(0, () => $(() => new Promise(e => {
       }]), showdown.extension("message", () => [{
         type: "output",
         filter: e => e.replace(/<\/?p[^>]*>/g, "")
-      }]),
+      }]),*/
       MDConverter = new showdown.Converter({
-        extensions: ["message", "font", "webpage"],
-        omitExtraWLInCodeBlocks: !0,
-        noHeaderId: !0,
-        parseImgDimensions: !0,
-        strikethrough: !0,
-        requireSpaceBeforeHeadingText: !0,
-        emoji: !0,
-        openLinksInNewWindow: !0
+        //extensions: ["message", "font", "webpage"],
+        //omitExtraWLInCodeBlocks: !0,
+        //noHeaderId: !0,
+        //parseImgDimensions: !0,
+        //strikethrough: !0,
+        //requireSpaceBeforeHeadingText: !0,
+        //emoji: !0,
+        //openLinksInNewWindow: !0
       }),
+      MDConverter.setFlavor('github');
       loadArticle('README.md');
     fetch("./articles/index.json").then(x => x.json()).then(x => Object.entries(x).forEach(catagory => {
         const [catagoryName,catagoryArticles] = catagory;
@@ -42,6 +43,6 @@ $("#site").hide(0, () => $(() => new Promise(e => {
 }).then(() => $("#loader").fadeOut("slow", () => $("#site").show()))));
 var loadArticle = (url) => {
     fetch(`./articles/${url}`).then(x => x.text()).then(x => {
-        $(".Content").html(MDConverter.makeHtml(x).replace(/<code>(.*)<\/code>/g, (e, o) => `<pre><code>${hljs.highlightAuto(o).value}</code></pre>`));
+        $(".Content").html(MDConverter.makeHtml(x)/*.replace(/<code>(.*)<\/code>/g, (e, o) => `<pre><code>${hljs.highlightAuto(o).value}</code></pre>`)*/);
     });
 }
