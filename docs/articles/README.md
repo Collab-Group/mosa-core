@@ -15,7 +15,7 @@ For **Windows:**
 
 ## Installation
 For **Windows:**  
-Run `CreateInstaller.bat`, and watch the magic happen
+Run `Install.bat`, and watch the magic happen
 
 ## Demonstration
 A GUI demonstration of MOSA-Core is available [here](https://github.com/nifanfa/MOSA-GUI-Sample).
