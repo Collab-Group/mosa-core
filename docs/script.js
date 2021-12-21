@@ -26,7 +26,7 @@ $("#site").hide(0, () => $(() => new Promise(e => {
       });
     fetch("./articles/index.json").then(x => x.json()).then(x => Object.entries(x).forEach(catagory => {
         const [catagoryName,catagoryArticles] = catagory;
-        if (catagoryName = "global") {
+        if (catagoryName == "global") {
           catagoryArticles.forEach(article => {
             $("#articles").append(`<li onclick=\"loadArticle(\'${article.filepath}\')\">${article.name}</li>`);
           });
