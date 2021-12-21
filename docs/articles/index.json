@@ -1,5 +1,17 @@
 {
     "global":[
-        {"name":"README","filepath":"README.md","catagory":"Test"}
+        {"name":"README","filepath":"README.md"}
+    ],
+    "guides":[
+        {"name":"Add Binary File To Your OS","filepath":"guides/Add-Binary-File-To-Your-OS.md"},
+        {"name":"Allocating Objects And Freeing Objects","filepath":"guides/Allocating-Objects-And-Freeing-Objects.md"},
+        {"name":"Arguments of Mosa.Launcher.Console.exe","filepath":"guides/Arguments-of-Mosa.Launcher.Console.md"},
+        {"name":"Booting OS On REAL HARDWARE","filepath":"guides/Booting-OS-On-REAL-HARDWARE.md"},
+        {"name":"Get Address or Size from A Managed Object","filepath":"guides/Get-Address-or-Size-From-A-Managed-Object.md"},
+        {"name":"GUI","filepath":"guides/GUI.md"},
+        {"name":"Mounting VMDK Files","filepath":"guides/Mountung-VMDK-Files.md"},
+        {"name":"Threads","filepath":"guides/Thread.md"},
+        {"name":"Use the network","filepath":"guides/Use-the-network.md"},
+        {"name":"Using Assembly (NASM) in MOSA-Core","filepath":"guides/Using-Assembly-(NASM)-in-MOSA-Core.md"}
     ]
 }
