@@ -1,18 +1,35 @@
 var MDConverter;
 
 $("#site").hide(0, () => $(() => new Promise(e => {
-    /*showdown.extension("font", () => [{
-        type: "output",
-        filter: e => e.replace(/\$\{(.+)\}\((.+)\)/g, (e, o, a) => `<span style="font-family: ${o};">${a}</span>`)
-      }]), showdown.extension("webpage", () => [{
-        type: "output",
-        filter: e => e.replace(/~\{(.+)\}\((\S+|(\S+) =(\d+)x(\d+))\)/g, (_, o, a, t, r, s) => `<iframe src="${t||a}" style="border:0" ${r?`width=${r}`:""} ${s?`height=${s}`:""} title="${o}">${o}</iframe>`)
-      }]), showdown.extension("message", () => [{
-        type: "output",
-        filter: e => e.replace(/<\/?p[^>]*>/g, "")
-      }]),*/
+      showdown.extension('highlightjs', function() {
+        function htmlunencode(text) {
+          return (
+            text
+              .replace(/&amp;/g, '&')
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+            );
+        }
+        return [
+          {
+            type: 'output',
+            filter: function (text, converter, options) {
+              // use new shodown's regexp engine to conditionally parse codeblocks
+              var left  = '<pre><code\\b[^>]*>',
+                  right = '</code></pre>',
+                  flags = 'g',
+                  replacement = function (wholeMatch, match, left, right) {
+                    // unescape match to prevent double escaping
+                    match = htmlunencode(match);
+                    return left + hljs.highlightAuto(match).value + right;
+                  };
+              return showdown.helper.replaceRecursiveRegExp(text, replacement, left, right, flags);
+            }
+          }
+        ];
+      }),
       MDConverter = new showdown.Converter({
-        //extensions: ["message", "font", "webpage"],
+        extensions: ["highlightjs"],
         //omitExtraWLInCodeBlocks: !0,
         //noHeaderId: !0,
         //parseImgDimensions: !0,
@@ -42,7 +59,11 @@ $("#site").hide(0, () => $(() => new Promise(e => {
     })).then(e);
 }).then(() => $("#loader").fadeOut("slow", () => $("#site").show()))));
 var loadArticle = (url) => {
-    fetch(`./articles/${url}`).then(x => x.text()).then(x => {
+    fetch(`./articles/${url}`).then(x => {
+      return x.ok ? x : !function() { throw new Error("Invalid filepath") }();
+    }).then(x => x.text()).then(x => {
         $(".Content").html(MDConverter.makeHtml(x)/*.replace(/<code>(.*)<\/code>/g, (e, o) => `<pre><code>${hljs.highlightAuto(o).value}</code></pre>`)*/);
+    }).catch(x => {
+      alert(x);
     });
 }
