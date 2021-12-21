@@ -10,6 +10,8 @@ pause
 exit
 )
 
+cd src
+
 echo Removing bin folder
 rd /s /q bin
 
