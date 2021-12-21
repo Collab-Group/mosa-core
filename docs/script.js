@@ -16,7 +16,7 @@ $("#site").hide(0, () => $(() => new Promise(e => {
             filter: function (text, converter, options) {
               return showdown.helper.replaceRecursiveRegExp(text, function (wholeMatch, match, left, right) {
                 match = htmlunencode(match);
-                return `<pre><code\\b[^>]*><button class="copybtn" onclick="navigator.clipboard.writeText('${match}')"></button>${hljs.highlightAuto(match).value}</code></pre>`;
+                return `<pre><code\\b[^>]*></button>${hljs.highlightAuto(match).value}</code></pre>`;
               }, '<pre><code\\b[^>]*>', '</code></pre>', 'g');
             }
           }
