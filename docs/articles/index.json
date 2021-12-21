@@ -1,8 +1,5 @@
 {
     "global":[
-        {"name":"Welcome2","filepath":"welcome.md","catagory":"Test"}
-    ],
-    "Test":[
-        {"name":"Welcome","filepath":"welcome.md","catagory":"Test"}
+        {"name":"README","filepath":"README.md","catagory":"Test"}
     ]
 }

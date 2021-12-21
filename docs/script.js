@@ -24,6 +24,7 @@ $("#site").hide(0, () => $(() => new Promise(e => {
         emoji: !0,
         openLinksInNewWindow: !0
       }),
+      loadArticle('README.md');
     fetch("./articles/index.json").then(x => x.json()).then(x => Object.entries(x).forEach(catagory => {
         const [catagoryName,catagoryArticles] = catagory;
         if (catagoryName == "global") {

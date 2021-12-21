@@ -1,7 +1,0 @@
-# Hello!
-
-`code`
-
-```
-BIG CODE
-```
