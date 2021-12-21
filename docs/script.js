@@ -28,19 +28,18 @@ $("#site").hide(0, () => $(() => new Promise(e => {
         const [catagoryName,catagoryArticles] = catagory;
         if (catagoryName == "global") {
           catagoryArticles.forEach(article => {
-            $("#articles").append(`<li onclick=\"loadArticle(\'${article.filepath}\')\">${article.name}</li>`);
+            $("#articles").append(`<li class=\"article\" onclick=\"loadArticle(\'${article.filepath}\')\">${article.name}</li>`);
           });
         } else {
-            var $el = $(`<li>${catagoryName}<br><ul class="catagory"></ul></li>`);
+            var $el = $(`<li class="catagory">${catagoryName}<br><ul></ul></li>`);
             
             catagoryArticles.forEach((article,i,a) => {
-                $($el[0].children[1]).append(`<li onclick=\"loadArticle(\'${article.filepath}\')\">${article.name}</li>`)
+                $($el[0].children[1]).append(`<li class=\"article\" onclick=\"loadArticle(\'${article.filepath}\')\">${article.name}</li>`)
                 if (i == a.length - 1) {
                     $("#articles").append($el);
                 }
             })
         }
-        //$("#articles").append(`<li onclick=\"loadArticle(\'${article.filepath}\')\">${article.name}</li>`);
     }));
     e();
 }).then(() => {
