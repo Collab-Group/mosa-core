@@ -1,17 +1,17 @@
 {
     "global":[
-        {"name":"README","filepath":"README.md"}
+        {"title":"README","location":"README.md"}
     ],
     "Guides":[
-        {"name":"Add Binary File To Your OS","filepath":"guides/Add-Binary-File-To-Your-OS.md"},
-        {"name":"Allocating Objects And Freeing Objects","filepath":"guides/Allocating-Objects-And-Freeing-Objects.md"},
-        {"name":"Arguments of Mosa.Launcher.Console.exe","filepath":"guides/Arguments-of-Mosa.Launcher.Console.md"},
-        {"name":"Booting OS On REAL HARDWARE","filepath":"guides/Booting-OS-On-REAL-HARDWARE.md"},
-        {"name":"Get Address or Size from A Managed Object","filepath":"guides/Get-Address-or-Size-From-A-Managed-Object.md"},
-        {"name":"GUI","filepath":"guides/GUI.md"},
-        {"name":"Mounting VMDK Files","filepath":"guides/Mounting-VMDK-Files.md"},
-        {"name":"Threads","filepath":"guides/Thread.md"},
-        {"name":"Use the network","filepath":"guides/Use-the-network.md"},
-        {"name":"Using Assembly (NASM) in MOSA-Core","filepath":"guides/Using-Assembly-(NASM)-in-MOSA-Core.md"}
+        {"title":"Add Binary File To Your OS","location":"guides/Add-Binary-File-To-Your-OS.md"},
+        {"title":"Allocating Objects And Freeing Objects","location":"guides/Allocating-Objects-And-Freeing-Objects.md"},
+        {"title":"Arguments of Mosa.Launcher.Console.exe","location":"guides/Arguments-of-Mosa.Launcher.Console.md"},
+        {"title":"Booting OS On REAL HARDWARE","location":"guides/Booting-OS-On-REAL-HARDWARE.md"},
+        {"title":"Get Address or Size from A Managed Object","location":"guides/Get-Address-or-Size-From-A-Managed-Object.md"},
+        {"title":"GUI","location":"guides/GUI.md"},
+        {"title":"Mounting VMDK Files","location":"guides/Mounting-VMDK-Files.md"},
+        {"title":"Threads","location":"guides/Thread.md"},
+        {"title":"Use the network","location":"guides/Use-the-network.md"},
+        {"title":"Using Assembly (NASM) in MOSA-Core","location":"guides/Using-Assembly-(NASM)-in-MOSA-Core.md"}
     ]
 }

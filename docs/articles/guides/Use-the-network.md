@@ -1,8 +1,8 @@
 ### Configuration
 #### First. Get know your Host IP
-![image](https://github.com/nifanfa/MOSA-Core/blob/master/Wiki/Images/GIF%202021-8-23%20%E4%B8%8B%E5%8D%88%2005-49-37.gif)
+![image](https://github.com/nifanfa/MOSA-Core/blob/master/Wiki/Images/GIF%202021-8-23%20%E4%B8%8B%E5%8D%88%2005-49-37.gif?raw=true)
 #### Second. Switch network mode to Host-Only
-![image](https://github.com/nifanfa/MOSA-Core/blob/master/Wiki/Images/GIF%202021-8-23%20%E4%B8%8B%E5%8D%88%2005-50-50.gif)
+![image](https://github.com/nifanfa/MOSA-Core/blob/master/Wiki/Images/GIF%202021-8-23%20%E4%B8%8B%E5%8D%88%2005-50-50.gif?raw=true)
 
 ### Initialization
 ```cs
@@ -16,7 +16,7 @@
 
 #### After that let's try if it is ready
 #### You can ping it. it should response your ping
-![image](https://github.com/nifanfa/MOSA-Core/blob/master/Wiki/Images/QQ%E6%88%AA%E5%9B%BE20210823181456.png)
+![image](https://github.com/nifanfa/MOSA-Core/blob/master/Wiki/Images/QQ%E6%88%AA%E5%9B%BE20210823181456.png?raw=true)
 
 ## Example of communication between Windows and MOSA
 ### MOSA
@@ -109,7 +109,7 @@ namespace ConsoleApp2
 }
 
 ```
-### Supported Controller:
+### Supported Controllers:
 #### Intel82542(0x1000)
 #### Intel82543GC(0x1001)
 #### Intel82543GC(0x1004)

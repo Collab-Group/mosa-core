@@ -59,12 +59,13 @@ body,html
   grid-template-rows: 0.2fr 1.4fr 1.4fr 1fr; 
   gap: 0px 0px; 
   grid-template-areas: 
-    "Header Header"
+    "Header1 Header2"
     "SideBar Content"
     "SideBar Content"
     "SideBar Content"; 
 }
-.Header { grid-area: Header; }
+.Header2 { grid-area: Header2; }
+.Header1 { grid-area: Header1;display:flex;align-items: center;justify-content: center; }
 .Content { grid-area: Content;overflow-y:scroll;padding:5px;}
 .SideBar { grid-area: SideBar;overflow-y :scroll;padding:2px; }
 #articles {
