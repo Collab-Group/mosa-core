@@ -25,7 +25,7 @@ $("#site").hide(0, () => $(() => new Promise(e => {
         openLinksInNewWindow: !0
       });
     fetch("./articles/index.json").then(x => x.json()).then(x => x.forEach(article => {
-        $("#articles").append(`<li onclick="loadArticle(\\\"${article.filepath}\\\")">${article.name}</li>`);
+        $("#articles").append(`<li onclick=\"loadArticle(\'${article.filepath}\')\">${article.name}</li>`);
     }));
     e();
 }).then(() => {
