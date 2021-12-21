@@ -2,7 +2,7 @@
     "global":[
         {"name":"README","filepath":"README.md"}
     ],
-    "guides":[
+    "Guides":[
         {"name":"Add Binary File To Your OS","filepath":"guides/Add-Binary-File-To-Your-OS.md"},
         {"name":"Allocating Objects And Freeing Objects","filepath":"guides/Allocating-Objects-And-Freeing-Objects.md"},
         {"name":"Arguments of Mosa.Launcher.Console.exe","filepath":"guides/Arguments-of-Mosa.Launcher.Console.md"},
