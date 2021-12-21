@@ -34,7 +34,7 @@ $("#site").hide(0, () => $(() => new Promise(e => {
             var $el = $(`<li>${catagoryName}<br><ul class="catagory"></ul></li>`);
             
             catagoryArticles.forEach((article,i,a) => {
-                $($el[0].children[2]).append(`<li onclick=\"loadArticle(\'${article.filepath}\')\">${article.name}</li>`)
+                $($el[0].children[1]).append(`<li onclick=\"loadArticle(\'${article.filepath}\')\">${article.name}</li>`)
                 if (i == a.length - 1) {
                     $("#articles").append($el);
                 }
