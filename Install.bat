@@ -30,7 +30,7 @@ popd
 
 "%msbuild%" Mosa.sln /t:Build /p:Configuration=Debug;Platform="Mixed Platforms" -m
 
-cd..
+cd ..
 cd Compiler
 
 echo Restoring packages
