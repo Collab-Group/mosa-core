@@ -1,8 +1,5 @@
 # MOSA-Core
 
-## Welcome
-Welcome to the official MOSA-Core docs!
-
 A fork of MOSA (Managed Operating System Alliance) project, whose goals are to add **useful** features into MOSA, while keeping it **organized** and **easy** to use.<br/>
 MOSA is a powerful and relatively **stable** way of creating an operating system in **C# 8.0 with limited .NET Core 5.0**.
 
@@ -15,7 +12,7 @@ For **Windows:**
 
 ## Installation
 For **Windows:**  
-Run `CreateInstaller.bat`, and watch the magic happen
+Run `Install.bat`, and watch the magic happen
 
 ## Demonstration
 A GUI demonstration of MOSA-Core is available [here](https://github.com/nifanfa/MOSA-GUI-Sample).
