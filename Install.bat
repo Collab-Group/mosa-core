@@ -15,12 +15,7 @@ cd src
 echo Removing bin folder
 rd /s /q bin
 
-cd Mosa
-
-echo Restoring packages
-dotnet restore
-
-echo Building MOSA
+echo Locating MSBuild
 
 pushd "%~d0%~p0"
 FOR /F "tokens=* USEBACKQ" %%F IN (
@@ -28,15 +23,25 @@ FOR /F "tokens=* USEBACKQ" %%F IN (
 ) DO (SET msbuild=%%F)
 popd
 
-"%msbuild%" Mosa.sln /t:Build /p:Configuration=Debug;Platform="Mixed Platforms" -m
+echo Building MOSA
 
+cd Mosa
+
+echo Restoring packages
+dotnet restore
+
+"%msbuild%" Mosa.sln /t:Build /p:Configuration=Debug;Platform="Mixed Platforms" -m
 cd ..
+
+echo Building Compiler
+
 cd Compiler
 
 echo Restoring packages
 dotnet restore
 
 "%msbuild%" Compiler.sln /t:Build /p:Configuration=Debug;Platform="Mixed Platforms" -m
+cd ..
 
 echo.
 if "%errorlevel%" == "1" (
@@ -50,6 +55,5 @@ echo.
 )
 
 echo Creating installer
-cd..
 cd Inno-Setup-Script
 create-installer.bat
