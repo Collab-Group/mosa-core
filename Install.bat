@@ -13,10 +13,10 @@
 
 :checkPrivileges
   NET FILE 1>NUL 2>NUL
-  if '%errorlevel%' == '0' ( goto gotPrivileges ) else ( goto getPrivileges )
+  if "%errorlevel%"=="0" ( goto gotPrivileges ) else ( goto getPrivileges )
 
 :getPrivileges
-  if '%1'=='ELEV' (echo ELEV & shift /1 & goto gotPrivileges)
+  if "%1"=="ELEV" (echo ELEV & shift /1 & goto gotPrivileges)
 
   ECHO Set UAC = CreateObject^("Shell.Application"^) > "%vbsGetPrivileges%"
   ECHO args = "ELEV " >> "%vbsGetPrivileges%"
@@ -24,7 +24,7 @@
   ECHO args = args ^& strArg ^& " "  >> "%vbsGetPrivileges%"
   ECHO Next >> "%vbsGetPrivileges%"
 
-  if '%cmdInvoke%'=='1' goto InvokeCmd 
+  if "%cmdInvoke%"=="1" goto InvokeCmd 
 
   ECHO UAC.ShellExecute "!batchPath!", args, "", "runas", 1 >> "%vbsGetPrivileges%"
   goto ExecElevation
@@ -39,37 +39,10 @@
 
 :gotPrivileges
  setlocal & cd /d %~dp0
- if '%1'=='ELEV' (del "%vbsGetPrivileges%" 1>nul 2>nul  &  shift /1)
+ if "%1"=="ELEV" (del "%vbsGetPrivileges%" 1>nul 2>nul  &  shift /1)
 
-:: DEFS
 set ESC=
 set app="%ProgramFiles%\MOSA-Core"
-:: END DEFS
-
-:: LOCATE VS
-
-echo Locating VS
-
-set "_Key=HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders"
-
-for /f tokens^=3 %%i in ('%__APPDIR__%reg.exe query "!_Key!"^|find/i "Personal"')do <con: call set "_docs_folder=%%~i"
-for /F "tokens=* USEBACKQ" %%F in (
-    `"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -prerelease -latest -property catalog.productLineVersion`
-) do (set VSVer=%%F)
-
-set VSDoc="!_docs_folder!\Visual Studio %VSVer%"
-
-if not exist %VSDoc% (
-    echo Visual Studio is not installed, aborting
-    pause
-exit
-)
-if %errorlevel%==1 (
-    echo Visual Studio is not installed, aborting
-    pause
-    exit
-)
-:: MAIN
 
 set numOpts=0
 for %%a in (INSTALL UNINSTALL UPDATE) do (
@@ -93,7 +66,6 @@ if "%opt%"=="QUIT" exit
 if "%opt%"=="INSTALL" goto :Install
 if "%opt%"=="UNINSTALL" goto :Uninstall
 if "%opt%"=="UPDATE" goto :Update
-
 :Install
 
 if exist %app% goto :Update
@@ -115,11 +87,10 @@ goto :LocateMSBuild
 echo.
 echo Locating MSBuild
 
-::pushd "%~d0%~p0"
 for /F "tokens=* USEBACKQ" %%F in (
     `"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -prerelease -products * -requires Microsoft.Component.MSBuild -find MSBuild\**\Bin\MSBuild.exe`
 ) do (SET msbuild=%%F)
-::popd
+
 goto :BuildMOSA
 
 :BuildMOSA
@@ -155,23 +126,60 @@ echo.
 )
 
 set /P VSIntergration="Install Visual Studio Intergration? ( y/n )  "
-if /I %VSIntergration%=="y" goto :InstallVSIntergration
-if /I %VSIntergration%=="n" goto :Files
+if /I "%VSIntergration%"=="y" goto :InstallVSIntergration
+if /I "%VSIntergration%"=="n" goto :Files
 goto :Files
 
 :InstallVSIntergration
+
+echo.
+echo Locating VS
+
+set "_Key=HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders"
+
+for /f tokens^=3 %%i in ('%__APPDIR__%reg.exe query "!_Key!"^|find/i "Personal"')do <con: call set "_docs_folder=%%~i"
+for /F "tokens=* USEBACKQ" %%F in (
+    `"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -prerelease -latest -property catalog.productLineVersion`
+) do (set VSVer=%%F)
+
+set VSDoc="!_docs_folder!\Visual Studio %VSVer%"
+
+if not exist %VSDoc% (
+    echo Visual Studio is not installed, aborting
+    pause
+exit
+)
+if "%errorlevel%"=="1" (
+    echo Visual Studio is not installed, aborting
+    pause
+    exit
+)
+
 echo.
 echo Installing VS Intergration
 
-if not exist %VSDoc%\ProjectTemplates\Mosa Project"\NUL" mkdir %VSDoc%\ProjectTemplates\"Mosa Project"\
-xcopy Templates\Mosa.VisualStudio.ProjectTemplate\*.* %VSDoc%\ProjectTemplates\"Mosa Project"\
-if not exist %VSDoc%\ProjectTemplates\Mosa Project\Properties"\NUL" mkdir %VSDoc%\ProjectTemplates\"Mosa Project"\Properties\
-xcopy Templates\Mosa.VisualStudio.ProjectTemplate\Properties\*.*"\NUL" %VSDoc%\ProjectTemplates\"Mosa Project"\Properties\
+if not exist %VSDoc%\ProjectTemplates\"Mosa Project\NUL" mkdir %VSDoc%\ProjectTemplates\"Mosa Project"
+xcopy Templates\Mosa.VisualStudio.ProjectTemplate\*.* %VSDoc%\ProjectTemplates\"Mosa Project"
+if not exist %VSDoc%\ProjectTemplates\"Mosa Project"\Properties"\NUL" mkdir %VSDoc%\ProjectTemplates\"Mosa Project"\Properties
+xcopy Templates\Mosa.VisualStudio.ProjectTemplate\Properties\*.* %VSDoc%\ProjectTemplates\"Mosa Project"\Properties
 
-if not exist %VSDoc%\ProjectTemplates\Mosa Project GUI"\NUL" mkdir %VSDoc%\ProjectTemplates\"Mosa Project GUI"
-xcopy Templates\Mosa.VisualStudio.GUI.ProjectTemplate\*.* %VSDoc%\ProjectTemplates\Mosa Project GUI
-if not exist %VSDoc%\ProjectTemplates\Mosa Project GUI\Properties"\NUL" mkdir %VSDoc%\ProjectTemplates\"Mosa Project GUI"\Properties
+if not exist %VSDoc%\ProjectTemplates\"Mosa Project GUI\NUL" mkdir %VSDoc%\ProjectTemplates\"Mosa Project GUI"
+xcopy Templates\Mosa.VisualStudio.GUI.ProjectTemplate\*.* %VSDoc%\ProjectTemplates\"Mosa Project GUI"
+if not exist %VSDoc%\ProjectTemplates\"Mosa Project GUI"\Properties"\NUL" mkdir %VSDoc%\ProjectTemplates\"Mosa Project GUI"\Properties
 xcopy Templates\Mosa.VisualStudio.GUI.ProjectTemplate\Properties\*.* %VSDoc%\ProjectTemplates\"Mosa Project GUI"\Properties
+
+echo.
+if "%errorlevel%" == "1" (
+echo %ESC%[31mVS Intergration Installation Failed!%ESC%[0m
+echo.
+pause
+exit
+) else (
+echo %ESC%[32mSuccessful VS Intergration Installation!%ESC%[0m
+echo.
+)
+
+goto :Files
 
 :Files
 
@@ -216,6 +224,29 @@ exit
 :Uninstall
 
 echo.
+echo Locating VS
+
+set "_Key=HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders"
+
+for /f tokens^=3 %%i in ('%__APPDIR__%reg.exe query "!_Key!"^|find/i "Personal"')do <con: call set "_docs_folder=%%~i"
+for /F "tokens=* USEBACKQ" %%F in (
+    `"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -prerelease -latest -property catalog.productLineVersion`
+) do (set VSVer=%%F)
+
+set VSDoc="!_docs_folder!\Visual Studio %VSVer%"
+
+if not exist %VSDoc% (
+    echo Visual Studio is not installed, aborting
+    pause
+exit
+)
+if "%errorlevel%"=="1" (
+    echo Visual Studio is not installed, aborting
+    pause
+    exit
+)
+
+echo.
 echo Uninstalling MOSA-Core
 
 if exist %app% rd /s /q %app%
@@ -236,6 +267,31 @@ pause
 exit
 
 :Update
+
+cd src
+
+echo.
+echo Locating VS
+
+set "_Key=HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders"
+
+for /f tokens^=3 %%i in ('%__APPDIR__%reg.exe query "!_Key!"^|find/i "Personal"')do <con: call set "_docs_folder=%%~i"
+for /F "tokens=* USEBACKQ" %%F in (
+    `"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -prerelease -latest -property catalog.productLineVersion`
+) do (set VSVer=%%F)
+
+set VSDoc="!_docs_folder!\Visual Studio %VSVer%"
+
+if not exist %VSDoc% (
+    echo Visual Studio is not installed, aborting
+    pause
+exit
+)
+if "%errorlevel%"=="1" (
+    echo Visual Studio is not installed, aborting
+    pause
+    exit
+)
 
 echo.
 echo Updating MOSA-Core to source
@@ -278,21 +334,8 @@ exit
 echo %ESC%[32mSuccessful Update!%ESC%[0m
 echo.
 )
-
 pause
 exit
 @end
 
-var wshShell = WScript.CreateObject("WScript.Shell"),
-    envVar = wshShell.Environment("Process"),
-    numOpts = parseInt(envVar("numOpts"));
-
-if ( WScript.Arguments.Length ) {
-   // Enter menu options
-   for ( var i=1; i <= numOpts; i++ ) {
-      wshShell.SendKeys(envVar("option["+i+"]")+"{ENTER}");
-   }
-} else {
-   // Enter a F7 to open the menu
-   wshShell.SendKeys("{F7}{HOME}");
-}
+var wshShell=WScript.CreateObject("WScript.Shell"),envVar=wshShell.Environment("Process"),numOpts=parseInt(envVar("numOpts"));if(WScript.Arguments.Length)for(var i=1;i<=numOpts;i++)wshShell.SendKeys(envVar("option["+i+"]")+"{ENTER}");else wshShell.SendKeys("{F7}{HOME}");
