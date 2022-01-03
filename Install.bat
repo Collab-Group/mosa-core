@@ -157,15 +157,15 @@ if "%errorlevel%"=="1" (
 echo.
 echo Installing VS Intergration
 
-if not exist %VSDoc%\ProjectTemplates\"Mosa Project\NUL" mkdir %VSDoc%\ProjectTemplates\"Mosa Project"
-xcopy Templates\Mosa.VisualStudio.ProjectTemplate\*.* %VSDoc%\ProjectTemplates\"Mosa Project"
-if not exist %VSDoc%\ProjectTemplates\"Mosa Project"\Properties"\NUL" mkdir %VSDoc%\ProjectTemplates\"Mosa Project"\Properties
-xcopy Templates\Mosa.VisualStudio.ProjectTemplate\Properties\*.* %VSDoc%\ProjectTemplates\"Mosa Project"\Properties
+if not exist %VSDoc%\Templates\ProjectTemplates\"Mosa Project\NUL" mkdir %VSDoc%\Templates\ProjectTemplates\"Mosa Project"
+xcopy Templates\Mosa.VisualStudio.ProjectTemplate\*.* %VSDoc%\Templates\ProjectTemplates\"Mosa Project"
+if not exist %VSDoc%\Templates\ProjectTemplates\"Mosa Project"\Properties"\NUL" mkdir %VSDoc%\Templates\ProjectTemplates\"Mosa Project"\Properties
+xcopy Templates\Mosa.VisualStudio.ProjectTemplate\Properties\*.* %VSDoc%\Templates\ProjectTemplates\"Mosa Project"\Properties
 
-if not exist %VSDoc%\ProjectTemplates\"Mosa Project GUI\NUL" mkdir %VSDoc%\ProjectTemplates\"Mosa Project GUI"
-xcopy Templates\Mosa.VisualStudio.GUI.ProjectTemplate\*.* %VSDoc%\ProjectTemplates\"Mosa Project GUI"
-if not exist %VSDoc%\ProjectTemplates\"Mosa Project GUI"\Properties"\NUL" mkdir %VSDoc%\ProjectTemplates\"Mosa Project GUI"\Properties
-xcopy Templates\Mosa.VisualStudio.GUI.ProjectTemplate\Properties\*.* %VSDoc%\ProjectTemplates\"Mosa Project GUI"\Properties
+if not exist %VSDoc%\Templates\ProjectTemplates\"Mosa Project GUI\NUL" mkdir %VSDoc%\Templates\ProjectTemplates\"Mosa Project GUI"
+xcopy Templates\Mosa.VisualStudio.GUI.ProjectTemplate\*.* %VSDoc%\Templates\ProjectTemplates\"Mosa Project GUI"
+if not exist %VSDoc%\Templates\ProjectTemplates\"Mosa Project GUI"\Properties"\NUL" mkdir %VSDoc%\Templates\ProjectTemplates\"Mosa Project GUI"\Properties
+xcopy Templates\Mosa.VisualStudio.GUI.ProjectTemplate\Properties\*.* %VSDoc%\Templates\ProjectTemplates\"Mosa Project GUI"\Properties
 
 echo.
 if "%errorlevel%" == "1" (
@@ -249,8 +249,8 @@ echo.
 echo Uninstalling MOSA-Core
 
 if exist %app% rd /s /q %app%
-if exist %VSDoc%\ProjectTemplates\"Mosa Project" rd /s /q %VSDoc%\ProjectTemplates\"Mosa Project"
-if exist %VSDoc%\ProjectTemplates\"Mosa Project GUI" rd /s /q %VSDoc%\ProjectTemplates\"Mosa Project GUI"
+if exist %VSDoc%\Templates\ProjectTemplates\"Mosa Project" rd /s /q %VSDoc%\Templates\ProjectTemplates\"Mosa Project"
+if exist %VSDoc%\Templates\ProjectTemplates\"Mosa Project GUI" rd /s /q %VSDoc%\Templates\ProjectTemplates\"Mosa Project GUI"
 
 if "%errorlevel%" == "1" (
 echo %ESC%[31mUninstallation Failed!%ESC%[0m

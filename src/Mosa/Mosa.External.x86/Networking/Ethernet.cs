@@ -36,7 +36,7 @@ namespace Mosa.External.x86.Networking
             public const ushort ARP = 0x0806;
         }
 
-        public static void Initialize(byte[] aIPAddress,byte[] aGateway,byte[] aMask)
+        public static void Initialize(byte[] aIPAddress,byte[] aGateway,byte[] aMask,bool silent = false)
         {
             Mask = aMask;
             Gateway = aGateway;
@@ -46,9 +46,11 @@ namespace Mosa.External.x86.Networking
 
             MACAddress = new byte[6];
 
-            Console.Write("IP Address: ");
-            for (int i = 0; i < 4; i++) Console.Write($"{IPAddress[i]}{((i == 3) ? "" : ".")}");
-            Console.WriteLine();
+            if (!silent) {
+                Console.Write("IP Address: ");
+                for (int i = 0; i < 4; i++) Console.Write($"{IPAddress[i]}{((i == 3) ? "" : ".")}");
+                Console.WriteLine();
+            }
         }
 
         internal static unsafe void HandlePacket(byte* buffer, ushort length)
