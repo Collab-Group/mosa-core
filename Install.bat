@@ -45,7 +45,7 @@ set ESC=
 set app="%ProgramFiles%\MOSA-Core"
 
 set numOpts=0
-for %%a in (INSTALL UNINSTALL UPDATE) do (
+for %%a in (INSTALL UNINSTALL) do (
    set /A numOpts+=1
    set "option[!numOpts!]=%%a"
 )
@@ -65,10 +65,9 @@ cls
 if "%opt%"=="QUIT" exit
 if "%opt%"=="INSTALL" goto :Install
 if "%opt%"=="UNINSTALL" goto :Uninstall
-if "%opt%"=="UPDATE" goto :Update
 :Install
 
-if exist %app% goto :Update
+if exist %app% goto :Uninstall
 
 echo Installing MOSA-Core
 
@@ -263,77 +262,6 @@ echo %ESC%[32mSuccessful Uninstallation!%ESC%[0m
 echo.
 )
 
-pause
-exit
-
-:Update
-
-cd src
-
-echo.
-echo Locating VS
-
-set "_Key=HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders"
-
-for /f tokens^=3 %%i in ('%__APPDIR__%reg.exe query "!_Key!"^|find/i "Personal"')do <con: call set "_docs_folder=%%~i"
-for /F "tokens=* USEBACKQ" %%F in (
-    `"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -prerelease -latest -property catalog.productLineVersion`
-) do (set VSVer=%%F)
-
-set VSDoc="!_docs_folder!\Visual Studio %VSVer%"
-
-if not exist %VSDoc% (
-    echo Visual Studio is not installed, aborting
-    pause
-exit
-)
-if "%errorlevel%"=="1" (
-    echo Visual Studio is not installed, aborting
-    pause
-    exit
-)
-
-echo.
-echo Updating MOSA-Core to source
-echo.
-echo This may be because you tried to install when already installed
-echo.
-
-if exist %app% rd /s /q %app%
-if exist %VSDoc%\ProjectTemplates\"Mosa Project" rd /s /q %VSDoc%\ProjectTemplates\"Mosa Project"
-if exist %VSDoc%\ProjectTemplates\"Mosa Project GUI" rd /s /q %VSDoc%\ProjectTemplates\"Mosa Project GUI"
-
-if not exist %app%"\NUL" mkdir %app%
-if not exist %app%\bin"\NUL" mkdir %app%\bin
-xcopy bin\* %app%\bin /s /E
-if not exist %app%\ASM"\NUL" mkdir %app%\ASM
-xcopy ASM\*.o %app%\ASM /s /E
-if not exist %app%\Tools\nasm"\NUL" mkdir %app%\Tools\nasm
-xcopy Tools\nasm\* %app%\Tools\nasm /s /E
-if not exist %app%\Tools\ndisasm"\NUL" mkdir %app%\Tools\ndisasm
-xcopy Tools\ndisasm %app%\Tools\ndisasm /s /E
-if not exist %app%\Tools\mkisofs"\NUL" mkdir %app%\Tools\mkisofs
-xcopy Tools\mkisofs %app%\Tools\mkisofs /s /E
-if not exist %app%\Tools\syslinux"\NUL" mkdir %app%\Tools\syslinux
-xcopy Tools\syslinux %app%\Tools\syslinux /s /E
-if not exist %app%\Tools\virtualbox"\NUL" mkdir %app%\Tools\virtualbox
-xcopy Tools\virtualbox %app%\Tools\virtualbox /s /E
-if not exist %app%\Tools\vmware"\NUL" mkdir %app%\Tools\vmware
-xcopy Tools\vmware %app%\Tools\vmware /s /E
-if not exist %app%\Tools\imdisk"\NUL" mkdir %app%\Tools\imdisk
-xcopy Tools\imdisk %app%\Tools\imdisk /s /E
-if not exist %app%\Tools\grub2"\NUL" mkdir %app%\Tools\grub2
-xcopy Tools\grub2 %app%\Tools\grub2 /s /E
-
-if "%errorlevel%" == "1" (
-echo %ESC%[31mUpdate Failed!%ESC%[0m
-echo.
-pause
-exit
-) else (
-echo %ESC%[32mSuccessful Update!%ESC%[0m
-echo.
-)
 pause
 exit
 @end
