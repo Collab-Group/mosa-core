@@ -9,7 +9,7 @@ namespace System.Text
 	{
 		public abstract string GetString(byte[] b);
 		public abstract byte[] GetBytes(string s);
-		public abstract byte GetChar(byte b);
-		public abstract char GetByte(char c);
+		public abstract char GetChar(byte b);
+		public abstract byte GetByte(char c);
 	}
 }
