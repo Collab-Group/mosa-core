@@ -5,34 +5,21 @@ namespace System.Text
 	/// <summary>
 	/// Implementation of the "ASCIIEncoding" class.
 	/// </summary>
-	public class ASCIIEncoding : Encoding
+	public static class ASCIIEncoding : Encoding
 	{
-		public string CharacterSet { get; } = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
-
-		// Decode a buffer of bytes into a string.
-		public override string GetString(byte[] bytes, int byteIndex, int count)
+		public static override string GetString(byte[] b)
 		{
-			if (count == 0)
-				return string.Empty;
-
-			string result = "";
-
-			for (int index = byteIndex; index < byteIndex + count; index++)
-			{
-				byte b = bytes[index];
-				result += new string((b <= 0x7F) ? (char)b : '?', 1);
-			}
-
-			return result;
+			string s = "";
+			for (int i = 0;i<b.Length;i++) s += (char)bytes[i];
+			return s;
 		}
-
-		// Decode a byte into a character.
-		public char GetChar(byte b)
+		public static override byte[] GetBytes(string s)
 		{
-			if (b - 0x20 > CharacterSet.Length || b < 0x20)
-				return CharacterSet[0x3F - 0x20];
-
-			return CharacterSet[b - 0x20];
+			byte[] b = new byte[s.Length];
+			for (int i = 0;i<s.Length;i++) b[i] = (byte)s[i];
+			return b;
 		}
+		public static char GetChar(byte b) => (char)b;
+		public static byte GetByte(char c) => (byte)c;
 	}
 }

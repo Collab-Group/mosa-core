@@ -3,22 +3,13 @@
 namespace System.Text
 {
 	/// <summary>
-	/// Implementation of the "Encoder" class.
+	/// Implementation of the "Encoding" class.
 	/// </summary>
 	public abstract class Encoding
 	{
-		public static ASCIIEncoding ASCII;
-
-		public static void Setup()
-        {
-			ASCII = new ASCIIEncoding();
-        }
-
-		public abstract string GetString(byte[] bytes, int index, int count);
-
-		public virtual string GetString(byte[] bytes)
-		{
-			return GetString(bytes, 0, bytes.Length);
-		}
+		public abstract string GetString(byte[] b);
+		public abstract byte[] GetBytes(string s);
+		public abstract byte GetChar(byte b);
+		public abstract char GetByte(char c);
 	}
 }
