@@ -10,7 +10,7 @@ namespace System.Text
 		public override string GetString(byte[] b)
 		{
 			string s = "";
-			for (int i = 0;i<b.Length;i++) s += (char)bytes[i];
+			for (int i = 0;i<b.Length;i++) s += (char)b[i];
 			return s;
 		}
 		public override byte[] GetBytes(string s)
