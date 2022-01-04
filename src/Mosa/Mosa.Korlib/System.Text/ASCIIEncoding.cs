@@ -1,4 +1,4 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace System.Text
 {
@@ -7,6 +7,18 @@ namespace System.Text
 	/// </summary>
 	public class ASCIIEncoding : Encoding
 	{
+		public override string GetString(byte[] b, int byteIndex, int count)
+		{
+			if (count == 0)
+				return string.Empty;
+
+			string s = "";
+			for (int i = byteIndex; i < byteIndex + count; i++)
+			{
+				s += (char)b[i];
+			}
+			return s;
+		}
 		public override string GetString(byte[] b)
 		{
 			string s = "";
