@@ -13,12 +13,6 @@ For **Windows:**
 ## Installation
 For **Windows:**  
 -  Run `Install.bat`, and watch the magic happen
-=======
--  .NET Core 5.0
-
-## Installation
-For **Windows:**  
-Run `Install.bat`, and follow the on screen instructions.
 
 ## Demonstration
 A GUI demonstration of MOSA-Core is available [here](https://github.com/nifanfa/MOSA-GUI-Sample).
