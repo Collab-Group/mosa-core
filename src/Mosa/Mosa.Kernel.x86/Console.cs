@@ -283,14 +283,8 @@ namespace Mosa.Kernel.x86
                 }
                 else
                 {
-                    if (PS2Keyboard.IsCapsLock)
-                    {
-                        S = code.KeyCodeToString().ToUpper();
-                    }
-                    else
-                    {
-                        S = code.KeyCodeToString().ToLower();
-                    }
+                    S = code.KeyCodeToString();
+                    
                     Line += S;
                     Write(S);
                 }
