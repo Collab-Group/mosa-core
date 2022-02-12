@@ -1,4 +1,5 @@
 ## A fork from https://github.com/mosa/MOSA-Project
+## MOSA-Core is kinda obsoloted now. if you want to try some new feature  please view: https://github.com/nifanfa/Solution1
 
 A fork of MOSA (Managed Operating System Alliance) project, whose goals are to add **useful** features into MOSA, while keeping it **organized** and **easy** to use.<br/>
 MOSA is a powerful and relatively **stable** way of creating an operating system in **C# 8.0 with limited .NET Core 5.0**.
