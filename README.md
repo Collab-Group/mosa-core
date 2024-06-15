@@ -1,29 +1,17 @@
-## A fork from https://github.com/mosa/MOSA-Project
-## MOSA-Core is kinda obsoloted now. if you want to try some new feature  please view: https://github.com/nifanfa/Solution1
+# MOSA Core Libraries for Ruby4
 
-A fork of MOSA (Managed Operating System Alliance) project, whose goals are to add **useful** features into MOSA, while keeping it **organized** and **easy** to use.<br/>
-MOSA is a powerful and relatively **stable** way of creating an operating system in **C# 8.0 with limited .NET Core 5.0**.
+When compiling Ruby4 you'll need to install libraries as MOSA Core is not built into Visual Studio 2019. This will install the libraries.
 
-## Dependencies
-
-For **Windows:**  
--  Visual Studio
--  Oracle VM VirtualBox **or** VMware Workstation/Player
--  NET 5.0
+For **Windows ONLY:**  
+-  Visual Studio 2019(with the select workloads which you can find only in the Ruby4 README)
+-  VMware Workstation/Player
+-  NET 5.0 and 8.0
 
 ## Installation
 For **Windows:**  
 -  Run `Install.bat`, and watch the magic happen
 
-## Demonstration
-A GUI demonstration of MOSA-Core is available [here](https://github.com/nifanfa/MOSA-GUI-Sample).
-
 ## Informations
-- This currently only supports windows
-- **Important** When updating, uninstall first, **THEN** install the update.
-- **Important** Your project name **cannot** contain spaces (or the bootloader that MOSA uses ( SYSLINUX ), won't be able to load your OS)  
-
-## Links
--  Wiki: https://github.com/nifanfa/MOSA-Core/wiki
--  Discord server: https://discord.gg/WrNEsmUmKa
--  Documentation: https://nifanfa.com/MOSA-Core
+- This currently only supports Windows
+- **Important** When updating, uninstall MOSA Core first, **THEN** install the update.
+- **Important** Your project name **cannot** contain spaces, GRUB does not support this sadly
